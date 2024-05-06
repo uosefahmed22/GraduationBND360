@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Account.Core.Enums
+namespace Account.Core.Models.Content
 {
-    public enum UserRoleEnum
+    public class BaseEntity
     {
-        User,
-        BussinesOwner,
-        ServiceProvider
+        public int Id { get; set; }
     }
 }

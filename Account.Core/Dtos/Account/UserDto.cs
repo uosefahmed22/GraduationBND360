@@ -1,5 +1,5 @@
 ﻿using Account.Apis.Errors;
-using Account.Core.Enums;
+using Account.Core.Enums.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;

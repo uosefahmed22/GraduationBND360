@@ -1,6 +1,5 @@
 ﻿using Account.Apis.Errors;
 using Account.Core.Models.Account;
-using Account.Core.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -18,9 +17,10 @@ using Account.Core.Errors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
-using Account.Core.Enums;
+using Account.Core.Services.Auth;
+using Account.Core.Enums.Auth;
 
-namespace Account.Reposatory.Reposatories.Authentications
+namespace Account.Reposatory.Services.Authentications
 {
     public class AccountService : IAccountService
     {

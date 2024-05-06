@@ -1,7 +1,7 @@
 ﻿using Account.Core.Models.Account;
-using Account.Core.Services;
+using Account.Core.Services.Auth;
 using Account.Reposatory.Data.Context;
-using Account.Reposatory.Reposatories.Authentications;
+using Account.Reposatory.Services.Authentications;
 using Account.services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +20,7 @@ namespace Account.Apis.Extentions
             {
             })
             // Configure identity to use Entity Framework stores
-            .AddEntityFrameworkStores<AppIdentityDbContext>()
+            .AddEntityFrameworkStores<AppDBContext>()
             .AddDefaultTokenProviders().AddRoles<IdentityRole>();
 
             // Add authentication services
@@ -45,9 +45,9 @@ namespace Account.Apis.Extentions
                 };
             });
 
-            services.AddDbContext<AppIdentityDbContext>(Options =>
+            services.AddDbContext<AppDBContext>(Options =>
             {
-                Options.UseSqlServer(configuration.GetConnectionString("IdentityConnections"));
+                Options.UseSqlServer(configuration.GetConnectionString("DefaultConnections"));
             });
 
             // Register custom token service

@@ -4,6 +4,7 @@ using Account.Core.Models.Account;
 using Account.Reposatory.Data.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace Account.Apis
 {
@@ -23,7 +24,14 @@ namespace Account.Apis
             builder.Services.AddSwaggerService();
             builder.Services.AddAplictionService();
             builder.Services.AddMemoryCache();
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy =>
+                    {
+                        policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader(); ;
+                    });
+            });
 
             #endregion
             var app = builder.Build();
@@ -38,7 +46,7 @@ namespace Account.Apis
             try
             {
                 // Get the database context for Identity
-                var identityDbContext = Services.GetRequiredService<AppIdentityDbContext>();
+                var identityDbContext = Services.GetRequiredService<AppDBContext>();
 
                 // Apply database migration asynchronously
                 await identityDbContext.Database.MigrateAsync();
@@ -67,8 +75,15 @@ namespace Account.Apis
             {
                 app.UseSwaggerMiddlewares();
             }
-            app.UseAuthentication();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
+                RequestPath = "/Resources"
+            });
+            app.UseCors();
             app.UseAuthorization();
+            app.UseAuthentication();
             app.MapControllers();
             #endregion
             app.Run();

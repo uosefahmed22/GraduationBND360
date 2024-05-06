@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Account.Core.Services
+namespace Account.Core.Services.Auth
 {
     public interface IOtpService
     {

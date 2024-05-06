@@ -1,4 +1,6 @@
 ﻿using Account.Core.Models.Account;
+using Account.Core.Models.Content;
+using Account.Core.Models.Content.Jobs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,15 +14,14 @@ using System.Xml.Linq;
 
 namespace Account.Reposatory.Data.Context
 {
-    public class AppIdentityDbContext : IdentityDbContext<AppUser>
+    public class AppDBContext : IdentityDbContext<AppUser>
     {
-        public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options)
+        public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             SeedRoles(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
@@ -33,8 +34,11 @@ namespace Account.Reposatory.Data.Context
                 new IdentityRole { Name = "ServiceProvider", ConcurrencyStamp = "2", NormalizedName = "ServiceProvider" }
             );
         }
-        //public DbSet<BusinessModel> Businesses { get; set; }
+        public DbSet<JobModel> Jobs { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<RequirementArb> RequirementsArabic { get; set; }
+        public DbSet<RequirementEnglish> RequirementEnglish { get; set; }
+
 
     }
-
 }

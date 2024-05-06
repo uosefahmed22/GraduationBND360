@@ -1,7 +1,7 @@
 ﻿using Account.Apis.Errors;
 using Account.Core.Dtos.Account;
 using Account.Core.Models.Account;
-using Account.Core.Services;
+using Account.Core.Services.Auth;
 using Account.services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

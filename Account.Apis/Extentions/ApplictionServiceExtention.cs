@@ -1,4 +1,9 @@
 ﻿using Account.Apis.Errors;
+using Account.Core.IReposatories;
+using Account.Core.Services.Content;
+using Account.Reposatory.Reposatories;
+using Account.Reposatory.Reposatories.Content;
+using Account.Reposatory.Services.Content;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Account.Apis.Extentions
@@ -30,11 +35,12 @@ namespace Account.Apis.Extentions
                     return new BadRequestObjectResult(ValidationErrorResponse);
                 };
             });
+            service.AddAutoMapper(typeof(MappingProfile));
 
-            // Register a scoped service for payment services
-            //service.AddScoped<IPaymentServices, PaymentServices>();
 
-            //Add here anny otehrt injection related to program....
+            //service.AddScoped<IFileService, FileService>();
+            service.AddScoped<IJobRepository, JobRepository>();
+
             return service;
         }
     }
