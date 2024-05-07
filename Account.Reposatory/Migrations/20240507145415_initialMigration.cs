@@ -263,17 +263,17 @@ namespace Account.Reposatory.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "0426c176-6441-4397-835c-b82fc70f3757", "0", "User", "User" });
+                values: new object[] { "2a7f438f-7c8d-4eec-bdca-de94a56de772", "2", "ServiceProvider", "ServiceProvider" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "436841d8-7e17-46f2-9625-1d3529c068bf", "2", "ServiceProvider", "ServiceProvider" });
+                values: new object[] { "bd2afcbb-143b-4e12-af5a-6b434e7af347", "1", "BussinesOwner", "BussinesOwner" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "fcab3e86-f8d6-4a3f-9a11-98903fe31fba", "1", "BussinesOwner", "BussinesOwner" });
+                values: new object[] { "d41111de-8942-431b-b6d5-064ec9513343", "0", "User", "User" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
