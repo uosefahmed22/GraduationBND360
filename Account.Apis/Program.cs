@@ -24,13 +24,14 @@ namespace Account.Apis
             builder.Services.AddSwaggerService();
             builder.Services.AddAplictionService();
             builder.Services.AddMemoryCache();
-            builder.Services.AddCors(options =>
+            builder.Services.AddCors(Options =>
             {
-                options.AddDefaultPolicy(
-                    policy =>
-                    {
-                        policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader(); ;
-                    });
+                Options.AddPolicy("MyPolicy", Options =>
+                {
+                    Options.AllowAnyHeader().
+                    AllowAnyMethod()
+                    .AllowAnyOrigin();
+                });
             });
 
             #endregion
@@ -75,13 +76,17 @@ namespace Account.Apis
             {
                 app.UseSwaggerMiddlewares();
             }
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-           Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
-                RequestPath = "/Resources"
-            });
-            app.UseCors();
+            app.UseStaticFiles(
+           //     new StaticFileOptions
+           // {
+           //     FileProvider = new PhysicalFileProvider(
+           //Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
+           //     RequestPath = "/Resources"
+            //}
+        );
+            app.UseSwaggerMiddlewares();
+            app.UseHttpsRedirection();
+            app.UseCors("MyPolicy");
             app.UseAuthorization();
             app.UseAuthentication();
             app.MapControllers();
