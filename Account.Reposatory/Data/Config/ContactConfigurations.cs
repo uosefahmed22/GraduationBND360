@@ -6,13 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Account.Core.Models.Content;
 
 namespace Account.Reposatory.Data.Config
 {
-    public class ContactConfigurations : IEntityTypeConfiguration<Contact>
+    public class ContactConfigurations : IEntityTypeConfiguration<JobContact>
     {
-        public void Configure(EntityTypeBuilder<Contact> builder)
+        public void Configure(EntityTypeBuilder<JobContact> builder)
         {
             builder.Property(b => b.Url).IsRequired(false);
             builder.Property(b => b.Email).IsRequired(false);

@@ -1,8 +1,6 @@
 ﻿using Account.Apis.Errors;
-using Account.Core.IReposatories;
+using Account.Core.IServices.Content;
 using Account.Core.Services.Content;
-using Account.Reposatory.Reposatories;
-using Account.Reposatory.Reposatories.Content;
 using Account.Reposatory.Services.Content;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,7 +37,10 @@ namespace Account.Apis.Extentions
 
 
             //service.AddScoped<IFileService, FileService>();
-            service.AddScoped<IJobRepository, JobRepository>();
+            service.AddScoped<IJobService, JobService>();
+            service.AddScoped<IPropertyService, PropertyService>();
+            service.AddScoped<IFileService, FileService>();
+
 
             return service;
         }

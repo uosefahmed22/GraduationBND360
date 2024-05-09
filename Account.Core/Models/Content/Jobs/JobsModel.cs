@@ -1,4 +1,4 @@
-﻿using Account.Core.Enums.Content;
+﻿using Account.Core.Enums.Content.Jobs;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -25,14 +25,17 @@ namespace Account.Core.Models.Content.Jobs
         public PublisherDetails PublisherDetails { get; set; }
         public ICollection<RequirementArb> RequirementsArabic { get; set; }
         public ICollection<RequirementEnglish> RequirementEnglish { get; set; }
+        public int ContactsId { get; set; }
 
-        public List<Contact> Contacts { get; set; }
+        [ForeignKey(nameof(ContactsId))]
+
+        public List<JobContact> Contacts { get; set; }
 
         public JobModel()
         {
             RequirementsArabic = new List<RequirementArb>();
             RequirementEnglish = new List<RequirementEnglish>();
-            Contacts = new List<Contact>();
+            Contacts = new List<JobContact>();
         }
     }
 }

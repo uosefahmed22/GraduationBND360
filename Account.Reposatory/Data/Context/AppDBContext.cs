@@ -1,6 +1,7 @@
 ﻿using Account.Core.Models.Account;
 using Account.Core.Models.Content;
 using Account.Core.Models.Content.Jobs;
+using Account.Core.Models.Content.Properties;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -34,10 +35,12 @@ namespace Account.Reposatory.Data.Context
                 new IdentityRole { Name = "ServiceProvider", ConcurrencyStamp = "2", NormalizedName = "ServiceProvider" }
             );
         }
+        public DbSet<PropertyModel> Properties { get; set; }
         public DbSet<JobModel> Jobs { get; set; }
-        public DbSet<Contact> Contacts { get; set; }
         public DbSet<RequirementArb> RequirementsArabic { get; set; }
         public DbSet<RequirementEnglish> RequirementEnglish { get; set; }
+        
+
 
 
     }
