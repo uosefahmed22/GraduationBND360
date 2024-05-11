@@ -40,6 +40,8 @@ namespace Account.Apis.Extentions
             service.AddScoped<IJobService, JobService>();
             service.AddScoped<IPropertyService, PropertyService>();
             service.AddScoped<IFileService, FileService>();
+            service.AddScoped<ICategoriesService, CategoriesService>();
+
 
 
             return service;

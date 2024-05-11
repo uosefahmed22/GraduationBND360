@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Account.Reposatory.Migrations
 {
+    /// <inheritdoc />
     public partial class initialMigration : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -48,6 +52,20 @@ namespace Account.Reposatory.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryNameArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryNameEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -333,17 +351,12 @@ namespace Account.Reposatory.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "896044d7-b435-4e65-bed5-6cf13f55229d", "2", "ServiceProvider", "ServiceProvider" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "ad87d1ba-39af-470f-b995-6dfbf2d88a4d", "0", "User", "User" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "b119ba71-b569-47e9-a128-547b161a436d", "1", "BussinesOwner", "BussinesOwner" });
+                values: new object[,]
+                {
+                    { "6af03e75-2fdc-4278-95f1-e63ea1c8ff80", "1", "BussinesOwner", "BussinesOwner" },
+                    { "a2e39058-f963-4eb5-b01c-ebbc19f5d3f9", "0", "User", "User" },
+                    { "edab9019-d699-4b08-96ff-683ca79494b8", "2", "ServiceProvider", "ServiceProvider" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -420,6 +433,7 @@ namespace Account.Reposatory.Migrations
                 column: "JobModelId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -436,6 +450,9 @@ namespace Account.Reposatory.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "ImageNamesModel");

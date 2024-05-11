@@ -1,7 +1,9 @@
 ﻿using Account.Core.Dtos;
+using Account.Core.Dtos.CategoriesDto;
 using Account.Core.Dtos.JobFolderDTO;
 using Account.Core.Dtos.PropertyFolderDto;
 using Account.Core.Models.Content;
+using Account.Core.Models.Content.Categories;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
 using AutoMapper;
@@ -19,6 +21,8 @@ public class MappingProfile : Profile
         CreateMap<PublisherDetails, PublisherDetailsDTO>().ReverseMap();
         CreateMap<PropertyModel, PropertyModelDTO>().ReverseMap();
         CreateMap<ImageNamesModel, ImageNamesModelDto>().ReverseMap();
+        CreateMap<CategoriesModel, CategoriesModelDTO>().ReverseMap();
+
     }
 }
 

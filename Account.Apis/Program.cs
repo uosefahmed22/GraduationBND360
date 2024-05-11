@@ -76,14 +76,7 @@ namespace Account.Apis
             {
                 app.UseSwaggerMiddlewares();
             }
-            app.UseStaticFiles(
-           //     new StaticFileOptions
-           // {
-           //     FileProvider = new PhysicalFileProvider(
-           //Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
-           //     RequestPath = "/Resources"
-            //}
-        );
+            app.UseStaticFiles();
             app.UseSwaggerMiddlewares();
             app.UseHttpsRedirection();
             app.UseCors("MyPolicy");
