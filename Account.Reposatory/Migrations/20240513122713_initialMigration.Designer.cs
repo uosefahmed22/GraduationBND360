@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240509153418_initialMigration")]
+    [Migration("20240513122713_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -97,6 +97,87 @@ namespace Account.Reposatory.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Account.Core.Models.Content.Business.BusinessContact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BusinessContactId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContactId");
+
+                    b.ToTable("BusinessContact");
+                });
+
+            modelBuilder.Entity("Account.Core.Models.Content.Business.BusinessModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BusinessAddressArabic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusinessAddressEnglish")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BusinessContactId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BusinessDescriptionArabic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusinessDescriptionEnglish")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusinessNameArabic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusinessNameEnglish")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CategoriesModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Closing")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Holidays")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Opening")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriesModelId");
+
+                    b.ToTable("Businesses");
+                });
+
             modelBuilder.Entity("Account.Core.Models.Content.Categories.CategoriesModel", b =>
                 {
                     b.Property<int>("Id")
@@ -112,6 +193,9 @@ namespace Account.Reposatory.Migrations
                     b.Property<string>("CategoryNameEnglish")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageFileName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
@@ -125,6 +209,9 @@ namespace Account.Reposatory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BusinessModelId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageNames")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -133,6 +220,8 @@ namespace Account.Reposatory.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BusinessModelId");
 
                     b.HasIndex("PropertyModelId");
 
@@ -390,21 +479,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a2e39058-f963-4eb5-b01c-ebbc19f5d3f9",
+                            Id = "27d2cbcb-5ca0-4e13-b82d-83a5d3b2a99a",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "6af03e75-2fdc-4278-95f1-e63ea1c8ff80",
+                            Id = "9e6d6dd9-d2ee-4a3c-84c9-d161c81c3070",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "edab9019-d699-4b08-96ff-683ca79494b8",
+                            Id = "4a21b7f5-4efc-4010-9f49-a854c860871b",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"
@@ -517,8 +606,31 @@ namespace Account.Reposatory.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Account.Core.Models.Content.Business.BusinessContact", b =>
+                {
+                    b.HasOne("Account.Core.Models.Content.Business.BusinessModel", null)
+                        .WithMany("Contacts")
+                        .HasForeignKey("BusinessContactId");
+                });
+
+            modelBuilder.Entity("Account.Core.Models.Content.Business.BusinessModel", b =>
+                {
+                    b.HasOne("Account.Core.Models.Content.Categories.CategoriesModel", "CategoriesModel")
+                        .WithMany()
+                        .HasForeignKey("CategoriesModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CategoriesModel");
+                });
+
             modelBuilder.Entity("Account.Core.Models.Content.ImageNamesModel", b =>
                 {
+                    b.HasOne("Account.Core.Models.Content.Business.BusinessModel", null)
+                        .WithMany("ImageNames")
+                        .HasForeignKey("BusinessModelId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Account.Core.Models.Content.Properties.PropertyModel", null)
                         .WithMany("ImageNames")
                         .HasForeignKey("PropertyModelId")
@@ -630,6 +742,13 @@ namespace Account.Reposatory.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Account.Core.Models.Content.Business.BusinessModel", b =>
+                {
+                    b.Navigation("Contacts");
+
+                    b.Navigation("ImageNames");
                 });
 
             modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobModel", b =>

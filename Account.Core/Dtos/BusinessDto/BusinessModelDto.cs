@@ -1,25 +1,24 @@
-﻿using Account.Core.Dtos.BusinessDto;
-using Account.Core.Enums.Content;
-using Account.Core.Models.Content.Categories;
-using Account.Core.Models.Content.Jobs;
+﻿using Account.Core.Enums.Content;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Account.Core.Models.Content;
+using Account.Core.Models.Content.Business;
+using Account.Core.Dtos.JobFolderDTO;
 
-namespace Account.Core.Models.Content.Business
+namespace Account.Core.Dtos.BusinessDto
 {
-    public class BusinessModel
+    public class BusinessModelDto
     {
         public int Id { get; set; }
         public string BusinessNameArabic { get; set; }
         public string? BusinessNameEnglish { get; set; }
         public int CategoriesModelId { get; set; }
-        public CategoriesModel CategoriesModel { get; set; }
         public string BusinessDescriptionArabic { get; set; }
         public string? BusinessDescriptionEnglish { get; set; }
         public string BusinessAddressArabic { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Account.Core.Models.Account;
 using Account.Core.Models.Content;
+using Account.Core.Models.Content.Business;
 using Account.Core.Models.Content.Categories;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
@@ -41,5 +42,7 @@ namespace Account.Reposatory.Data.Context
         public DbSet<RequirementArb> RequirementsArabic { get; set; }
         public DbSet<RequirementEnglish> RequirementEnglish { get; set; }
         public DbSet<CategoriesModel> Categories { get; set; }
+        public DbSet<BusinessModel> Businesses { get; set; }
+
     }
 }

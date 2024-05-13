@@ -9,6 +9,7 @@ namespace Account.Core.Dtos.CategoriesDto
 {
     public class CategoriesModelDTO
     {
+        public int Id { get; set; }
         public string CategoryNameArabic { get; set; }
         public string? CategoryNameEnglish { get; set; }
         public string? ImageFileName { get; set; }

@@ -7,6 +7,7 @@ using Account.Core.Dtos.PropertyFolderDto;
 using AutoMapper;
 using Account.Core.Models.Content.Properties;
 using Account.Core.Models.Content;
+using Account.Core.Dtos.JobFolderDTO;
 
 namespace Account.Apis.Controllers
 {

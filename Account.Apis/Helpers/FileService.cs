@@ -93,7 +93,6 @@ namespace Account.Reposatory.Services.Content
                 return new Tuple<int, string>(0, "Error has occurred");
             }
         }
-
         public async Task DeleteImage(string imageFileName)
         {
             var contentPath = this.environment.ContentRootPath;

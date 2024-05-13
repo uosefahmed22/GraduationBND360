@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,7 +8,7 @@
 namespace Account.Reposatory.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration1 : Migration
+    public partial class initialMigration2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,32 +16,33 @@ namespace Account.Reposatory.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "6af03e75-2fdc-4278-95f1-e63ea1c8ff80");
+                keyValue: "132c249d-3790-480a-b69c-d9610b86ac1c");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "a2e39058-f963-4eb5-b01c-ebbc19f5d3f9");
+                keyValue: "134bfa8a-eca0-4456-900d-93d22827c53c");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "edab9019-d699-4b08-96ff-683ca79494b8");
+                keyValue: "c759c1e1-3662-4f49-a659-3e195dc130ff");
 
-            migrationBuilder.AddColumn<string>(
-                name: "ImageFileName",
-                table: "Categories",
-                type: "nvarchar(max)",
-                nullable: true);
+            migrationBuilder.AddColumn<DateTime>(
+                name: "TimeAddedjob",
+                table: "Jobs",
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "55336ece-3807-462f-b489-cde0e067866d", "1", "BussinesOwner", "BussinesOwner" },
-                    { "888f667c-ec5c-42b4-b0d0-992453b521d2", "0", "User", "User" },
-                    { "e197a018-5cd5-4f99-b66c-fbb2c87cded7", "2", "ServiceProvider", "ServiceProvider" }
+                    { "58b6a76e-59e6-4dad-aa5a-b7ab4e330e02", "2", "ServiceProvider", "ServiceProvider" },
+                    { "7f17e33d-6437-4162-9b0e-f55ef03c55a9", "0", "User", "User" },
+                    { "8eeb4f16-af02-4fd3-b762-05662df4bd21", "1", "BussinesOwner", "BussinesOwner" }
                 });
         }
 
@@ -50,30 +52,30 @@ namespace Account.Reposatory.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "55336ece-3807-462f-b489-cde0e067866d");
+                keyValue: "58b6a76e-59e6-4dad-aa5a-b7ab4e330e02");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "888f667c-ec5c-42b4-b0d0-992453b521d2");
+                keyValue: "7f17e33d-6437-4162-9b0e-f55ef03c55a9");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "e197a018-5cd5-4f99-b66c-fbb2c87cded7");
+                keyValue: "8eeb4f16-af02-4fd3-b762-05662df4bd21");
 
             migrationBuilder.DropColumn(
-                name: "ImageFileName",
-                table: "Categories");
+                name: "TimeAddedjob",
+                table: "Jobs");
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6af03e75-2fdc-4278-95f1-e63ea1c8ff80", "1", "BussinesOwner", "BussinesOwner" },
-                    { "a2e39058-f963-4eb5-b01c-ebbc19f5d3f9", "0", "User", "User" },
-                    { "edab9019-d699-4b08-96ff-683ca79494b8", "2", "ServiceProvider", "ServiceProvider" }
+                    { "132c249d-3790-480a-b69c-d9610b86ac1c", "1", "BussinesOwner", "BussinesOwner" },
+                    { "134bfa8a-eca0-4456-900d-93d22827c53c", "0", "User", "User" },
+                    { "c759c1e1-3662-4f49-a659-3e195dc130ff", "2", "ServiceProvider", "ServiceProvider" }
                 });
         }
     }

@@ -1,4 +1,5 @@
-﻿using Account.Core.Enums.Content.Property;
+﻿using Account.Core.Dtos.JobFolderDTO;
+using Account.Core.Enums.Content.Property;
 using Account.Core.Models.Content;
 using Account.Core.Models.Content.Properties;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ namespace Account.Core.Dtos.PropertyFolderDto
 {
     public class PropertyModelDTO
     {
+        public int Id { get; set; }
         public string ArabicDescription { get; set; }
         public string? EnglishDescription { get; set; }
         public string ArabicAddress { get; set; }
@@ -24,6 +26,7 @@ namespace Account.Core.Dtos.PropertyFolderDto
         public decimal Price { get; set; }
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
+        public DateTime? TimeAddedProperty { get; set; } = DateTime.Now;
         public List<ImageNamesModelDto>? ImageNames { get; set; }
         public List<IFormFile> images { get; set; }
     }

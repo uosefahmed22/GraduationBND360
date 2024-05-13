@@ -25,12 +25,11 @@ namespace Account.Core.Models.Content.Jobs
         public PublisherDetails PublisherDetails { get; set; }
         public ICollection<RequirementArb> RequirementsArabic { get; set; }
         public ICollection<RequirementEnglish> RequirementEnglish { get; set; }
+        public DateTime? TimeAddedjob { get; set; } = DateTime.Now;
         public int ContactsId { get; set; }
 
         [ForeignKey(nameof(ContactsId))]
-
         public List<JobContact> Contacts { get; set; }
-
         public JobModel()
         {
             RequirementsArabic = new List<RequirementArb>();

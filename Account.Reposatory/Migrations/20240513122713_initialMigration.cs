@@ -61,7 +61,8 @@ namespace Account.Reposatory.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryNameArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryNameEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CategoryNameEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageFileName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,6 +206,36 @@ namespace Account.Reposatory.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Businesses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BusinessNameArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BusinessNameEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoriesModelId = table.Column<int>(type: "int", nullable: false),
+                    BusinessDescriptionArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BusinessDescriptionEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessAddressArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Holidays = table.Column<int>(type: "int", nullable: true),
+                    BusinessAddressEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessContactId = table.Column<int>(type: "int", nullable: false),
+                    Opening = table.Column<int>(type: "int", nullable: false),
+                    Closing = table.Column<int>(type: "int", nullable: false),
+                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Businesses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Businesses_Categories_CategoriesModelId",
+                        column: x => x.CategoriesModelId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Jobs",
                 columns: table => new
                 {
@@ -263,6 +294,27 @@ namespace Account.Reposatory.Migrations
                         name: "FK_Properties_PublisherDetails_PublisherDetailsId",
                         column: x => x.PublisherDetailsId,
                         principalTable: "PublisherDetails",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BusinessContact",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessContactId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BusinessContact", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BusinessContact_Businesses_BusinessContactId",
+                        column: x => x.BusinessContactId,
+                        principalTable: "Businesses",
                         principalColumn: "Id");
                 });
 
@@ -335,11 +387,18 @@ namespace Account.Reposatory.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImageNames = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BusinessModelId = table.Column<int>(type: "int", nullable: true),
                     PropertyModelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ImageNamesModel", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ImageNamesModel_Businesses_BusinessModelId",
+                        column: x => x.BusinessModelId,
+                        principalTable: "Businesses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ImageNamesModel_Properties_PropertyModelId",
                         column: x => x.PropertyModelId,
@@ -353,9 +412,9 @@ namespace Account.Reposatory.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6af03e75-2fdc-4278-95f1-e63ea1c8ff80", "1", "BussinesOwner", "BussinesOwner" },
-                    { "a2e39058-f963-4eb5-b01c-ebbc19f5d3f9", "0", "User", "User" },
-                    { "edab9019-d699-4b08-96ff-683ca79494b8", "2", "ServiceProvider", "ServiceProvider" }
+                    { "27d2cbcb-5ca0-4e13-b82d-83a5d3b2a99a", "0", "User", "User" },
+                    { "4a21b7f5-4efc-4010-9f49-a854c860871b", "2", "ServiceProvider", "ServiceProvider" },
+                    { "9e6d6dd9-d2ee-4a3c-84c9-d161c81c3070", "1", "BussinesOwner", "BussinesOwner" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -396,6 +455,21 @@ namespace Account.Reposatory.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BusinessContact_BusinessContactId",
+                table: "BusinessContact",
+                column: "BusinessContactId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Businesses_CategoriesModelId",
+                table: "Businesses",
+                column: "CategoriesModelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ImageNamesModel_BusinessModelId",
+                table: "ImageNamesModel",
+                column: "BusinessModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ImageNamesModel_PropertyModelId",
@@ -452,7 +526,7 @@ namespace Account.Reposatory.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "BusinessContact");
 
             migrationBuilder.DropTable(
                 name: "ImageNamesModel");
@@ -473,10 +547,16 @@ namespace Account.Reposatory.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Businesses");
+
+            migrationBuilder.DropTable(
                 name: "Properties");
 
             migrationBuilder.DropTable(
                 name: "Jobs");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "PropertyContact");

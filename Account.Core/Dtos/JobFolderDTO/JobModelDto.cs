@@ -13,6 +13,7 @@ namespace Account.Core.Dtos.JobFolderDTO
 {
     public class JobModelDto
     {
+        public int Id { get; set; }
         public string JobTitleArabic { get; set; }
         public string JobTitleEnglish { get; set; }
         public string JobDescriptionArabic { get; set; }
@@ -23,6 +24,7 @@ namespace Account.Core.Dtos.JobFolderDTO
         public PublisherDetailsDTO PublisherDetails { get; set; }
         public string Type { get; set; }
         public int WorkHours { get; set; }
+        public DateTime? TimeAddedjob { get; set; } = DateTime.Now;
         public decimal Salary { get; set; }
         public List<ContactDTO> Contacts { get; set; }
 
