@@ -29,11 +29,20 @@ namespace Account.Core.Dtos.BusinessDto
         public string? URls { get; set; }
         public int Opening { get; set; }
         public int Closing { get; set; }
-        public string? ImageName { get; set; }
+        public string? ProfileImageName { get; set; }
         [NotMapped]
         public IFormFile ProfileImage { get; set; }
-        public List<ImageNamesModel>? ImageNames { get; set; }
+        public string? BusinessImageName1 { get; set; }
         [NotMapped]
-        public List<IFormFile> BusinessImages { get; set; }
+        public IFormFile BusinessImage1 { get; set; }
+        public string? BusinessImageName2 { get; set; }
+        [NotMapped]
+        public IFormFile? BusinessImage2 { get; set; }
+        public string? BusinessImageName3 { get; set; }
+        [NotMapped]
+        public IFormFile? BusinessImage3 { get; set; }
+        public string? BusinessImageName4 { get; set; }
+        [NotMapped]
+        public IFormFile? BusinessImage4 { get; set; }
     }
 }

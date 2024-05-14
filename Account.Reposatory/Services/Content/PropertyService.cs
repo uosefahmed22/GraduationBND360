@@ -33,7 +33,6 @@ namespace Account.Reposatory.Services.Content
                 var propertyEntity = _mapper.Map<PropertyModel>(propertyDto);
                 _context.Properties.Add(propertyEntity);
                 await _context.SaveChangesAsync();
-
                 return new ApiResponse(200, "Property added successfully.");
             }
             catch (Exception ex)
@@ -79,7 +78,6 @@ namespace Account.Reposatory.Services.Content
                 return new ApiResponse(500, $"Failed to delete property: {ex.Message}");
             }
         }
-
         public async Task<List<PropertyModelDTO>> GetAllPropertiesAsync()
         {
             try

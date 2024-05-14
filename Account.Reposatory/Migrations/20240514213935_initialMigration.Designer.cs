@@ -4,6 +4,7 @@ using Account.Reposatory.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240514213935_initialMigration")]
+    partial class initialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,26 +191,6 @@ namespace Account.Reposatory.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Account.Core.Models.Content.Crafts.CraftsModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CraftsNameArabic")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CraftsNameEnglish")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("crafts");
                 });
 
             modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobModel", b =>
@@ -442,21 +425,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cf042779-6f4c-47b0-8869-6b11589f80d8",
+                            Id = "553e49c1-1490-47fb-8085-8af9b771842d",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "cf35365e-0e88-43da-a48a-be2627222783",
+                            Id = "242fba15-0eb8-49ff-a8a9-5f94ffdef54d",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "8f708d6f-340a-49d4-aa34-114a8b9732d6",
+                            Id = "d5a88f66-e33c-403f-b0c6-543e0648bd9e",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"

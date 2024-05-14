@@ -36,12 +36,12 @@ namespace Account.Core.Models.Content.Properties
         public IFormFile image1 { get; set; }
         public string? ImageName2 { get; set; }
         [NotMapped]
-        public IFormFile image2 { get; set; }
+        public IFormFile? image2 { get; set; }
         public string? ImageName3 { get; set; }
         [NotMapped]
-        public IFormFile image3 { get; set; }
+        public IFormFile? image3 { get; set; }
         public string? ImageName4 { get; set; }
         [NotMapped]
-        public IFormFile image4 { get; set; }
+        public IFormFile? image4 { get; set; }
     }
 }

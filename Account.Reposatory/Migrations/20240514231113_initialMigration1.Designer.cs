@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240514164159_initialMigration")]
-    partial class initialMigration
+    [Migration("20240514231113_initialMigration1")]
+    partial class initialMigration1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,6 +119,18 @@ namespace Account.Reposatory.Migrations
                     b.Property<string>("BusinessDescriptionEnglish")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BusinessImageName1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusinessImageName2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusinessImageName3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusinessImageName4")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BusinessNameArabic")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -138,14 +150,14 @@ namespace Account.Reposatory.Migrations
                     b.Property<int?>("Holidays")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Opening")
                         .HasColumnType("int");
 
                     b.Property<string>("Phonenumbers")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfileImageName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("URls")
@@ -181,7 +193,7 @@ namespace Account.Reposatory.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Account.Core.Models.Content.ImageNamesModel", b =>
+            modelBuilder.Entity("Account.Core.Models.Content.Crafts.CraftsModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -189,18 +201,16 @@ namespace Account.Reposatory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BusinessModelId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageNames")
+                    b.Property<string>("CraftsNameArabic")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CraftsNameEnglish")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessModelId");
-
-                    b.ToTable("ImageNamesModel");
+                    b.ToTable("crafts");
                 });
 
             modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobModel", b =>
@@ -435,21 +445,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "aa8ac631-071a-4414-b226-abb8b5f9f4a6",
+                            Id = "cf042779-6f4c-47b0-8869-6b11589f80d8",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "90cad836-8e31-4cff-abac-bfc6e65ce689",
+                            Id = "cf35365e-0e88-43da-a48a-be2627222783",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "b18c6f23-cf06-4376-ac0b-633ca90b6004",
+                            Id = "8f708d6f-340a-49d4-aa34-114a8b9732d6",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"
@@ -573,14 +583,6 @@ namespace Account.Reposatory.Migrations
                     b.Navigation("CategoriesModel");
                 });
 
-            modelBuilder.Entity("Account.Core.Models.Content.ImageNamesModel", b =>
-                {
-                    b.HasOne("Account.Core.Models.Content.Business.BusinessModel", null)
-                        .WithMany("ImageNames")
-                        .HasForeignKey("BusinessModelId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobModel", b =>
                 {
                     b.HasOne("Account.Core.Models.Content.PublisherDetails", "PublisherDetails")
@@ -672,11 +674,6 @@ namespace Account.Reposatory.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Account.Core.Models.Content.Business.BusinessModel", b =>
-                {
-                    b.Navigation("ImageNames");
                 });
 
             modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobModel", b =>

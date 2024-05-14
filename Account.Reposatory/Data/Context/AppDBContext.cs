@@ -2,8 +2,10 @@
 using Account.Core.Models.Content;
 using Account.Core.Models.Content.Business;
 using Account.Core.Models.Content.Categories;
+using Account.Core.Models.Content.Crafts;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
+using Account.Reposatory.Services.Content;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +45,8 @@ namespace Account.Reposatory.Data.Context
         public DbSet<RequirementEnglish> RequirementEnglish { get; set; }
         public DbSet<CategoriesModel> Categories { get; set; }
         public DbSet<BusinessModel> Businesses { get; set; }
+        public DbSet<CraftsModel> crafts { get; set; }
+
 
     }
 }

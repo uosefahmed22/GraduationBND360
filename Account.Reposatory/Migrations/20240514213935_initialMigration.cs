@@ -209,7 +209,11 @@ namespace Account.Reposatory.Migrations
                     URls = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Opening = table.Column<int>(type: "int", nullable: false),
                     Closing = table.Column<int>(type: "int", nullable: false),
-                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ProfileImageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessImageName1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessImageName2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessImageName3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessImageName4 = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -290,26 +294,6 @@ namespace Account.Reposatory.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ImageNamesModel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageNames = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BusinessModelId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ImageNamesModel", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ImageNamesModel_Businesses_BusinessModelId",
-                        column: x => x.BusinessModelId,
-                        principalTable: "Businesses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RequirementEnglish",
                 columns: table => new
                 {
@@ -354,9 +338,9 @@ namespace Account.Reposatory.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "90cad836-8e31-4cff-abac-bfc6e65ce689", "1", "BussinesOwner", "BussinesOwner" },
-                    { "aa8ac631-071a-4414-b226-abb8b5f9f4a6", "0", "User", "User" },
-                    { "b18c6f23-cf06-4376-ac0b-633ca90b6004", "2", "ServiceProvider", "ServiceProvider" }
+                    { "242fba15-0eb8-49ff-a8a9-5f94ffdef54d", "1", "BussinesOwner", "BussinesOwner" },
+                    { "553e49c1-1490-47fb-8085-8af9b771842d", "0", "User", "User" },
+                    { "d5a88f66-e33c-403f-b0c6-543e0648bd9e", "2", "ServiceProvider", "ServiceProvider" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -404,11 +388,6 @@ namespace Account.Reposatory.Migrations
                 column: "CategoriesModelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageNamesModel_BusinessModelId",
-                table: "ImageNamesModel",
-                column: "BusinessModelId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Jobs_PublisherDetailsId",
                 table: "Jobs",
                 column: "PublisherDetailsId");
@@ -448,7 +427,7 @@ namespace Account.Reposatory.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ImageNamesModel");
+                name: "Businesses");
 
             migrationBuilder.DropTable(
                 name: "Properties");
@@ -466,13 +445,10 @@ namespace Account.Reposatory.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Businesses");
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Jobs");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "PublisherDetails");

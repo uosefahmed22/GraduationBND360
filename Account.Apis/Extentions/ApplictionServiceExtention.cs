@@ -42,9 +42,7 @@ namespace Account.Apis.Extentions
             service.AddScoped<IFileService, FileService>();
             service.AddScoped<ICategoriesService, CategoriesService>();
             service.AddScoped<IBusinessService, BusinessService>();
-
-
-
+            service.AddScoped<ICraftsService, CraftsService>();
 
             return service;
         }

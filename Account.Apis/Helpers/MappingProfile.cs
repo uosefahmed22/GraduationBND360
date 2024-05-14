@@ -1,11 +1,13 @@
 ﻿using Account.Core.Dtos;
 using Account.Core.Dtos.BusinessDto;
 using Account.Core.Dtos.CategoriesDto;
+using Account.Core.Dtos.CraftsFolder;
 using Account.Core.Dtos.JobFolderDTO;
 using Account.Core.Dtos.PropertyFolderDto;
 using Account.Core.Models.Content;
 using Account.Core.Models.Content.Business;
 using Account.Core.Models.Content.Categories;
+using Account.Core.Models.Content.Crafts;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
 using AutoMapper;
@@ -21,9 +23,9 @@ public class MappingProfile : Profile
         CreateMap<PublisherDetails, PublisherDetailsDTO>().ReverseMap();
         CreateMap<PropertyModel, PropertyModelDTO>().ReverseMap();
         CreateMap<CategoriesModel, CategoriesModelDTO>()
-        .ForMember(dest => dest.Image, opt => opt.Ignore())
-        .ReverseMap();
+        .ForMember(dest => dest.Image, opt => opt.Ignore()).ReverseMap();
         CreateMap<BusinessModel, BusinessModelDto>().ReverseMap();
+        CreateMap<CraftsModel, CraftsModelDto>().ReverseMap();
     }
 }
 
