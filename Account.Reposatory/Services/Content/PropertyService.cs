@@ -2,6 +2,7 @@
 using Account.Core.Dtos.PropertyFolderDto;
 using Account.Core.IServices.Content;
 using Account.Core.Models.Content.Properties;
+using Account.Core.Services.Content;
 using Account.Reposatory.Data.Context;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,13 @@ namespace Account.Reposatory.Services.Content
     {
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
+        private readonly IFileService _fileService;
 
-        public PropertyService(AppDBContext context, IMapper mapper)
+        public PropertyService(AppDBContext context, IMapper mapper,IFileService fileService)
         {
             _context = context;
             _mapper = mapper;
+            _fileService = fileService;
         }
         public async Task<ApiResponse> CreatePropertyAsync(PropertyModelDTO propertyDto)
         {
@@ -49,6 +52,23 @@ namespace Account.Reposatory.Services.Content
                     return new ApiResponse(404, "Property not found.");
                 }
 
+                if (!string.IsNullOrEmpty(existingProperty.ImageName1))
+                {
+                    await _fileService.DeleteImage(existingProperty.ImageName1);
+                }
+                if (!string.IsNullOrEmpty(existingProperty.ImageName2))
+                {
+                    await _fileService.DeleteImage(existingProperty.ImageName2);
+                }
+                if (!string.IsNullOrEmpty(existingProperty.ImageName3))
+                {
+                    await _fileService.DeleteImage(existingProperty.ImageName3);
+                }
+                if (!string.IsNullOrEmpty(existingProperty.ImageName4))
+                {
+                    await _fileService.DeleteImage(existingProperty.ImageName4);
+                }
+
                 _context.Properties.Remove(existingProperty);
                 await _context.SaveChangesAsync();
 
@@ -59,14 +79,13 @@ namespace Account.Reposatory.Services.Content
                 return new ApiResponse(500, $"Failed to delete property: {ex.Message}");
             }
         }
+
         public async Task<List<PropertyModelDTO>> GetAllPropertiesAsync()
         {
             try
             {
                 var propertyEntities = await _context.Properties
-                    .Include(p => p.ImageNames)
                     .Include(p=>p.PublisherDetails)
-                    .Include(p => p.Contacts)
                     .ToListAsync();
 
                 return _mapper.Map<List<PropertyModelDTO>>(propertyEntities);
@@ -81,9 +100,7 @@ namespace Account.Reposatory.Services.Content
             try
             {
                 var propertyEntity = await _context.Properties
-                    .Include(p => p.ImageNames)
                     .Include(p => p.PublisherDetails)
-                    .Include(p => p.Contacts)
                     .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (propertyEntity == null)

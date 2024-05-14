@@ -70,21 +70,6 @@ namespace Account.Reposatory.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PropertyContact",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PropertyContact", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PublisherDetails",
                 columns: table => new
                 {
@@ -219,7 +204,9 @@ namespace Account.Reposatory.Migrations
                     BusinessAddressArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Holidays = table.Column<int>(type: "int", nullable: true),
                     BusinessAddressEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BusinessContactId = table.Column<int>(type: "int", nullable: false),
+                    Phonenumbers = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Emails = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    URls = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Opening = table.Column<int>(type: "int", nullable: false),
                     Closing = table.Column<int>(type: "int", nullable: false),
                     ImageName = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -246,11 +233,14 @@ namespace Account.Reposatory.Migrations
                     JobDescriptionArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     JobDescriptionEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Whatsapp = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phonenumbers = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Emails = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    URls = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false),
                     WorkHours = table.Column<int>(type: "int", nullable: false),
                     Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PublisherDetailsId = table.Column<int>(type: "int", nullable: false),
-                    ContactsId = table.Column<int>(type: "int", nullable: false)
+                    TimeAddedjob = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -274,22 +264,24 @@ namespace Account.Reposatory.Migrations
                     ArabicAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EnglishAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhatsappNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phonenumbers = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Emails = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    URls = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PublisherDetailsId = table.Column<int>(type: "int", nullable: true),
-                    ContactsId = table.Column<int>(type: "int", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Area = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TimeAddedProperty = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ImageName1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageName2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageName3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageName4 = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Properties", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Properties_PropertyContact_ContactsId",
-                        column: x => x.ContactsId,
-                        principalTable: "PropertyContact",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Properties_PublisherDetails_PublisherDetailsId",
                         column: x => x.PublisherDetailsId,
@@ -298,44 +290,21 @@ namespace Account.Reposatory.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BusinessContact",
+                name: "ImageNamesModel",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BusinessContactId = table.Column<int>(type: "int", nullable: true)
+                    ImageNames = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BusinessModelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BusinessContact", x => x.Id);
+                    table.PrimaryKey("PK_ImageNamesModel", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BusinessContact_Businesses_BusinessContactId",
-                        column: x => x.BusinessContactId,
+                        name: "FK_ImageNamesModel_Businesses_BusinessModelId",
+                        column: x => x.BusinessModelId,
                         principalTable: "Businesses",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "JobContact",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactsId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_JobContact", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_JobContact_Jobs_ContactsId",
-                        column: x => x.ContactsId,
-                        principalTable: "Jobs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -380,41 +349,14 @@ namespace Account.Reposatory.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ImageNamesModel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageNames = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BusinessModelId = table.Column<int>(type: "int", nullable: true),
-                    PropertyModelId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ImageNamesModel", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ImageNamesModel_Businesses_BusinessModelId",
-                        column: x => x.BusinessModelId,
-                        principalTable: "Businesses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ImageNamesModel_Properties_PropertyModelId",
-                        column: x => x.PropertyModelId,
-                        principalTable: "Properties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "27d2cbcb-5ca0-4e13-b82d-83a5d3b2a99a", "0", "User", "User" },
-                    { "4a21b7f5-4efc-4010-9f49-a854c860871b", "2", "ServiceProvider", "ServiceProvider" },
-                    { "9e6d6dd9-d2ee-4a3c-84c9-d161c81c3070", "1", "BussinesOwner", "BussinesOwner" }
+                    { "90cad836-8e31-4cff-abac-bfc6e65ce689", "1", "BussinesOwner", "BussinesOwner" },
+                    { "aa8ac631-071a-4414-b226-abb8b5f9f4a6", "0", "User", "User" },
+                    { "b18c6f23-cf06-4376-ac0b-633ca90b6004", "2", "ServiceProvider", "ServiceProvider" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -457,11 +399,6 @@ namespace Account.Reposatory.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BusinessContact_BusinessContactId",
-                table: "BusinessContact",
-                column: "BusinessContactId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Businesses_CategoriesModelId",
                 table: "Businesses",
                 column: "CategoriesModelId");
@@ -472,24 +409,9 @@ namespace Account.Reposatory.Migrations
                 column: "BusinessModelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageNamesModel_PropertyModelId",
-                table: "ImageNamesModel",
-                column: "PropertyModelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_JobContact_ContactsId",
-                table: "JobContact",
-                column: "ContactsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Jobs_PublisherDetailsId",
                 table: "Jobs",
                 column: "PublisherDetailsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Properties_ContactsId",
-                table: "Properties",
-                column: "ContactsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Properties_PublisherDetailsId",
@@ -526,13 +448,10 @@ namespace Account.Reposatory.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BusinessContact");
-
-            migrationBuilder.DropTable(
                 name: "ImageNamesModel");
 
             migrationBuilder.DropTable(
-                name: "JobContact");
+                name: "Properties");
 
             migrationBuilder.DropTable(
                 name: "RequirementEnglish");
@@ -550,16 +469,10 @@ namespace Account.Reposatory.Migrations
                 name: "Businesses");
 
             migrationBuilder.DropTable(
-                name: "Properties");
-
-            migrationBuilder.DropTable(
                 name: "Jobs");
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "PropertyContact");
 
             migrationBuilder.DropTable(
                 name: "PublisherDetails");

@@ -22,18 +22,6 @@ namespace Account.Reposatory.Data.Config
 
             builder.Property(b => b.Price)
                 .HasColumnType("decimal(18, 2)");
-
-            builder.HasMany(p => p.ImageNames)
-           .WithOne()
-           .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Navigation(p => p.PublisherDetails)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
-            builder.Navigation(p => p.Contacts)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
-            builder.Ignore(p => p.images);
         }
     }
 

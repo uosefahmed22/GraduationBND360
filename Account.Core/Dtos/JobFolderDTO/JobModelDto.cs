@@ -19,6 +19,9 @@ namespace Account.Core.Dtos.JobFolderDTO
         public string JobDescriptionArabic { get; set; }
         public string JobDescriptionEnglish { get; set; }
         public string Whatsapp { get; set; }
+        public string Phonenumbers { get; set; }
+        public string? Emails { get; set; }
+        public string? URls { get; set; }
         public List<RequirementDTO> RequirementsArabic { get; set; }
         public List<RequirementDTO> RequirementEnglish { get; set; }
         public PublisherDetailsDTO PublisherDetails { get; set; }
@@ -26,13 +29,10 @@ namespace Account.Core.Dtos.JobFolderDTO
         public int WorkHours { get; set; }
         public DateTime? TimeAddedjob { get; set; } = DateTime.Now;
         public decimal Salary { get; set; }
-        public List<ContactDTO> Contacts { get; set; }
-
         public JobModelDto()
         {
             RequirementsArabic = new List<RequirementDTO>();
             RequirementEnglish = new List<RequirementDTO>();
-            Contacts = new List<ContactDTO>();
         }
     }
 }

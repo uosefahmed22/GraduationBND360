@@ -58,7 +58,6 @@ namespace Account.Reposatory.Services.Content
             try
             {
                 var jobEntity = await _context.Jobs
-                    .Include(j => j.Contacts)
                     .Include(k => k.RequirementsArabic)
                     .Include(k => k.RequirementEnglish)
                     .Include(k => k.PublisherDetails)
@@ -86,7 +85,6 @@ namespace Account.Reposatory.Services.Content
             try
             {
                 var jobsEntities = await _context.Jobs
-                    .Include(j => j.Contacts)
                     .Include(k => k.RequirementsArabic)
                     .Include(k => k.RequirementEnglish)
                     .Include(k => k.PublisherDetails)
@@ -106,7 +104,6 @@ namespace Account.Reposatory.Services.Content
                                             .Include(j => j.RequirementsArabic)
                                             .Include(j => j.RequirementEnglish)
                                             .Include(j => j.PublisherDetails)
-                                            .Include(j => j.Contacts)
                                             .FirstOrDefaultAsync(j => j.Id == id);
 
             if (existingJob == null)
@@ -127,11 +124,6 @@ namespace Account.Reposatory.Services.Content
                 existingJob.RequirementEnglish.Add(_mapper.Map<RequirementEnglish>(req));
             }
 
-            existingJob.Contacts.Clear();
-            foreach (var contact in job.Contacts)
-            {
-                existingJob.Contacts.Add(_mapper.Map<JobContact>(contact));
-            }
 
             await _context.SaveChangesAsync();
 

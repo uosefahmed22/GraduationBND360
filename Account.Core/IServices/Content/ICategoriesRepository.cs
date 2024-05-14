@@ -17,5 +17,6 @@ namespace Account.Core.IServices.Content
         Task<IEnumerable<CategoriesModelDTO>> GetAllCategoriesAsync();
         Task<ApiResponse> UpdateCategoryAsync(int id, CategoriesModelDTO category);
         Task<ApiResponse> DeleteCategoryAsync(int id);
+        Task<CategoriesModel?> FindByIdAsync(int id);
     }
 }

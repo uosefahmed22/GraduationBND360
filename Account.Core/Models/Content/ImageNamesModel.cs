@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Account.Core.Models.Content
 {
-        public class ImageNamesModel
-        {
-            public int Id { get; set; }
-            public string ImageNames { get; set; }
-        }
+    public class ImageNamesModel
+    {
+        public int Id { get; set; }
+        public string ImageNames { get; set; }
+    }
 }

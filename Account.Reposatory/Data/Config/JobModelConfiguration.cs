@@ -27,9 +27,6 @@ namespace Account.Reposatory.Data.Config
                 .HasForeignKey(r => r.JobModelId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(j => j.Contacts)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 

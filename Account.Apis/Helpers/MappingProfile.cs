@@ -16,16 +16,14 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<JobModel, JobModelDto>().ReverseMap();
-        CreateMap<JobContact, ContactDTO>().ReverseMap();
-        CreateMap<PropertyContact, PropertyContactDto>().ReverseMap();
         CreateMap<RequirementArb, RequirementDTO>().ReverseMap();
         CreateMap<RequirementEnglish, RequirementDTO>().ReverseMap();
         CreateMap<PublisherDetails, PublisherDetailsDTO>().ReverseMap();
         CreateMap<PropertyModel, PropertyModelDTO>().ReverseMap();
-        CreateMap<ImageNamesModel, ImageNamesModelDto>().ReverseMap();
-        CreateMap<CategoriesModel, CategoriesModelDTO>().ReverseMap();
+        CreateMap<CategoriesModel, CategoriesModelDTO>()
+        .ForMember(dest => dest.Image, opt => opt.Ignore())
+        .ReverseMap();
         CreateMap<BusinessModel, BusinessModelDto>().ReverseMap();
-        CreateMap<BusinessContact, BusinessContactDto>().ReverseMap();
     }
 }
 

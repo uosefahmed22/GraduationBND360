@@ -9,7 +9,6 @@ namespace Account.Core.Services.Content
 {
     public interface IFileService
     {
-        Tuple<int, List<string>> SaveImages(List<IFormFile> imageFiles);
         public Task DeleteImage(string imageFileName);
         Tuple<int, string> SaveImage(IFormFile imageFile);
     }

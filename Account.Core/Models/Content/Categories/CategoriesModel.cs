@@ -16,6 +16,6 @@ namespace Account.Core.Models.Content.Categories
         public string? ImageFileName { get; set; }
 
         [NotMapped]
-        public IFormFile image {  get; set; }
+        public IFormFile Image { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace Account.Apis.Controllers
         private readonly IFileService _fileService;
         private readonly IMapper _mapper;
 
-        public CategoriesController(ICategoriesService categoryRepository, IFileService fileService,IMapper mapper)
+        public CategoriesController(ICategoriesService categoryRepository, IFileService fileService, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
             _fileService = fileService;
@@ -34,9 +34,9 @@ namespace Account.Apis.Controllers
                 return Ok(status);
             }
 
-            if (model.image != null)
+            if (model.Image != null)
             {
-                var fileResult = _fileService.SaveImage(model.image);
+                var fileResult = _fileService.SaveImage(model.Image);
 
                 if (fileResult.Item1 == 1)
                 {
@@ -92,42 +92,65 @@ namespace Account.Apis.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromForm] CategoriesModelDTO categoryToUpdate)
         {
-            var existingCategory = await _categoryRepository.GetCategoryByIdAsync(id);
-            if (existingCategory == null)
+            try
             {
-                return StatusCode(404,
+                if (id != categoryToUpdate.Id)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest,
+                        new Status
+                        {
+                            StatusCode = 400,
+                            Message = "Id in URL and form body does not match."
+                        });
+                }
+
+                var existingCategory = await _categoryRepository.FindByIdAsync(id);
+                if (existingCategory == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound,
+                        new Status
+                        {
+                            StatusCode = 404,
+                            Message = $"Category with ID: {id} does not exist."
+                        });
+                }
+
+                if (categoryToUpdate.Image != null)
+                {
+                    var fileResult = _fileService.SaveImage(categoryToUpdate.Image);
+                    if (fileResult.Item1 == 1)
+                    {
+                        categoryToUpdate.ImageFileName = fileResult.Item2;
+                    }
+                }
+
+                _mapper.Map(categoryToUpdate, existingCategory);
+
+                var result = await _categoryRepository.UpdateCategoryAsync(id, categoryToUpdate);
+
+                if (categoryToUpdate.Image != null)
+                {
+                    await _fileService.DeleteImage(existingCategory.ImageFileName);
+                }
+
+                return StatusCode(result.StatusCode,
                     new Status
                     {
-                        StatusCode = 404,
-                        Message = $"Category with ID: {id} does not exist."
+                        StatusCode = result.StatusCode,
+                        Message = result.Message
                     });
             }
-
-            if (categoryToUpdate.image != null)
+            catch (Exception ex)
             {
-                var fileResult = _fileService.SaveImage(categoryToUpdate.image);
-                if (fileResult.Item1 == 1)
-                {
-                    categoryToUpdate.ImageFileName = fileResult.Item2;
-                }
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Status
+                    {
+                        StatusCode = 500,
+                        Message = ex.Message
+                    });
             }
-            _mapper.Map(categoryToUpdate, existingCategory);
-            var result = await _categoryRepository.UpdateCategoryAsync(id, existingCategory);
-            if (categoryToUpdate.ImageFileName != null)
-            {
-                await _fileService.DeleteImage(existingCategory.ImageFileName);
-            }
-
-            return StatusCode(result.StatusCode,
-                new Status
-                {
-                    StatusCode = result.StatusCode,
-                    Message = result.Message
-                });
-
         }
 
     }
-
 }
 

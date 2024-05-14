@@ -21,16 +21,27 @@ namespace Account.Core.Models.Content.Properties
         public string ArabicAddress { get; set; }
         public string? EnglishAddress { get; set; }
         public string WhatsappNumber { get; set; }
+        public string Phonenumbers { get; set; }
+        public string? Emails { get; set; }
+        public string? URls { get; set; }
         public PublisherDetails? PublisherDetails { get; set; }
-        public PropertyContact? Contacts { get; set; }
         public PropertyType Type { get; set; }
         public int Area { get; set; }
         public decimal Price { get; set; }
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
         public DateTime? TimeAddedProperty { get; set; } = DateTime.Now;
-        public List<ImageNamesModel>? ImageNames { get; set; }
+        public string? ImageName1 { get; set; }
         [NotMapped]
-        public List<IFormFile> images { get; set; }
+        public IFormFile image1 { get; set; }
+        public string? ImageName2 { get; set; }
+        [NotMapped]
+        public IFormFile image2 { get; set; }
+        public string? ImageName3 { get; set; }
+        [NotMapped]
+        public IFormFile image3 { get; set; }
+        public string? ImageName4 { get; set; }
+        [NotMapped]
+        public IFormFile image4 { get; set; }
     }
 }

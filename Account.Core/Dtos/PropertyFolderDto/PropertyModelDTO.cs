@@ -19,15 +19,23 @@ namespace Account.Core.Dtos.PropertyFolderDto
         public string ArabicAddress { get; set; }
         public string? EnglishAddress { get; set; }
         public string WhatsappNumber { get; set; }
+        public string Phonenumbers { get; set; }
+        public string? Emails { get; set; }
+        public string? URls { get; set; }
         public PublisherDetailsDTO? PublisherDetails { get; set; }
-        public PropertyContactDto? Contacts { get; set; }
         public PropertyType Type { get; set; }
         public int Area { get; set; }
         public decimal Price { get; set; }
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
         public DateTime? TimeAddedProperty { get; set; } = DateTime.Now;
-        public List<ImageNamesModelDto>? ImageNames { get; set; }
-        public List<IFormFile> images { get; set; }
+        public string? ImageName1 { get; set; }
+        public IFormFile image1 { get; set; }
+        public string? ImageName2 { get; set; }
+        public IFormFile image2 { get; set; }
+        public string? ImageName3 { get; set; }
+        public IFormFile image3 { get; set; }
+        public string? ImageName4 { get; set; }
+        public IFormFile image4 { get; set; }
     }
 }

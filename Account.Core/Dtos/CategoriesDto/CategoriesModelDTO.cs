@@ -14,6 +14,6 @@ namespace Account.Core.Dtos.CategoriesDto
         public string? CategoryNameEnglish { get; set; }
         public string? ImageFileName { get; set; }
 
-        public IFormFile image { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

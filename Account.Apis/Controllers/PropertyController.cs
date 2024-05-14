@@ -36,27 +36,67 @@ namespace Account.Apis.Controllers
                 return Ok(status);
             }
 
-            if (model.images != null && model.images.Any())
+            try
             {
-                var fileResult = _fileService.SaveImages(model.images);
-                if (fileResult.Item1 == 1)
+                var fileResult1 = _fileService.SaveImage(model.image1);
+                if (fileResult1.Item1 == 1)
                 {
-                    model.ImageNames = fileResult.Item2.Select(fileName => new ImageNamesModelDto { ImageNames = fileName }).ToList();
+                    model.ImageName1 = fileResult1.Item2;
                 }
-
                 else
                 {
                     status.StatusCode = 0;
-                    status.Message = "Error saving image.";
+                    status.Message = "Error saving image 1.";
                     return Ok(status);
                 }
-            }
 
-            try
-            {
+                var fileResult2 = _fileService.SaveImage(model.image2);
+                if (fileResult2.Item1 == 1)
+                {
+                    model.ImageName2 = fileResult2.Item2;
+                }
+                else
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Error saving image 2.";
+                    return Ok(status);
+                }
+
+                var fileResult3 = _fileService.SaveImage(model.image3);
+                if (fileResult3.Item1 == 1)
+                {
+                    model.ImageName3 = fileResult3.Item2;
+                }
+                else
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Error saving image 3.";
+                    return Ok(status);
+                }
+
+                var fileResult4 = _fileService.SaveImage(model.image4);
+                if (fileResult4.Item1 == 1)
+                {
+                    model.ImageName4 = fileResult4.Item2;
+                }
+                else
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Error saving image 4.";
+                    return Ok(status);
+                }
+
                 var propertyResult = await _propertyService.CreatePropertyAsync(model);
-                status.StatusCode = 1;
-                status.Message = "Property added successfully.";
+                if (propertyResult.StatusCode == 200)
+                {
+                    status.StatusCode = 1;
+                    status.Message = "Property added successfully.";
+                }
+                else
+                {
+                    status.StatusCode = 0;
+                    status.Message = $"Error adding property: {propertyResult.Message}";
+                }
             }
             catch (Exception ex)
             {
@@ -66,6 +106,7 @@ namespace Account.Apis.Controllers
 
             return Ok(status);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllProperties()
         {
@@ -80,14 +121,13 @@ namespace Account.Apis.Controllers
             }
         }
 
-        [HttpDelete("properties/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProperty(int id)
         {
             var result = await _propertyService.DeletePropertyAsync(id);
             return StatusCode(result.StatusCode, result);
         }
-
-        [HttpGet("properties/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetProperty(int id)
         {
             var property = await _propertyService.GetPropertyByIdAsync(id);
@@ -103,39 +143,85 @@ namespace Account.Apis.Controllers
         {
             try
             {
+                if (id != propertyToUpdate.Id)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest,
+                        new Status
+                        {
+                            StatusCode = 400,
+                            Message = "Id in URL and form body does not match."
+                        });
+                }
+
                 var existingProperty = await _propertyService.FindByIdAsync(id);
                 if (existingProperty == null)
+                {
                     return StatusCode(StatusCodes.Status404NotFound,
                         new Status
                         {
                             StatusCode = 404,
                             Message = $"Property with id: {id} does not exist."
                         });
+                }
 
-                if (propertyToUpdate.images != null)
+                if (propertyToUpdate.image1 != null)
                 {
-                    var fileResult = _fileService.SaveImages(propertyToUpdate.images);
+                    var fileResult = _fileService.SaveImage(propertyToUpdate.image1);
                     if (fileResult.Item1 == 1)
                     {
-                        propertyToUpdate.ImageNames = fileResult.Item2
-                            .Select(imageName => new ImageNamesModelDto { ImageNames = imageName })
-                            .ToList();
+                        propertyToUpdate.ImageName1 = fileResult.Item2;
+                    }
+                }
+                if (propertyToUpdate.image2 != null)
+                {
+                    var fileResult = _fileService.SaveImage(propertyToUpdate.image2);
+                    if (fileResult.Item1 == 1)
+                    {
+                        propertyToUpdate.ImageName2 = fileResult.Item2;
+                    }
+                }
+                if (propertyToUpdate.image3 != null)
+                {
+                    var fileResult = _fileService.SaveImage(propertyToUpdate.image3);
+                    if (fileResult.Item1 == 1)
+                    {
+                        propertyToUpdate.ImageName3 = fileResult.Item2;
+                    }
+                }
+                if (propertyToUpdate.image4 != null)
+                {
+                    var fileResult = _fileService.SaveImage(propertyToUpdate.image4);
+                    if (fileResult.Item1 == 1)
+                    {
+                        propertyToUpdate.ImageName4 = fileResult.Item2;
                     }
                 }
 
-                string[] oldImageNames = existingProperty.ImageNames?.Select(image => image.ImageNames).ToArray();
+                if (existingProperty.ImageName1 != null && existingProperty.ImageName1 != propertyToUpdate.ImageName1)
+                {
+                    await _fileService.DeleteImage(existingProperty.ImageName1);
+                }
+                if (existingProperty.ImageName2 != null && existingProperty.ImageName2 != propertyToUpdate.ImageName2)
+                {
+                    await _fileService.DeleteImage(existingProperty.ImageName2);
+                }
+                if (existingProperty.ImageName3 != null && existingProperty.ImageName3 != propertyToUpdate.ImageName3)
+                {
+                    await _fileService.DeleteImage(existingProperty.ImageName3);
+                }
+                if (existingProperty.ImageName4 != null && existingProperty.ImageName4 != propertyToUpdate.ImageName4)
+                {
+                    await _fileService.DeleteImage(existingProperty.ImageName4);
+                }
 
                 _mapper.Map(propertyToUpdate, existingProperty);
-                await _propertyService.UpdatePropertyAsync(id, propertyToUpdate);
 
-                // Delete old images
-                if (oldImageNames != null)
+                if (propertyToUpdate.PublisherDetails != null)
                 {
-                    foreach (var oldImageName in oldImageNames)
-                    {
-                        await _fileService.DeleteImage(oldImageName);
-                    }
+                    _mapper.Map(propertyToUpdate.PublisherDetails, existingProperty.PublisherDetails);
                 }
+
+                await _propertyService.UpdatePropertyAsync(id, propertyToUpdate);
 
                 return Ok(new Status
                 {
@@ -152,6 +238,5 @@ namespace Account.Apis.Controllers
                 });
             }
         }
-
     }
 }

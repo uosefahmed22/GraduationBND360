@@ -2,6 +2,7 @@
 using Account.Core.Dtos.CategoriesDto;
 using Account.Core.IServices.Content;
 using Account.Core.Models.Content.Categories;
+using Account.Core.Services.Content;
 using Account.Reposatory.Data.Context;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,13 @@ namespace Account.Reposatory.Services.Content
     {
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
+        private readonly IFileService _fileService;
 
-        public CategoriesService(AppDBContext context , IMapper mapper)
+        public CategoriesService(AppDBContext context , IMapper mapper,IFileService fileService)
         {
             _context = context;
             _mapper = mapper;
+            _fileService = fileService;
         }
         public async Task<ApiResponse> CreateCategoryAsync(CategoriesModelDTO category)
         {
@@ -60,8 +63,12 @@ namespace Account.Reposatory.Services.Content
                     return new ApiResponse(404, "Category not found.");
                 }
 
+                string imageFileName = existingCategory.ImageFileName;
+
                 _context.Categories.Remove(existingCategory);
                 await _context.SaveChangesAsync();
+
+                await _fileService.DeleteImage(imageFileName);
 
                 return new ApiResponse(200, "Category deleted successfully.");
             }
@@ -109,6 +116,11 @@ namespace Account.Reposatory.Services.Content
             {
                 return new ApiResponse(500, $"Failed to update category: {ex.Message}");
             }
+        }
+        public async Task<CategoriesModel?> FindByIdAsync(int id)
+        {
+            var product = await _context.Categories.FindAsync(id);
+            return product;
         }
     }
 }

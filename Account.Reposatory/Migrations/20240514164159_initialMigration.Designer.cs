@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240513220335_initialMigration3")]
-    partial class initialMigration3
+    [Migration("20240514164159_initialMigration")]
+    partial class initialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,43 +196,11 @@ namespace Account.Reposatory.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PropertyModelId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BusinessModelId");
 
-                    b.HasIndex("PropertyModelId");
-
                     b.ToTable("ImageNamesModel");
-                });
-
-            modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobContact", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ContactsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContactsId");
-
-                    b.ToTable("JobContact");
                 });
 
             modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobModel", b =>
@@ -243,8 +211,8 @@ namespace Account.Reposatory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ContactsId")
-                        .HasColumnType("int");
+                    b.Property<string>("Emails")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("JobDescriptionArabic")
                         .IsRequired()
@@ -260,17 +228,24 @@ namespace Account.Reposatory.Migrations
                     b.Property<string>("JobTitleEnglish")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Phonenumbers")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PublisherDetailsId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<DateTime>("TimeAddedjob")
+                    b.Property<DateTime?>("TimeAddedjob")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
+
+                    b.Property<string>("URls")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Whatsapp")
                         .IsRequired()
@@ -330,28 +305,6 @@ namespace Account.Reposatory.Migrations
                     b.ToTable("RequirementEnglish");
                 });
 
-            modelBuilder.Entity("Account.Core.Models.Content.Properties.PropertyContact", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PropertyContact");
-                });
-
             modelBuilder.Entity("Account.Core.Models.Content.Properties.PropertyModel", b =>
                 {
                     b.Property<int>("Id")
@@ -371,13 +324,25 @@ namespace Account.Reposatory.Migrations
                     b.Property<int>("Area")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ContactsId")
-                        .HasColumnType("int");
+                    b.Property<string>("Emails")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EnglishAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EnglishDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName4")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Latitude")
@@ -386,25 +351,30 @@ namespace Account.Reposatory.Migrations
                     b.Property<decimal>("Longitude")
                         .HasColumnType("decimal(18, 2)");
 
+                    b.Property<string>("Phonenumbers")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<int?>("PublisherDetailsId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("TimeAddedProperty")
+                    b.Property<DateTime?>("TimeAddedProperty")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
+
+                    b.Property<string>("URls")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WhatsappNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ContactsId");
 
                     b.HasIndex("PublisherDetailsId");
 
@@ -465,21 +435,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4e31223d-a997-44e5-9b2e-8146fcf0b482",
+                            Id = "aa8ac631-071a-4414-b226-abb8b5f9f4a6",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "149e38e3-3a49-4b21-9cd6-fa643622ade7",
+                            Id = "90cad836-8e31-4cff-abac-bfc6e65ce689",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "61699bf3-44e4-4840-8b20-d769b53f51af",
+                            Id = "b18c6f23-cf06-4376-ac0b-633ca90b6004",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"
@@ -609,19 +579,6 @@ namespace Account.Reposatory.Migrations
                         .WithMany("ImageNames")
                         .HasForeignKey("BusinessModelId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Account.Core.Models.Content.Properties.PropertyModel", null)
-                        .WithMany("ImageNames")
-                        .HasForeignKey("PropertyModelId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobContact", b =>
-                {
-                    b.HasOne("Account.Core.Models.Content.Jobs.JobModel", null)
-                        .WithMany("Contacts")
-                        .HasForeignKey("ContactsId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobModel", b =>
@@ -659,15 +616,9 @@ namespace Account.Reposatory.Migrations
 
             modelBuilder.Entity("Account.Core.Models.Content.Properties.PropertyModel", b =>
                 {
-                    b.HasOne("Account.Core.Models.Content.Properties.PropertyContact", "Contacts")
-                        .WithMany()
-                        .HasForeignKey("ContactsId");
-
                     b.HasOne("Account.Core.Models.Content.PublisherDetails", "PublisherDetails")
                         .WithMany()
                         .HasForeignKey("PublisherDetailsId");
-
-                    b.Navigation("Contacts");
 
                     b.Navigation("PublisherDetails");
                 });
@@ -730,16 +681,9 @@ namespace Account.Reposatory.Migrations
 
             modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobModel", b =>
                 {
-                    b.Navigation("Contacts");
-
                     b.Navigation("RequirementEnglish");
 
                     b.Navigation("RequirementsArabic");
-                });
-
-            modelBuilder.Entity("Account.Core.Models.Content.Properties.PropertyModel", b =>
-                {
-                    b.Navigation("ImageNames");
                 });
 #pragma warning restore 612, 618
         }
