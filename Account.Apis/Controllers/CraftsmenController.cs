@@ -1,34 +1,30 @@
-﻿using Account.Apis.Errors;
+﻿using Account.Core.Dtos.CraftsMenDtoFolder;
 using Account.Core.Dtos;
-using Account.Core.Dtos.BusinessDto;
-using Account.Core.Dtos.JobFolderDTO;
-using Account.Core.IServices.Content;
-using Account.Core.Models.Content;
-using Account.Core.Services.Content;
-using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Account.Core.IServices.Content;
+using AutoMapper;
+using Account.Core.Services.Content;
 
 namespace Account.Apis.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BusinessController : ControllerBase
+    public class CraftsmenController : ControllerBase
     {
-        private readonly IBusinessService _businessService;
-        private readonly IFileService _fileService;
+        private readonly ICraftsMenService _craftsmanService;
         private readonly IMapper _mapper;
+        private readonly IFileService _fileService;
 
-        public BusinessController(IBusinessService businessService, IFileService fileService, IMapper mapper)
+        public CraftsmenController(ICraftsMenService craftsMenService , IMapper mapper,IFileService fileService)
         {
-            _businessService = businessService;
-            _fileService = fileService;
+            _craftsmanService = craftsMenService;
             _mapper = mapper;
+            _fileService = fileService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBusiness([FromForm] BusinessModelDto model)
+        public async Task<IActionResult> AddCraftsman([FromForm] CraftsMenModelDto model)
         {
             var status = new Status();
             if (!ModelState.IsValid)
@@ -56,10 +52,11 @@ namespace Account.Apis.Controllers
                     }
                 }
 
-                var fileResult1 = _fileService.SaveImage(model.BusinessImage1);
+                // Save other images
+                var fileResult1 = _fileService.SaveImage(model.CraftsMenImage1);
                 if (fileResult1.Item1 == 1)
                 {
-                    model.BusinessImageName1 = fileResult1.Item2;
+                    model.CraftsMenImageName1 = fileResult1.Item2;
                 }
                 else
                 {
@@ -68,10 +65,10 @@ namespace Account.Apis.Controllers
                     return Ok(status);
                 }
 
-                var fileResult2 = _fileService.SaveImage(model.BusinessImage2);
+                var fileResult2 = _fileService.SaveImage(model.CraftsMenImage2);
                 if (fileResult2.Item1 == 1)
                 {
-                    model.BusinessImageName2 = fileResult2.Item2;
+                    model.CraftsMenImageName2 = fileResult2.Item2;
                 }
                 else
                 {
@@ -80,10 +77,10 @@ namespace Account.Apis.Controllers
                     return Ok(status);
                 }
 
-                var fileResult3 = _fileService.SaveImage(model.BusinessImage3);
+                var fileResult3 = _fileService.SaveImage(model.CraftsMenImage3);
                 if (fileResult3.Item1 == 1)
                 {
-                    model.BusinessImageName3 = fileResult3.Item2;
+                    model.CraftsMenImageName3 = fileResult3.Item2;
                 }
                 else
                 {
@@ -92,10 +89,10 @@ namespace Account.Apis.Controllers
                     return Ok(status);
                 }
 
-                var fileResult4 = _fileService.SaveImage(model.BusinessImage4);
+                var fileResult4 = _fileService.SaveImage(model.CraftsMenImage4);
                 if (fileResult4.Item1 == 1)
                 {
-                    model.BusinessImageName4 = fileResult4.Item2;
+                    model.CraftsMenImageName4 = fileResult4.Item2;
                 }
                 else
                 {
@@ -104,33 +101,35 @@ namespace Account.Apis.Controllers
                     return Ok(status);
                 }
 
-                var businessResult = await _businessService.CreateAsync(model);
-                if (businessResult.StatusCode == 200)
+                // Create the craftsman
+                var craftsmanResult = await _craftsmanService.CreateCraftsMenAsync(model);
+                if (craftsmanResult.StatusCode == 200)
                 {
                     status.StatusCode = 1;
-                    status.Message = "Business added successfully.";
+                    status.Message = "Craftsman added successfully.";
                 }
                 else
                 {
                     status.StatusCode = 0;
-                    status.Message = "Error adding business: " + businessResult.Message;
+                    status.Message = "Error adding craftsman: " + craftsmanResult.Message;
                 }
             }
             catch (Exception ex)
             {
                 status.StatusCode = 0;
-                status.Message = $"Error adding business: {ex.Message}";
+                status.Message = $"Error adding craftsman: {ex.Message}";
             }
 
             return Ok(status);
         }
+
         [HttpGet]
-        public async Task<IActionResult> GetAllBusinesses()
+        public async Task<IActionResult> GetAllCraftsmen()
         {
             try
             {
-                var businesses = await _businessService.GetAllAsync();
-                return Ok(businesses);
+                var craftsmen = await _craftsmanService.GetAllCraftsMenAsync();
+                return Ok(craftsmen);
             }
             catch (Exception ex)
             {
@@ -139,43 +138,43 @@ namespace Account.Apis.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBusiness(int id)
+        public async Task<IActionResult> DeleteCraftsman(int id)
         {
-            var result = await _businessService.DeleteAsync(id);
+            var result = await _craftsmanService.DeleteCraftsMenAsync(id);
             return StatusCode(result.StatusCode, result);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBusiness(int id)
+        public async Task<IActionResult> GetCraftsman(int id)
         {
-            var business = await _businessService.GetByIdAsync(id);
-            if (business == null)
+            var craftsman = await _craftsmanService.GetCraftsMenByIdAsync(id);
+            if (craftsman == null)
             {
                 return NotFound();
             }
-            return Ok(business);
+            return Ok(craftsman);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBusiness(int id, [FromForm] BusinessModelDto businessToUpdate)
+        public async Task<IActionResult> UpdateCraftsman(int id, [FromForm] CraftsMenModelDto craftsmanToUpdate)
         {
             try
             {
-                var existingBusiness = await _businessService.FindByIdAsync(id);
-                if (existingBusiness == null)
+                var existingCraftsman = await _craftsmanService.FindByIdAsync(id);
+                if (existingCraftsman == null)
                     return StatusCode(StatusCodes.Status404NotFound,
                         new Status
                         {
                             StatusCode = 404,
-                            Message = $"Business with id: {id} does not exist."
+                            Message = $"Craftsman with id: {id} does not exist."
                         });
 
-                if (businessToUpdate.ProfileImage != null)
+                if (craftsmanToUpdate.ProfileImage != null)
                 {
-                    var profileImageResult = _fileService.SaveImage(businessToUpdate.ProfileImage);
+                    var profileImageResult = _fileService.SaveImage(craftsmanToUpdate.ProfileImage);
                     if (profileImageResult.Item1 == 1)
                     {
-                        businessToUpdate.ProfileImageName = profileImageResult.Item2;
+                        craftsmanToUpdate.ProfileImageName = profileImageResult.Item2;
                     }
                     else
                     {
@@ -187,34 +186,34 @@ namespace Account.Apis.Controllers
                     }
                 }
 
-                List<IFormFile> businessImages = new List<IFormFile>
-            {
-            businessToUpdate.BusinessImage1,
-            businessToUpdate.BusinessImage2,
-            businessToUpdate.BusinessImage3,
-            businessToUpdate.BusinessImage4
-            };
-
-                for (int i = 0; i < businessImages.Count; i++)
+                List<IFormFile> craftsmanImages = new List<IFormFile>
                 {
-                    if (businessImages[i] != null)
+                craftsmanToUpdate.CraftsMenImage1,
+                craftsmanToUpdate.CraftsMenImage2,
+                craftsmanToUpdate.CraftsMenImage3,
+                craftsmanToUpdate.CraftsMenImage4
+                };
+
+                for (int i = 0; i < craftsmanImages.Count; i++)
+                {
+                    if (craftsmanImages[i] != null)
                     {
-                        var fileResult = _fileService.SaveImage(businessImages[i]);
+                        var fileResult = _fileService.SaveImage(craftsmanImages[i]);
                         if (fileResult.Item1 == 1)
                         {
                             switch (i)
                             {
                                 case 0:
-                                    businessToUpdate.BusinessImageName1 = fileResult.Item2;
+                                    craftsmanToUpdate.CraftsMenImageName1 = fileResult.Item2;
                                     break;
                                 case 1:
-                                    businessToUpdate.BusinessImageName2 = fileResult.Item2;
+                                    craftsmanToUpdate.CraftsMenImageName2 = fileResult.Item2;
                                     break;
                                 case 2:
-                                    businessToUpdate.BusinessImageName3 = fileResult.Item2;
+                                    craftsmanToUpdate.CraftsMenImageName3 = fileResult.Item2;
                                     break;
                                 case 3:
-                                    businessToUpdate.BusinessImageName4 = fileResult.Item2;
+                                    craftsmanToUpdate.CraftsMenImageName4 = fileResult.Item2;
                                     break;
                             }
                         }
@@ -223,19 +222,19 @@ namespace Account.Apis.Controllers
                             return StatusCode(StatusCodes.Status500InternalServerError, new Status
                             {
                                 StatusCode = 500,
-                                Message = $"Error saving business image {i + 1}."
+                                Message = $"Error saving craftsman image {i + 1}."
                             });
                         }
                     }
                 }
 
-                _mapper.Map(businessToUpdate, existingBusiness);
-                await _businessService.UpdateAsync(id, businessToUpdate);
+                _mapper.Map(craftsmanToUpdate, existingCraftsman);
+                await _craftsmanService.UpdateCraftsMenAsync(id, craftsmanToUpdate);
 
                 return Ok(new Status
                 {
                     StatusCode = 200,
-                    Message = "Business updated successfully."
+                    Message = "Craftsman updated successfully."
                 });
             }
             catch (Exception ex)
@@ -247,6 +246,5 @@ namespace Account.Apis.Controllers
                 });
             }
         }
-
     }
 }

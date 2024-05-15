@@ -19,5 +19,6 @@ namespace Account.Core.Services.Auth
         Task SendEmailAsync(string To, string Subject, string Body, CancellationToken Cancellation = default);
         Task<bool> ConfirmUserEmailAsync(string userId, string token);
         Task<ApiResponse> ResetPasswordAsync(ResetPassword dto);
+        Task<ApiResponse> ChangePasswordAsync(Guid userId, string oldPassword, string newPassword);
     }
 }

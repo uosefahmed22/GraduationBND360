@@ -1,5 +1,6 @@
 ﻿using Account.Apis.Errors;
 using Account.Core.Dtos.BusinessDto;
+using Account.Core.Dtos.CategoriesDto;
 using Account.Core.IServices.Content;
 using Account.Core.Models.Content.Business;
 using Account.Core.Services.Content;
@@ -86,14 +87,24 @@ namespace Account.Reposatory.Services.Content
             try
             {
                 var businessEntities = await _context.Businesses
+                    .Include(b => b.CategoriesModel) // Include related category
                     .ToListAsync();
-                return _mapper.Map<List<BusinessModelDto>>(businessEntities);
+
+                var businessDtoList = _mapper.Map<List<BusinessModelDto>>(businessEntities);
+
+                foreach (var businessDto in businessDtoList)
+                {
+                    businessDto.CategoriesModel = _mapper.Map<CategoriesModelDTO>(businessDto.CategoriesModel);
+                }
+
+                return businessDtoList;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
         public async Task<ApiResponse> UpdateAsync(int id, BusinessModelDto model)
         {
             try

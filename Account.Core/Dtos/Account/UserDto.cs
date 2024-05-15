@@ -13,6 +13,7 @@ namespace Account.Core.Dtos.Account
         public string DisplayName { get; set; }
         public string Email { get; set; }
         public UserRoleEnum Role { get; set; }
+        public string id { get; set; }
         public string Token { get; set; }
     }
 }

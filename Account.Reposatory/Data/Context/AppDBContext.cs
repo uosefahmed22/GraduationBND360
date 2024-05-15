@@ -1,8 +1,10 @@
-﻿using Account.Core.Models.Account;
+﻿using Account.Core.Dtos.CraftsMenDtoFolder;
+using Account.Core.Models.Account;
 using Account.Core.Models.Content;
 using Account.Core.Models.Content.Business;
 using Account.Core.Models.Content.Categories;
 using Account.Core.Models.Content.Crafts;
+using Account.Core.Models.Content.CraftsMen;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
 using Account.Reposatory.Services.Content;
@@ -46,6 +48,8 @@ namespace Account.Reposatory.Data.Context
         public DbSet<CategoriesModel> Categories { get; set; }
         public DbSet<BusinessModel> Businesses { get; set; }
         public DbSet<CraftsModel> crafts { get; set; }
+        public DbSet<CraftsMenModel> CraftsMen { get; set; }
+
 
 
     }

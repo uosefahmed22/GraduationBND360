@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Account.Core.Models.Content;
 using Account.Core.Models.Content.Business;
 using Account.Core.Dtos.JobFolderDTO;
+using Account.Core.Models.Content.Categories;
+using Account.Core.Dtos.CategoriesDto;
 
 namespace Account.Core.Dtos.BusinessDto
 {
@@ -29,6 +31,7 @@ namespace Account.Core.Dtos.BusinessDto
         public string? URls { get; set; }
         public int Opening { get; set; }
         public int Closing { get; set; }
+        public CategoriesModelDTO? CategoriesModel { get; set; }
         public string? ProfileImageName { get; set; }
         [NotMapped]
         public IFormFile ProfileImage { get; set; }

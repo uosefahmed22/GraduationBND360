@@ -2,12 +2,14 @@
 using Account.Core.Dtos.BusinessDto;
 using Account.Core.Dtos.CategoriesDto;
 using Account.Core.Dtos.CraftsFolder;
+using Account.Core.Dtos.CraftsMenDtoFolder;
 using Account.Core.Dtos.JobFolderDTO;
 using Account.Core.Dtos.PropertyFolderDto;
 using Account.Core.Models.Content;
 using Account.Core.Models.Content.Business;
 using Account.Core.Models.Content.Categories;
 using Account.Core.Models.Content.Crafts;
+using Account.Core.Models.Content.CraftsMen;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
 using AutoMapper;
@@ -26,6 +28,8 @@ public class MappingProfile : Profile
         .ForMember(dest => dest.Image, opt => opt.Ignore()).ReverseMap();
         CreateMap<BusinessModel, BusinessModelDto>().ReverseMap();
         CreateMap<CraftsModel, CraftsModelDto>().ReverseMap();
+        CreateMap<CraftsMenModel, CraftsMenModelDto>().ReverseMap();
+
     }
 }
 

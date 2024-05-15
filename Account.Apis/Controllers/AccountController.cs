@@ -106,6 +106,13 @@ namespace Account.Apis.Controllers
                     return StatusCode(500, "An unexpected error occurred.");
             }
         }
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+        {
+            var result = await _accountService.ChangePasswordAsync(request.UserId, request.OldPassword, request.NewPassword);
+
+            return StatusCode(result.StatusCode, result);
+        }
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmUserEmail(string userId, string confirmationToken)
         {

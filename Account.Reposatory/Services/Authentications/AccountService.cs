@@ -30,12 +30,14 @@ namespace Account.Reposatory.Services.Authentications
         private readonly ITokenService _TokenService;
         private readonly IOtpService _otpService;
         private readonly IMemoryCache _cache;
+        private readonly SignInManager<AppUser> _signInManager;
 
         public AccountService(UserManager<AppUser> userManager,
             IOptionsMonitor<MailSettings> options,
             ITokenService tokenService,
             IOtpService otpService,
-            IMemoryCache cache
+            IMemoryCache cache,
+            SignInManager<AppUser> signInManager
             )
         {
             _userManager = userManager;
@@ -43,6 +45,7 @@ namespace Account.Reposatory.Services.Authentications
             _TokenService = tokenService;
             _otpService = otpService;
             _cache = cache;
+            _signInManager = signInManager;
         }
         #endregion
 
@@ -125,6 +128,7 @@ namespace Account.Reposatory.Services.Authentications
                 DisplayName = user.DisplayName,
                 Email = user.Email,
                 Role = GetRoleEnum(role),
+                id = user.Id,
                 Token = await _TokenService.CreateTokenAsync(user)
             };
         }
@@ -183,27 +187,43 @@ namespace Account.Reposatory.Services.Authentications
                 return new ApiResponse(400, "User not found.");
             }
 
-            // Check if email is verified
             if (!_cache.TryGetValue(dto.Email, out bool validOtp) || !validOtp)
             {
                 return new ApiResponse(400, "You have not verified your email addres(OTP).");
             }
 
-            // Generate password reset token
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            // Reset password
             var result = await _userManager.ResetPasswordAsync(user, token, dto.Password);
 
-            // Check if password reset was successful
             if (result.Succeeded)
             {
                 return new ApiResponse(200, "Password reset successfully.");
             }
             else
             {
-                // Password reset failed
                 return new ApiResponse(500, "Failed to reset password.");
+            }
+        }
+        public async Task<ApiResponse> ChangePasswordAsync(Guid userId, string oldPassword, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                return new ApiResponse(400, "User not found.");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.SignOutAsync();
+                return new ApiResponse(200, "Password changed successfully.");
+            }
+            else
+            {
+                return new ApiResponse(500, "Failed to change password.");
             }
         }
         public async Task<bool> ConfirmUserEmailAsync(string userId, string token)

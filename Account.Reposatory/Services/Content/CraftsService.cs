@@ -39,6 +39,18 @@ namespace Account.Reposatory.Services.Content
                 return new ApiResponse(400, "Failed to add craft: " + ex.Message);
             }
         }
+        public async Task<IEnumerable<CraftsModelDto>> GetAllCraftsAsync()
+        {
+            try
+            {
+                var crafts = await _context.crafts.ToListAsync();
+                return _mapper.Map<IEnumerable<CraftsModelDto>>(crafts);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         public async Task<ApiResponse> DeleteCraftAsync(int id)
         {
             try
@@ -64,18 +76,6 @@ namespace Account.Reposatory.Services.Content
         {
             var craft = await _context.crafts.FindAsync(id);
             return craft;
-        }
-        public async Task<IEnumerable<CraftsModelDto>> GetAllCraftsAsync()
-        {
-            try
-            {
-                var crafts = await _context.crafts.ToListAsync();
-                return _mapper.Map<IEnumerable<CraftsModelDto>>(crafts);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
         }
         public async Task<CraftsModelDto> GetCraftByIdAsync(int id)
         {

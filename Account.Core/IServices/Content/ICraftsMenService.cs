@@ -1,0 +1,23 @@
+﻿using Account.Apis.Errors;
+using Account.Core.Dtos.CraftsMenDtoFolder;
+using Account.Core.Models.Content.Business;
+using Account.Core.Models.Content.Crafts;
+using Account.Core.Models.Content.CraftsMen;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Account.Core.IServices.Content
+{
+    public interface ICraftsMenService
+    {
+        Task<ApiResponse> CreateCraftsMenAsync(CraftsMenModelDto model);
+        Task<CraftsMenModelDto> GetCraftsMenByIdAsync(int id);
+        Task<IEnumerable<CraftsMenModelDto>> GetAllCraftsMenAsync();
+        Task<ApiResponse> UpdateCraftsMenAsync(int id, CraftsMenModelDto model);
+        Task<ApiResponse> DeleteCraftsMenAsync(int id);
+        Task<CraftsMenModel> FindByIdAsync(int id);
+    }
+}
