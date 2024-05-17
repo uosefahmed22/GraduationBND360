@@ -29,6 +29,8 @@ namespace Account.Core.Dtos.JobFolderDTO
         public int WorkHours { get; set; }
         public DateTime? TimeAddedjob { get; set; } = DateTime.Now;
         public decimal Salary { get; set; }
+        public string UserId { get; set; }
+
         public JobModelDto()
         {
             RequirementsArabic = new List<RequirementDTO>();

@@ -30,6 +30,7 @@ namespace Account.Core.Models.Content.Properties
         public decimal Price { get; set; }
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
+        public string UserId { get; set; }
         public DateTime? TimeAddedProperty { get; set; } = DateTime.Now;
         public string? ImageName1 { get; set; }
         [NotMapped]

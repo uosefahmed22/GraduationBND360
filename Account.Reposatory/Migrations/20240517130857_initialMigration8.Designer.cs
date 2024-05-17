@@ -4,6 +4,7 @@ using Account.Reposatory.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240517130857_initialMigration8")]
+    partial class initialMigration8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,12 +149,6 @@ namespace Account.Reposatory.Migrations
 
                     b.Property<int?>("Holidays")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<int>("Opening")
                         .HasColumnType("int");
@@ -569,9 +566,8 @@ namespace Account.Reposatory.Migrations
                     b.Property<int>("businessId")
                         .HasColumnType("int");
 
-                    b.Property<string>("userId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -599,9 +595,8 @@ namespace Account.Reposatory.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("userId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -677,21 +672,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "00820c92-5bce-486f-b809-98db18aeac73",
+                            Id = "72aa1b6d-3984-470a-a092-149275b3eed4",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "f276a22f-aa3d-4622-8843-a4906e50021f",
+                            Id = "1a4ffc62-d6fa-4d6a-9a62-56c462901586",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "591270dd-cb49-48cf-90fc-57ca869c2b19",
+                            Id = "d19c13ee-5f42-4a37-a772-56502ed8b963",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"

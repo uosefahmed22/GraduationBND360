@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,5 +13,9 @@ namespace Account.Core.Models.Account
     {
         public string DisplayName { get; set; }
         public int UserRole { get; set; }
+        public string Email { get; set; }
+        public string? ProfileName { get; set; }
+        [NotMapped]
+        public IFormFile image { get; set; }
     }
 }

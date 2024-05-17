@@ -4,6 +4,7 @@ using Account.Reposatory.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240517112203_initialMigration7")]
+    partial class initialMigration7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,12 +150,6 @@ namespace Account.Reposatory.Migrations
                     b.Property<int?>("Holidays")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(18, 2)");
-
                     b.Property<int>("Opening")
                         .HasColumnType("int");
 
@@ -164,10 +161,6 @@ namespace Account.Reposatory.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("URls")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -286,10 +279,6 @@ namespace Account.Reposatory.Migrations
                     b.Property<string>("URIs")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CraftsModelId");
@@ -379,10 +368,6 @@ namespace Account.Reposatory.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("URls")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Whatsapp")
@@ -508,10 +493,6 @@ namespace Account.Reposatory.Migrations
                     b.Property<string>("URls")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("WhatsappNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -556,9 +537,6 @@ namespace Account.Reposatory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<float?>("Rating")
                         .HasColumnType("real");
 
@@ -569,9 +547,8 @@ namespace Account.Reposatory.Migrations
                     b.Property<int>("businessId")
                         .HasColumnType("int");
 
-                    b.Property<string>("userId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -589,9 +566,6 @@ namespace Account.Reposatory.Migrations
                     b.Property<int>("CraftsmanId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<float?>("Rating")
                         .HasColumnType("real");
 
@@ -599,9 +573,8 @@ namespace Account.Reposatory.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("userId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -677,21 +650,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "00820c92-5bce-486f-b809-98db18aeac73",
+                            Id = "03a9f411-7636-49ca-9856-63f5474f4132",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "f276a22f-aa3d-4622-8843-a4906e50021f",
+                            Id = "5e42e010-421f-44dc-83a2-ab57727c3edb",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "591270dd-cb49-48cf-90fc-57ca869c2b19",
+                            Id = "5b68754b-ee40-4737-a207-40691be6f348",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"

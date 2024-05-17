@@ -48,10 +48,8 @@ namespace Account.Apis.Extentions
             service.AddScoped<ISavedServiceForProperty, SavedServiceForProperty>();
             service.AddScoped<IFavoriteForCraftsmenService, FavoriteForCraftsmenService>();
             service.AddScoped<IFavoriteForBusinessService, FavoriteForBusinessService>();
-
-
-
-
+            service.AddScoped<IServiceForRatingAndReviewsForCraftsmen, ServiceForRatingAndReviewsForCraftsmen>();
+            service.AddScoped<IServiceForRatingAndReviewsForBusiness, ServiceForRatingAndReviewsForBusiness>();
 
             return service;
         }

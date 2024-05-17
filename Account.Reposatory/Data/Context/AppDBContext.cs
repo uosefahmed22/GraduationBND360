@@ -8,6 +8,7 @@ using Account.Core.Models.Content.CraftsMen;
 using Account.Core.Models.Content.Favorite;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
+using Account.Core.Models.Content.RatingReview;
 using Account.Core.Models.Content.Saved;
 using Account.Reposatory.Services.Content;
 using Microsoft.AspNetCore.Identity;
@@ -55,6 +56,9 @@ namespace Account.Reposatory.Data.Context
         public DbSet<SavedModelForJobs> JobsSaved { get; set; }
         public DbSet<FavoriteModelForBusiness> BusinessFavorites { get; set; }
         public DbSet<FavoriteModelForCraftsmen> ServiceProvidersFavorites { get; set; }
+        public DbSet<RatingAndReviewModelForBusiness> ratingAndReviewModelForBusinesses { get; set; }
+        public DbSet<RatingAndReviewModelForCraftsmen> ratingAndReviewModelForCraftsmens { get; set; }
+
 
     }
 }

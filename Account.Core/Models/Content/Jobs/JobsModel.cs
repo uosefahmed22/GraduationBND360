@@ -29,6 +29,8 @@ namespace Account.Core.Models.Content.Jobs
         public ICollection<RequirementArb> RequirementsArabic { get; set; }
         public ICollection<RequirementEnglish> RequirementEnglish { get; set; }
         public DateTime? TimeAddedjob { get; set; } = DateTime.Now;
+        public string UserId { get; set; }
+
         public JobModel()
         {
             RequirementsArabic = new List<RequirementArb>();

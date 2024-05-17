@@ -31,6 +31,9 @@ namespace Account.Core.Dtos.BusinessDto
         public string? URls { get; set; }
         public int Opening { get; set; }
         public int Closing { get; set; }
+        public decimal Longitude { get; set; }
+        public decimal Latitude { get; set; }
+        public string UserId { get; set; }
         public CategoriesModelDTO? CategoriesModel { get; set; }
         public string? ProfileImageName { get; set; }
         [NotMapped]

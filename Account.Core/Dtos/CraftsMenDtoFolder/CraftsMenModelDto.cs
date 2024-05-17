@@ -27,6 +27,8 @@ namespace Account.Core.Dtos.CraftsMenDtoFolder
         public string? URIs { get; set; }
         public int Opening { get; set; }
         public int Closing { get; set; }
+        public string UserId { get; set; }
+
         public CraftsModelDto? CraftsModel { get; set; }
         public string? ProfileImageName { get; set; }
         [NotMapped]
