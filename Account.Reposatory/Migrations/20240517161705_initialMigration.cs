@@ -34,6 +34,7 @@ namespace Account.Reposatory.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserRole = table.Column<int>(type: "int", nullable: false),
+                    ProfileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -55,6 +56,20 @@ namespace Account.Reposatory.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BusinessFavorites",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BusinessId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BusinessFavorites", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -70,6 +85,48 @@ namespace Account.Reposatory.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "crafts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CraftsNameArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CraftsNameEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_crafts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "JobsSaved",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobsSaved", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PropertiesSaved",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PropertyId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PropertiesSaved", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PublisherDetails",
                 columns: table => new
                 {
@@ -82,6 +139,54 @@ namespace Account.Reposatory.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PublisherDetails", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ratingAndReviewModelForBusinesses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Review = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rating = table.Column<float>(type: "real", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    businessId = table.Column<int>(type: "int", nullable: false),
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ratingAndReviewModelForBusinesses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ratingAndReviewModelForCraftsmens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Review = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rating = table.Column<float>(type: "real", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CraftsmanId = table.Column<int>(type: "int", nullable: false),
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ratingAndReviewModelForCraftsmens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServiceProvidersFavorites",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BusinessId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceProvidersFavorites", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,6 +314,9 @@ namespace Account.Reposatory.Migrations
                     URls = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Opening = table.Column<int>(type: "int", nullable: false),
                     Closing = table.Column<int>(type: "int", nullable: false),
+                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProfileImageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BusinessImageName1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BusinessImageName2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -222,6 +330,43 @@ namespace Account.Reposatory.Migrations
                         name: "FK_Businesses_Categories_CategoriesModelId",
                         column: x => x.CategoriesModelId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CraftsMen",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CraftsMenNameArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CraftsMenNameEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CraftsModelId = table.Column<int>(type: "int", nullable: false),
+                    CraftsMenDescriptionArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CraftsMenDescriptionEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CraftsMenAddressArabic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CraftsMenAddressEnglish = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Holidays = table.Column<int>(type: "int", nullable: true),
+                    Phonenumbers = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Emails = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    URIs = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Opening = table.Column<int>(type: "int", nullable: false),
+                    Closing = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfileImageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CraftsMenImageName1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CraftsMenImageName2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CraftsMenImageName3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CraftsMenImageName4 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CraftsMen", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CraftsMen_crafts_CraftsModelId",
+                        column: x => x.CraftsModelId,
+                        principalTable: "crafts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -244,7 +389,8 @@ namespace Account.Reposatory.Migrations
                     WorkHours = table.Column<int>(type: "int", nullable: false),
                     Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PublisherDetailsId = table.Column<int>(type: "int", nullable: false),
-                    TimeAddedjob = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    TimeAddedjob = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -277,6 +423,7 @@ namespace Account.Reposatory.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeAddedProperty = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ImageName1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImageName2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -338,9 +485,9 @@ namespace Account.Reposatory.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "242fba15-0eb8-49ff-a8a9-5f94ffdef54d", "1", "BussinesOwner", "BussinesOwner" },
-                    { "553e49c1-1490-47fb-8085-8af9b771842d", "0", "User", "User" },
-                    { "d5a88f66-e33c-403f-b0c6-543e0648bd9e", "2", "ServiceProvider", "ServiceProvider" }
+                    { "5e67a631-8b7e-46dd-85b3-af676eddf85d", "1", "BussinesOwner", "BussinesOwner" },
+                    { "83eaaf2c-7917-4ba7-9c1a-4bb93713bec0", "0", "User", "User" },
+                    { "be1c1507-23e7-4304-a987-8e3d8624e600", "2", "ServiceProvider", "ServiceProvider" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -388,6 +535,11 @@ namespace Account.Reposatory.Migrations
                 column: "CategoriesModelId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CraftsMen_CraftsModelId",
+                table: "CraftsMen",
+                column: "CraftsModelId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Jobs_PublisherDetailsId",
                 table: "Jobs",
                 column: "PublisherDetailsId");
@@ -430,13 +582,34 @@ namespace Account.Reposatory.Migrations
                 name: "Businesses");
 
             migrationBuilder.DropTable(
+                name: "BusinessFavorites");
+
+            migrationBuilder.DropTable(
+                name: "CraftsMen");
+
+            migrationBuilder.DropTable(
+                name: "JobsSaved");
+
+            migrationBuilder.DropTable(
                 name: "Properties");
+
+            migrationBuilder.DropTable(
+                name: "PropertiesSaved");
+
+            migrationBuilder.DropTable(
+                name: "ratingAndReviewModelForBusinesses");
+
+            migrationBuilder.DropTable(
+                name: "ratingAndReviewModelForCraftsmens");
 
             migrationBuilder.DropTable(
                 name: "RequirementEnglish");
 
             migrationBuilder.DropTable(
                 name: "RequirementsArabic");
+
+            migrationBuilder.DropTable(
+                name: "ServiceProvidersFavorites");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -446,6 +619,9 @@ namespace Account.Reposatory.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "crafts");
 
             migrationBuilder.DropTable(
                 name: "Jobs");

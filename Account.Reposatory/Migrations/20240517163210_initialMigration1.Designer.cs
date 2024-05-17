@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240516232503_initialMigration4")]
-    partial class initialMigration4
+    [Migration("20240517163210_initialMigration1")]
+    partial class initialMigration1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,6 +84,9 @@ namespace Account.Reposatory.Migrations
                     b.Property<int>("UserRole")
                         .HasColumnType("int");
 
+                    b.Property<string>("profileImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -150,6 +153,12 @@ namespace Account.Reposatory.Migrations
                     b.Property<int?>("Holidays")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(18, 2)");
+
                     b.Property<int>("Opening")
                         .HasColumnType("int");
 
@@ -161,6 +170,10 @@ namespace Account.Reposatory.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("URls")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -279,11 +292,55 @@ namespace Account.Reposatory.Migrations
                     b.Property<string>("URIs")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CraftsModelId");
 
                     b.ToTable("CraftsMen");
+                });
+
+            modelBuilder.Entity("Account.Core.Models.Content.Favorite.FavoriteModelForBusiness", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BusinessId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BusinessFavorites");
+                });
+
+            modelBuilder.Entity("Account.Core.Models.Content.Favorite.FavoriteModelForCraftsmen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BusinessId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServiceProvidersFavorites");
                 });
 
             modelBuilder.Entity("Account.Core.Models.Content.Jobs.JobModel", b =>
@@ -328,6 +385,10 @@ namespace Account.Reposatory.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("URls")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Whatsapp")
@@ -453,6 +514,10 @@ namespace Account.Reposatory.Migrations
                     b.Property<string>("URls")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("WhatsappNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -489,6 +554,66 @@ namespace Account.Reposatory.Migrations
                     b.ToTable("PublisherDetails");
                 });
 
+            modelBuilder.Entity("Account.Core.Models.Content.RatingReview.RatingAndReviewModelForBusiness", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float?>("Rating")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Review")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("businessId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("userId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ratingAndReviewModelForBusinesses");
+                });
+
+            modelBuilder.Entity("Account.Core.Models.Content.RatingReview.RatingAndReviewModelForCraftsmen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CraftsmanId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float?>("Rating")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Review")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("userId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ratingAndReviewModelForCraftsmens");
+                });
+
             modelBuilder.Entity("Account.Core.Models.Content.Saved.SavedModelForJobs", b =>
                 {
                     b.Property<int>("Id")
@@ -517,17 +642,14 @@ namespace Account.Reposatory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("PropertyIdId")
+                    b.Property<int?>("PropertyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserIdId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PropertyIdId");
-
-                    b.HasIndex("UserIdId");
 
                     b.ToTable("PropertiesSaved");
                 });
@@ -561,21 +683,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a24a69be-596f-413e-ac4d-0c36d0ef8725",
+                            Id = "3a995b84-fc73-41d5-8d9a-c9f7814360f2",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "4c2be4e6-8f23-413a-9de0-86661e0fb8ee",
+                            Id = "6ec018af-f656-48e8-8e4a-a1eba8fa8454",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "8fe97381-704d-411b-a2af-62093ffdd8d6",
+                            Id = "b2a19cda-0907-441b-b59d-ed83cea73aea",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"
@@ -750,21 +872,6 @@ namespace Account.Reposatory.Migrations
                         .HasForeignKey("PublisherDetailsId");
 
                     b.Navigation("PublisherDetails");
-                });
-
-            modelBuilder.Entity("Account.Core.Models.Content.Saved.SavedModelForProperty", b =>
-                {
-                    b.HasOne("Account.Core.Models.Content.Properties.PropertyModel", "PropertyId")
-                        .WithMany()
-                        .HasForeignKey("PropertyIdId");
-
-                    b.HasOne("Account.Core.Models.Account.AppUser", "UserId")
-                        .WithMany()
-                        .HasForeignKey("UserIdId");
-
-                    b.Navigation("PropertyId");
-
-                    b.Navigation("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

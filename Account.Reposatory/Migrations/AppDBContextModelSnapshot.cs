@@ -81,6 +81,9 @@ namespace Account.Reposatory.Migrations
                     b.Property<int>("UserRole")
                         .HasColumnType("int");
 
+                    b.Property<string>("profileImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -677,21 +680,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "00820c92-5bce-486f-b809-98db18aeac73",
+                            Id = "3a995b84-fc73-41d5-8d9a-c9f7814360f2",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "f276a22f-aa3d-4622-8843-a4906e50021f",
+                            Id = "6ec018af-f656-48e8-8e4a-a1eba8fa8454",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "591270dd-cb49-48cf-90fc-57ca869c2b19",
+                            Id = "b2a19cda-0907-441b-b59d-ed83cea73aea",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"

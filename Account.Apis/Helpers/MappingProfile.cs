@@ -1,4 +1,5 @@
 ﻿using Account.Core.Dtos;
+using Account.Core.Dtos.Account;
 using Account.Core.Dtos.BusinessDto;
 using Account.Core.Dtos.CategoriesDto;
 using Account.Core.Dtos.CraftsFolder;
@@ -9,6 +10,7 @@ using Account.Core.Dtos.PropertyFolderDto;
 using Account.Core.Dtos.RatingAndReviewDto;
 using Account.Core.Dtos.RatingAndReviewDto.Account.Core.Dtos.RatingAndReviewDto;
 using Account.Core.Dtos.Saved;
+using Account.Core.Models.Account;
 using Account.Core.Models.Content;
 using Account.Core.Models.Content.Business;
 using Account.Core.Models.Content.Categories;
@@ -44,6 +46,9 @@ public class MappingProfile : Profile
         CreateMap<RatingAndReviewModelForCraftsmen, RatingAndReviewModelForCraftsmenDto>().ReverseMap();
         CreateMap<RatingAndReviewModelForCraftsmen, ReviewAndRatingResponse>().ReverseMap();
         CreateMap<RatingAndReviewModelForCraftsmen, ReviewAndRatingSummaryResponse>().ReverseMap();
+        CreateMap<AppUser, AppUserDto>().ReverseMap();
+        CreateMap<AppUser, UpdateUserImageModel>().ReverseMap();
+
 
 
     }
