@@ -12,6 +12,7 @@ using Account.Core.Models.Content.Crafts;
 using Account.Core.Models.Content.CraftsMen;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
+using Account.Core.Models.Content.Saved;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -29,6 +30,9 @@ public class MappingProfile : Profile
         CreateMap<BusinessModel, BusinessModelDto>().ReverseMap();
         CreateMap<CraftsModel, CraftsModelDto>().ReverseMap();
         CreateMap<CraftsMenModel, CraftsMenModelDto>().ReverseMap();
+        CreateMap<SavedModelForProperty, SavedModelForPropertyDto>().ReverseMap();
+        CreateMap<SavedModelForJobs, SavedModelForJobsDto>().ReverseMap();
+
 
     }
 }

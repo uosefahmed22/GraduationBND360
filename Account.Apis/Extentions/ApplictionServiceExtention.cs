@@ -44,6 +44,10 @@ namespace Account.Apis.Extentions
             service.AddScoped<IBusinessService, BusinessService>();
             service.AddScoped<ICraftsService, CraftsService>();
             service.AddScoped<ICraftsMenService, CraftsMenService>();
+            service.AddScoped<ISavedServiceForJobs, SavedServiceForJobs>();
+            service.AddScoped<ISavedServiceForProperty, SavedServiceForProperty>();
+
+
 
 
             return service;

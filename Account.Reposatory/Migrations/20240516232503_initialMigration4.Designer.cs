@@ -4,6 +4,7 @@ using Account.Reposatory.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240516232503_initialMigration4")]
+    partial class initialMigration4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -514,14 +517,17 @@ namespace Account.Reposatory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("PropertyId")
+                    b.Property<int?>("PropertyIdId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("UserIdId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PropertyIdId");
+
+                    b.HasIndex("UserIdId");
 
                     b.ToTable("PropertiesSaved");
                 });
@@ -555,21 +561,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cb2e2fed-02b6-40b7-ba62-4b18bc0bdfda",
+                            Id = "a24a69be-596f-413e-ac4d-0c36d0ef8725",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "f026acb0-b2e2-4128-9f04-ef336ca97c50",
+                            Id = "4c2be4e6-8f23-413a-9de0-86661e0fb8ee",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "34f4a649-7e36-4486-8be9-b811f7724691",
+                            Id = "8fe97381-704d-411b-a2af-62093ffdd8d6",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"
@@ -744,6 +750,21 @@ namespace Account.Reposatory.Migrations
                         .HasForeignKey("PublisherDetailsId");
 
                     b.Navigation("PublisherDetails");
+                });
+
+            modelBuilder.Entity("Account.Core.Models.Content.Saved.SavedModelForProperty", b =>
+                {
+                    b.HasOne("Account.Core.Models.Content.Properties.PropertyModel", "PropertyId")
+                        .WithMany()
+                        .HasForeignKey("PropertyIdId");
+
+                    b.HasOne("Account.Core.Models.Account.AppUser", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserIdId");
+
+                    b.Navigation("PropertyId");
+
+                    b.Navigation("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

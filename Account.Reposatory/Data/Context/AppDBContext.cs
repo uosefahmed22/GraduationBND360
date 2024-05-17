@@ -7,6 +7,7 @@ using Account.Core.Models.Content.Crafts;
 using Account.Core.Models.Content.CraftsMen;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
+using Account.Core.Models.Content.Saved;
 using Account.Reposatory.Services.Content;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -49,6 +50,10 @@ namespace Account.Reposatory.Data.Context
         public DbSet<BusinessModel> Businesses { get; set; }
         public DbSet<CraftsModel> crafts { get; set; }
         public DbSet<CraftsMenModel> CraftsMen { get; set; }
+        public DbSet<SavedModelForProperty> PropertiesSaved { get; set; }
+        public DbSet<SavedModelForJobs> JobsSaved { get; set; }
+
+
 
 
 
