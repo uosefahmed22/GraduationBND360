@@ -1,12 +1,12 @@
 ﻿using Account.Apis.Errors;
 using Account.Core.Dtos.JobFolderDTO;
-using Account.Core.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Account.Core.Dtos.PropertyFolderDto;
+using Account.Core.Dtos.Saved;
 
 namespace Account.Core.IServices.Content
 {

@@ -1,7 +1,8 @@
 ﻿using Account.Apis.Errors;
+using Account.Core.Dtos.BusinessDto;
+using Account.Core.Dtos.FavoirteDto;
 using Account.Core.Dtos.JobFolderDTO;
 using Account.Core.Dtos.Saved;
-using Account.Core.Models.Content.Saved;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Account.Core.IServices.Content
 {
-    public interface ISavedServiceForJobs
+    public interface IFavoriteForBusinessService
     {
-        Task<IEnumerable<JobModelDto>> GetJobs(string userId);
-        Task<ApiResponse> AddAsync(SavedModelForJobsDto savedModel);
+        Task<IEnumerable<BusinessModelDto>> GetBusinesses(string userId);
+        Task<ApiResponse> AddAsync(FavoriteModelForBusinessDto savedModel);
         Task<ApiResponse> RemoveAsync(int id);
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Account.Apis.Errors;
-using Account.Core.Dtos;
+using Account.Core.Dtos.Saved;
 using Account.Core.IServices.Content;
 using Account.Reposatory.Services.Content;
 using Microsoft.AspNetCore.Http;

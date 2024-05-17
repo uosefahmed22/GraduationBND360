@@ -3,13 +3,16 @@ using Account.Core.Dtos.BusinessDto;
 using Account.Core.Dtos.CategoriesDto;
 using Account.Core.Dtos.CraftsFolder;
 using Account.Core.Dtos.CraftsMenDtoFolder;
+using Account.Core.Dtos.FavoirteDto;
 using Account.Core.Dtos.JobFolderDTO;
 using Account.Core.Dtos.PropertyFolderDto;
+using Account.Core.Dtos.Saved;
 using Account.Core.Models.Content;
 using Account.Core.Models.Content.Business;
 using Account.Core.Models.Content.Categories;
 using Account.Core.Models.Content.Crafts;
 using Account.Core.Models.Content.CraftsMen;
+using Account.Core.Models.Content.Favorite;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
 using Account.Core.Models.Content.Saved;
@@ -32,6 +35,9 @@ public class MappingProfile : Profile
         CreateMap<CraftsMenModel, CraftsMenModelDto>().ReverseMap();
         CreateMap<SavedModelForProperty, SavedModelForPropertyDto>().ReverseMap();
         CreateMap<SavedModelForJobs, SavedModelForJobsDto>().ReverseMap();
+        CreateMap<FavoriteModelForBusiness, FavoriteModelForBusinessDto>().ReverseMap();
+        CreateMap<FavoriteModelForCraftsmen, FavoriteModelForCraftsmenDto>().ReverseMap();
+
 
 
     }

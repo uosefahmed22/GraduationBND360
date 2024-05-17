@@ -1,6 +1,5 @@
 ﻿using Account.Apis.Errors;
 using Account.Core.Dtos.PropertyFolderDto;
-using Account.Core.Dtos;
 using Account.Core.IServices.Content;
 using Account.Core.Models.Content.Saved;
 using System;
@@ -11,6 +10,7 @@ using System.Threading.Tasks;
 using Account.Reposatory.Data.Context;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Account.Core.Dtos.Saved;
 
 namespace Account.Reposatory.Services.Content
 {

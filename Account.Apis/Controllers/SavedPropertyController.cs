@@ -1,4 +1,4 @@
-﻿using Account.Core.Dtos;
+﻿using Account.Core.Dtos.Saved;
 using Account.Core.IServices.Content;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

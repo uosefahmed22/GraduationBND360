@@ -46,6 +46,9 @@ namespace Account.Apis.Extentions
             service.AddScoped<ICraftsMenService, CraftsMenService>();
             service.AddScoped<ISavedServiceForJobs, SavedServiceForJobs>();
             service.AddScoped<ISavedServiceForProperty, SavedServiceForProperty>();
+            service.AddScoped<IFavoriteForCraftsmenService, FavoriteForCraftsmenService>();
+            service.AddScoped<IFavoriteForBusinessService, FavoriteForBusinessService>();
+
 
 
 

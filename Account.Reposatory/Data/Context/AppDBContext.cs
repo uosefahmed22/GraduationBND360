@@ -5,6 +5,7 @@ using Account.Core.Models.Content.Business;
 using Account.Core.Models.Content.Categories;
 using Account.Core.Models.Content.Crafts;
 using Account.Core.Models.Content.CraftsMen;
+using Account.Core.Models.Content.Favorite;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Properties;
 using Account.Core.Models.Content.Saved;
@@ -52,10 +53,8 @@ namespace Account.Reposatory.Data.Context
         public DbSet<CraftsMenModel> CraftsMen { get; set; }
         public DbSet<SavedModelForProperty> PropertiesSaved { get; set; }
         public DbSet<SavedModelForJobs> JobsSaved { get; set; }
-
-
-
-
+        public DbSet<FavoriteModelForBusiness> BusinessFavorites { get; set; }
+        public DbSet<FavoriteModelForCraftsmen> ServiceProvidersFavorites { get; set; }
 
     }
 }

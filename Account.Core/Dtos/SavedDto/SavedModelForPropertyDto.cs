@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Account.Core.Dtos
+namespace Account.Core.Dtos.Saved
 {
     public class SavedModelForPropertyDto
     {

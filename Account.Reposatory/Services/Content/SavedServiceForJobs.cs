@@ -1,6 +1,6 @@
 ﻿using Account.Apis.Errors;
-using Account.Core.Dtos;
 using Account.Core.Dtos.JobFolderDTO;
+using Account.Core.Dtos.Saved;
 using Account.Core.IServices.Content;
 using Account.Core.Models.Content.Jobs;
 using Account.Core.Models.Content.Saved;
