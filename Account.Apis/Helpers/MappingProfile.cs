@@ -48,9 +48,8 @@ public class MappingProfile : Profile
         CreateMap<RatingAndReviewModelForCraftsmen, ReviewAndRatingSummaryResponse>().ReverseMap();
         CreateMap<AppUser, AppUserDto>().ReverseMap();
         CreateMap<AppUser, UpdateUserImageModel>().ReverseMap();
-
-
-
+        CreateMap<BusinessModel, BusinessResponseInCategory>().ReverseMap();
+        CreateMap<CraftsMenModel, CraftsmanResponseDto>().ReverseMap();
     }
 }
 

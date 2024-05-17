@@ -54,7 +54,7 @@ namespace Account.Apis.Extentions
             services.AddScoped<IAccountService,AccountService>();
             services.AddScoped<IOtpService, OtpService>();
             services.AddScoped<ITokenService,TokenService>();
-            services.AddScoped<IProgfileService, ProgfileService>();
+            services.AddScoped<IProfileService, ProfileService>();
 
 
 

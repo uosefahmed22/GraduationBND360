@@ -1,4 +1,5 @@
 ﻿using Account.Apis.Errors;
+using Account.Core.Dtos.BusinessDto;
 using Account.Core.Dtos.CraftsMenDtoFolder;
 using Account.Core.Models.Content.Business;
 using Account.Core.Models.Content.Crafts;
@@ -18,6 +19,8 @@ namespace Account.Core.IServices.Content
         Task<IEnumerable<CraftsMenModelDto>> GetAllCraftsMenAsync();
         Task<ApiResponse> UpdateCraftsMenAsync(int id, CraftsMenModelDto model);
         Task<ApiResponse> DeleteCraftsMenAsync(int id);
+        Task<CraftsMenModelDto> GetcraftsForCraftsmanAsync(string userId);
         Task<CraftsMenModel> FindByIdAsync(int id);
+        Task<List<CraftsmanResponseDto>> GetAllCraftsmenWithDetailsAsync();
     }
 }

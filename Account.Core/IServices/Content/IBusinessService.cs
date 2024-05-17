@@ -16,6 +16,8 @@ namespace Account.Core.IServices.Content
         Task<ApiResponse> CreateAsync(BusinessModelDto model);
         Task<ApiResponse> UpdateAsync(int id, BusinessModelDto model);
         Task<ApiResponse> DeleteAsync(int id);
+        Task<BusinessModelDto> GetBusinessForBusinessOwnerAsync(string userId);
+        Task<List<BusinessResponseInCategory>> GetAllBusinessesWithDetailsAsync();
         Task<BusinessModel> FindByIdAsync(int id);
     }
 }

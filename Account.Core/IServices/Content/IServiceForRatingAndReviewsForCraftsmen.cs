@@ -16,6 +16,6 @@ namespace Account.Core.IServices.Content
         Task<IEnumerable<ReviewAndRatingResponse>> GetReviewsAndRatings(int craftsmanId);
         Task<ApiResponse> AddAsync(RatingAndReviewModelForCraftsmenDto savedModel);
         Task<ApiResponse> RemoveAsync(int ReviewAndRatingId);
-        Task<ReviewAndRatingSummaryResponse> GetReviewsAndRatingsForCraftsmanAsync(int craftsmanId);
+        Task<Dtos.RatingAndReviewDto.Account.Core.Dtos.RatingAndReviewDto.ReviewAndRatingSummaryResponse> GetReviewsAndRatingsForCraftsmanAsync(int craftsmanId);
     }
 }

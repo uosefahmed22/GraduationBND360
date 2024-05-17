@@ -39,7 +39,7 @@ namespace Account.Apis.Controllers
         [HttpGet("summary/{businessId}")]
         public async Task<IActionResult> GetReviewsAndRatingsSummary(int businessId)
         {
-            var summary = await _serviceForRatingAndReviewsForBusiness.GetReviewsAndRatingsForBusinessAsync(businessId);
+            var summary = await _serviceForRatingAndReviewsForBusiness.GetReviewsAndRatingsForBusinessWithDetailsAsync(businessId);
             return Ok(summary);
         }
     }

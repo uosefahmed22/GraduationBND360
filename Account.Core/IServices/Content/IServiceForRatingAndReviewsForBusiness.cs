@@ -14,6 +14,6 @@ namespace Account.Core.IServices.Content
         Task<IEnumerable<ReviewAndRatingResponse>> GetReviewsAndRatings(int businessId);
         Task<ApiResponse> AddAsync(RatingAndReviewModelForBusinessDto savedModel);
         Task<ApiResponse> RemoveAsync(int ReviewAndRatingId);
-        Task<ReviewAndRatingSummaryResponse> GetReviewsAndRatingsForBusinessAsync(int businessId);
+        Task<ReviewAndRatingSummaryResponse> GetReviewsAndRatingsForBusinessWithDetailsAsync(int businessId);
     }
 }

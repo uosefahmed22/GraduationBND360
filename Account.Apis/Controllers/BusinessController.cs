@@ -40,7 +40,13 @@ namespace Account.Apis.Controllers
 
             try
             {
-                if (model.ProfileImage != null)
+                if (model.ProfileImage == null)
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Profile image is required.";
+                    return Ok(status);
+                }
+                else
                 {
                     var fileResult = _fileService.SaveImage(model.ProfileImage);
 
@@ -56,52 +62,64 @@ namespace Account.Apis.Controllers
                     }
                 }
 
-                var fileResult1 = _fileService.SaveImage(model.BusinessImage1);
-                if (fileResult1.Item1 == 1)
+                if (model.BusinessImage1 != null)
                 {
-                    model.BusinessImageName1 = fileResult1.Item2;
-                }
-                else
-                {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 1.";
-                    return Ok(status);
-                }
-
-                var fileResult2 = _fileService.SaveImage(model.BusinessImage2);
-                if (fileResult2.Item1 == 1)
-                {
-                    model.BusinessImageName2 = fileResult2.Item2;
-                }
-                else
-                {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 2.";
-                    return Ok(status);
+                    var fileResult1 = _fileService.SaveImage(model.BusinessImage1);
+                    if (fileResult1.Item1 == 1)
+                    {
+                        model.BusinessImageName1 = fileResult1.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 1.";
+                        return Ok(status);
+                    }
                 }
 
-                var fileResult3 = _fileService.SaveImage(model.BusinessImage3);
-                if (fileResult3.Item1 == 1)
+                if (model.BusinessImage2 != null)
                 {
-                    model.BusinessImageName3 = fileResult3.Item2;
-                }
-                else
-                {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 3.";
-                    return Ok(status);
+                    var fileResult2 = _fileService.SaveImage(model.BusinessImage2);
+                    if (fileResult2.Item1 == 1)
+                    {
+                        model.BusinessImageName2 = fileResult2.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 2.";
+                        return Ok(status);
+                    }
                 }
 
-                var fileResult4 = _fileService.SaveImage(model.BusinessImage4);
-                if (fileResult4.Item1 == 1)
+                if (model.BusinessImage3 != null)
                 {
-                    model.BusinessImageName4 = fileResult4.Item2;
+                    var fileResult3 = _fileService.SaveImage(model.BusinessImage3);
+                    if (fileResult3.Item1 == 1)
+                    {
+                        model.BusinessImageName3 = fileResult3.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 3.";
+                        return Ok(status);
+                    }
                 }
-                else
+
+                if (model.BusinessImage4 != null)
                 {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 4.";
-                    return Ok(status);
+                    var fileResult4 = _fileService.SaveImage(model.BusinessImage4);
+                    if (fileResult4.Item1 == 1)
+                    {
+                        model.BusinessImageName4 = fileResult4.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 4.";
+                        return Ok(status);
+                    }
                 }
 
                 var businessResult = await _businessService.CreateAsync(model);
@@ -124,6 +142,7 @@ namespace Account.Apis.Controllers
 
             return Ok(status);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllBusinesses()
         {
@@ -248,5 +267,40 @@ namespace Account.Apis.Controllers
             }
         }
 
+        [HttpGet("business-owner/{userId}")]
+        public async Task<IActionResult> GetBusinessForBusinessOwnerAsync(string userId)
+        {
+            try
+            {
+                var business = await _businessService.GetBusinessForBusinessOwnerAsync(userId);
+                if (business == null)
+                {
+                    return NotFound(new ApiResponse(404, "Business not found."));
+                }
+                return Ok(business);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse(500, $"An error occurred: {ex.Message}"));
+            }
+        }
+
+        [HttpGet("all-businessesWithReviewsAndCategories")]
+        public async Task<IActionResult> GetAllBusinessesWithDetails()
+        {
+            try
+            {
+                var businessResponses = await _businessService.GetAllBusinessesWithDetailsAsync();
+                if (businessResponses == null || businessResponses.Count == 0)
+                {
+                    return NotFound(new ApiResponse(404, "No businesses found."));
+                }
+                return Ok(businessResponses);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse(500, $"An error occurred: {ex.Message}"));
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Account.Core.IServices.Content;
 using AutoMapper;
 using Account.Core.Services.Content;
+using Account.Apis.Errors;
 
 namespace Account.Apis.Controllers
 {
@@ -22,7 +23,6 @@ namespace Account.Apis.Controllers
             _mapper = mapper;
             _fileService = fileService;
         }
-
         [HttpPost]
         public async Task<IActionResult> AddCraftsman([FromForm] CraftsMenModelDto model)
         {
@@ -36,7 +36,13 @@ namespace Account.Apis.Controllers
 
             try
             {
-                if (model.ProfileImage != null)
+                if (model.ProfileImage == null)
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Profile image is required.";
+                    return Ok(status);
+                }
+                else
                 {
                     var fileResult = _fileService.SaveImage(model.ProfileImage);
 
@@ -52,56 +58,66 @@ namespace Account.Apis.Controllers
                     }
                 }
 
-                // Save other images
-                var fileResult1 = _fileService.SaveImage(model.CraftsMenImage1);
-                if (fileResult1.Item1 == 1)
+                if (model.CraftsMenImage1 != null)
                 {
-                    model.CraftsMenImageName1 = fileResult1.Item2;
-                }
-                else
-                {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 1.";
-                    return Ok(status);
-                }
-
-                var fileResult2 = _fileService.SaveImage(model.CraftsMenImage2);
-                if (fileResult2.Item1 == 1)
-                {
-                    model.CraftsMenImageName2 = fileResult2.Item2;
-                }
-                else
-                {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 2.";
-                    return Ok(status);
+                    var fileResult1 = _fileService.SaveImage(model.CraftsMenImage1);
+                    if (fileResult1.Item1 == 1)
+                    {
+                        model.CraftsMenImageName1 = fileResult1.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 1.";
+                        return Ok(status);
+                    }
                 }
 
-                var fileResult3 = _fileService.SaveImage(model.CraftsMenImage3);
-                if (fileResult3.Item1 == 1)
+                if (model.CraftsMenImage2 != null)
                 {
-                    model.CraftsMenImageName3 = fileResult3.Item2;
-                }
-                else
-                {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 3.";
-                    return Ok(status);
-                }
-
-                var fileResult4 = _fileService.SaveImage(model.CraftsMenImage4);
-                if (fileResult4.Item1 == 1)
-                {
-                    model.CraftsMenImageName4 = fileResult4.Item2;
-                }
-                else
-                {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 4.";
-                    return Ok(status);
+                    var fileResult2 = _fileService.SaveImage(model.CraftsMenImage2);
+                    if (fileResult2.Item1 == 1)
+                    {
+                        model.CraftsMenImageName2 = fileResult2.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 2.";
+                        return Ok(status);
+                    }
                 }
 
-                // Create the craftsman
+                if (model.CraftsMenImage3 != null)
+                {
+                    var fileResult3 = _fileService.SaveImage(model.CraftsMenImage3);
+                    if (fileResult3.Item1 == 1)
+                    {
+                        model.CraftsMenImageName3 = fileResult3.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 3.";
+                        return Ok(status);
+                    }
+                }
+
+                if (model.CraftsMenImage4 != null)
+                {
+                    var fileResult4 = _fileService.SaveImage(model.CraftsMenImage4);
+                    if (fileResult4.Item1 == 1)
+                    {
+                        model.CraftsMenImageName4 = fileResult4.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 4.";
+                        return Ok(status);
+                    }
+                }
+
                 var craftsmanResult = await _craftsmanService.CreateCraftsMenAsync(model);
                 if (craftsmanResult.StatusCode == 200)
                 {
@@ -244,6 +260,38 @@ namespace Account.Apis.Controllers
                     StatusCode = 500,
                     Message = ex.Message
                 });
+            }
+        }
+
+        [HttpGet("craftsman/{userId}")]
+        public async Task<IActionResult> GetcraftsForCraftsmanAsync(string userId)
+        {
+            try
+            {
+                var craftsMen = await _craftsmanService.GetcraftsForCraftsmanAsync(userId);
+                if (craftsMen == null)
+                {
+                    return NotFound(new ApiResponse(404, "Craftsman not found."));
+                }
+                return Ok(craftsMen);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse(500, $"An error occurred: {ex.Message}"));
+            }
+        }
+
+        [HttpGet("GetAllCraftsmenWithDetails")]
+        public async Task<IActionResult> GetAllCraftsmenWithDetails()
+        {
+            try
+            {
+                var craftsmen = await _craftsmanService.GetAllCraftsmenWithDetailsAsync();
+                return Ok(craftsmen);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }

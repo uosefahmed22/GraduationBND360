@@ -18,7 +18,10 @@ namespace Account.Reposatory.Services.Content
     {
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
+        public ServiceForRatingAndReviewsForBusiness()
+        {
 
+        }
         public ServiceForRatingAndReviewsForBusiness(AppDBContext context, IMapper mapper)
         {
             _context = context;
@@ -74,7 +77,7 @@ namespace Account.Reposatory.Services.Content
                 return new ApiResponse(400, $"Failed to remove record: {ex.Message}");
             }
         }
-        public async Task<ReviewAndRatingSummaryResponse> GetReviewsAndRatingsForBusinessAsync(int businessId)
+        public async Task<ReviewAndRatingSummaryResponse> GetReviewsAndRatingsForBusinessWithDetailsAsync(int businessId)
         {
             try
             {

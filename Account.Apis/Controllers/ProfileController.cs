@@ -10,23 +10,23 @@ namespace Account.Apis.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
-        private readonly IProgfileService _progfileService;
+        private readonly IProfileService _profileService;
 
-        public ProfileController(IProgfileService progfileService)
+        public ProfileController(IProfileService progfileService)
         {
-            _progfileService = progfileService;
+            _profileService = progfileService;
         }
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(string userId)
         {
-            var response = await _progfileService.DeleteUserAsync(userId);
+            var response = await _profileService.DeleteUserAsync(userId);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetProfile(string userId)
         {
-            var user = await _progfileService.GetProfileAsync(userId);
+            var user = await _profileService.GetProfileAsync(userId);
             if (user == null)
             {
                 return NotFound(new ApiResponse(404, "User not found."));
@@ -37,16 +37,43 @@ namespace Account.Apis.Controllers
         [HttpPatch("updateImage")]
         public async Task<IActionResult> UpdateUserImage([FromForm] UpdateUserImageModel model)
         {
-            var response = await _progfileService.UpdateUserImageAsync(model);
+            var response = await _profileService.UpdateUserImageAsync(model);
             return StatusCode(response.StatusCode, response);
         }
-
 
         [HttpPatch("{userId}/name")]
         public async Task<IActionResult> UpdateUserName(string userId, [FromBody] string newName)
         {
-            var response = await _progfileService.UpdateUserNameAsync(userId, newName);
+            var response = await _profileService.UpdateUserNameAsync(userId, newName);
             return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpGet("jobs/{userId}")]
+        public async Task<IActionResult> GetMyPostsInJobs(string userId)
+        {
+            try
+            {
+                var jobs = await _profileService.GetMyPostsInJobs(userId);
+                return Ok(jobs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Failed to retrieve jobs: {ex.Message}");
+            }
+        }
+
+        [HttpGet("properties/{userId}")]
+        public async Task<IActionResult> GetMyPostsInProperties(string userId)
+        {
+            try
+            {
+                var properties = await _profileService.GetMyPostsInProperties(userId);
+                return Ok(properties);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Failed to retrieve properties: {ex.Message}");
+            }
         }
     }
 }
