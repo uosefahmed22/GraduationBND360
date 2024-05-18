@@ -77,14 +77,15 @@ namespace Account.Apis
                 app.UseSwaggerMiddlewares();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles(
-                //new StaticFileOptions
-                //{
-                //    FileProvider = new PhysicalFileProvider(
-                //        Path.Combine(builder.Environment.ContentRootPath,"Uploads")),
-                //    RequestPath = "/Resourses"
-                //}
-                );
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                        Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
+                RequestPath = "/resources"
+            });
+
+
             app.UseSwaggerMiddlewares();
             app.UseCors("MyPolicy");
             app.UseAuthorization();

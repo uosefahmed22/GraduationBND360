@@ -253,5 +253,25 @@ namespace Account.Reposatory.Services.Content
                 throw new Exception("Failed to retrieve reviews and ratings.", ex);
             }
         }
+        public async Task<List<CraftsMenModelDto>> GetcraftsmanByCraftsAsync(int CraftsId)
+        {
+            try
+            {
+                var craftsMenEntities = await _context.CraftsMen
+                    .Where(x => x.CraftsModelId == CraftsId)
+                    .ToListAsync();
+
+                if (craftsMenEntities == null || !craftsMenEntities.Any())
+                {
+                    return null;
+                }
+
+                return craftsMenEntities.Select(craftsMen => _mapper.Map<CraftsMenModelDto>(craftsMen)).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve crafts for the craftsman.", ex);
+            }
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace Account.Core.Dtos.PropertyFolderDto
 
         public DateTime? TimeAddedProperty { get; set; } = DateTime.Now;
         public string? ImageName1 { get; set; }
-        public IFormFile image1 { get; set; }
+        public IFormFile? image1 { get; set; }
         public string? ImageName2 { get; set; }
         public IFormFile? image2 { get; set; }
         public string? ImageName3 { get; set; }

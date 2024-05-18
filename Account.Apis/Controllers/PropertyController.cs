@@ -36,6 +36,13 @@ namespace Account.Apis.Controllers
                 return Ok(status);
             }
 
+            if (model.image1 == null)
+            {
+                status.StatusCode = 0;
+                status.Message = "Image1 is required.";
+                return Ok(status);
+            }
+
             try
             {
                 var fileResult1 = _fileService.SaveImage(model.image1);
@@ -50,40 +57,49 @@ namespace Account.Apis.Controllers
                     return Ok(status);
                 }
 
-                var fileResult2 = _fileService.SaveImage(model.image2);
-                if (fileResult2.Item1 == 1)
+                if (model.image2 != null)
                 {
-                    model.ImageName2 = fileResult2.Item2;
-                }
-                else
-                {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 2.";
-                    return Ok(status);
-                }
-
-                var fileResult3 = _fileService.SaveImage(model.image3);
-                if (fileResult3.Item1 == 1)
-                {
-                    model.ImageName3 = fileResult3.Item2;
-                }
-                else
-                {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 3.";
-                    return Ok(status);
+                    var fileResult2 = _fileService.SaveImage(model.image2);
+                    if (fileResult2.Item1 == 1)
+                    {
+                        model.ImageName2 = fileResult2.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 2.";
+                        return Ok(status);
+                    }
                 }
 
-                var fileResult4 = _fileService.SaveImage(model.image4);
-                if (fileResult4.Item1 == 1)
+                if (model.image3 != null)
                 {
-                    model.ImageName4 = fileResult4.Item2;
+                    var fileResult3 = _fileService.SaveImage(model.image3);
+                    if (fileResult3.Item1 == 1)
+                    {
+                        model.ImageName3 = fileResult3.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 3.";
+                        return Ok(status);
+                    }
                 }
-                else
+
+                if (model.image4 != null)
                 {
-                    status.StatusCode = 0;
-                    status.Message = "Error saving image 4.";
-                    return Ok(status);
+                    var fileResult4 = _fileService.SaveImage(model.image4);
+                    if (fileResult4.Item1 == 1)
+                    {
+                        model.ImageName4 = fileResult4.Item2;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error saving image 4.";
+                        return Ok(status);
+                    }
                 }
 
                 var propertyResult = await _propertyService.CreatePropertyAsync(model);
@@ -106,6 +122,7 @@ namespace Account.Apis.Controllers
 
             return Ok(status);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAllProperties()
@@ -137,7 +154,6 @@ namespace Account.Apis.Controllers
             }
             return Ok(property);
         }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromForm] PropertyModelDTO propertyToUpdate)
         {
@@ -164,55 +180,35 @@ namespace Account.Apis.Controllers
                         });
                 }
 
-                if (propertyToUpdate.image1 != null)
+                // Handle images
+                string[] existingImageNames = { existingProperty.ImageName1, existingProperty.ImageName2, existingProperty.ImageName3, existingProperty.ImageName4 };
+                IFormFile[] newImages = { propertyToUpdate.image1, propertyToUpdate.image2, propertyToUpdate.image3, propertyToUpdate.image4 };
+                string[] newImageNames = { propertyToUpdate.ImageName1, propertyToUpdate.ImageName2, propertyToUpdate.ImageName3, propertyToUpdate.ImageName4 };
+
+                for (int i = 0; i < newImages.Length; i++)
                 {
-                    var fileResult = _fileService.SaveImage(propertyToUpdate.image1);
-                    if (fileResult.Item1 == 1)
+                    if (newImages[i] != null)
                     {
-                        propertyToUpdate.ImageName1 = fileResult.Item2;
+                        var fileResult = _fileService.SaveImage(newImages[i]);
+                        if (fileResult.Item1 == 1)
+                        {
+                            if (!string.IsNullOrEmpty(existingImageNames[i]))
+                            {
+                                await _fileService.DeleteImage(existingImageNames[i]);
+                            }
+                            newImageNames[i] = fileResult.Item2;
+                        }
                     }
-                }
-                if (propertyToUpdate.image2 != null)
-                {
-                    var fileResult = _fileService.SaveImage(propertyToUpdate.image2);
-                    if (fileResult.Item1 == 1)
+                    else
                     {
-                        propertyToUpdate.ImageName2 = fileResult.Item2;
-                    }
-                }
-                if (propertyToUpdate.image3 != null)
-                {
-                    var fileResult = _fileService.SaveImage(propertyToUpdate.image3);
-                    if (fileResult.Item1 == 1)
-                    {
-                        propertyToUpdate.ImageName3 = fileResult.Item2;
-                    }
-                }
-                if (propertyToUpdate.image4 != null)
-                {
-                    var fileResult = _fileService.SaveImage(propertyToUpdate.image4);
-                    if (fileResult.Item1 == 1)
-                    {
-                        propertyToUpdate.ImageName4 = fileResult.Item2;
+                        newImageNames[i] = existingImageNames[i];
                     }
                 }
 
-                if (existingProperty.ImageName1 != null && existingProperty.ImageName1 != propertyToUpdate.ImageName1)
-                {
-                    await _fileService.DeleteImage(existingProperty.ImageName1);
-                }
-                if (existingProperty.ImageName2 != null && existingProperty.ImageName2 != propertyToUpdate.ImageName2)
-                {
-                    await _fileService.DeleteImage(existingProperty.ImageName2);
-                }
-                if (existingProperty.ImageName3 != null && existingProperty.ImageName3 != propertyToUpdate.ImageName3)
-                {
-                    await _fileService.DeleteImage(existingProperty.ImageName3);
-                }
-                if (existingProperty.ImageName4 != null && existingProperty.ImageName4 != propertyToUpdate.ImageName4)
-                {
-                    await _fileService.DeleteImage(existingProperty.ImageName4);
-                }
+                propertyToUpdate.ImageName1 = newImageNames[0];
+                propertyToUpdate.ImageName2 = newImageNames[1];
+                propertyToUpdate.ImageName3 = newImageNames[2];
+                propertyToUpdate.ImageName4 = newImageNames[3];
 
                 _mapper.Map(propertyToUpdate, existingProperty);
 
@@ -238,5 +234,6 @@ namespace Account.Apis.Controllers
                 });
             }
         }
+
     }
 }

@@ -178,18 +178,24 @@ namespace Account.Apis.Controllers
             {
                 var existingCraftsman = await _craftsmanService.FindByIdAsync(id);
                 if (existingCraftsman == null)
+                {
                     return StatusCode(StatusCodes.Status404NotFound,
                         new Status
                         {
                             StatusCode = 404,
                             Message = $"Craftsman with id: {id} does not exist."
                         });
+                }
 
                 if (craftsmanToUpdate.ProfileImage != null)
                 {
                     var profileImageResult = _fileService.SaveImage(craftsmanToUpdate.ProfileImage);
                     if (profileImageResult.Item1 == 1)
                     {
+                        if (!string.IsNullOrEmpty(existingCraftsman.ProfileImageName))
+                        {
+                            await _fileService.DeleteImage(existingCraftsman.ProfileImageName);
+                        }
                         craftsmanToUpdate.ProfileImageName = profileImageResult.Item2;
                     }
                     else
@@ -201,37 +207,27 @@ namespace Account.Apis.Controllers
                         });
                     }
                 }
-
-                List<IFormFile> craftsmanImages = new List<IFormFile>
+                else
                 {
-                craftsmanToUpdate.CraftsMenImage1,
-                craftsmanToUpdate.CraftsMenImage2,
-                craftsmanToUpdate.CraftsMenImage3,
-                craftsmanToUpdate.CraftsMenImage4
-                };
+                    craftsmanToUpdate.ProfileImageName = existingCraftsman.ProfileImageName;
+                }
 
-                for (int i = 0; i < craftsmanImages.Count; i++)
+                string[] existingImageNames = { existingCraftsman.CraftsMenImageName1, existingCraftsman.CraftsMenImageName2, existingCraftsman.CraftsMenImageName3, existingCraftsman.CraftsMenImageName4 };
+                IFormFile[] newImages = { craftsmanToUpdate.CraftsMenImage1, craftsmanToUpdate.CraftsMenImage2, craftsmanToUpdate.CraftsMenImage3, craftsmanToUpdate.CraftsMenImage4 };
+                string[] newImageNames = { craftsmanToUpdate.CraftsMenImageName1, craftsmanToUpdate.CraftsMenImageName2, craftsmanToUpdate.CraftsMenImageName3, craftsmanToUpdate.CraftsMenImageName4 };
+
+                for (int i = 0; i < newImages.Length; i++)
                 {
-                    if (craftsmanImages[i] != null)
+                    if (newImages[i] != null)
                     {
-                        var fileResult = _fileService.SaveImage(craftsmanImages[i]);
+                        var fileResult = _fileService.SaveImage(newImages[i]);
                         if (fileResult.Item1 == 1)
                         {
-                            switch (i)
+                            if (!string.IsNullOrEmpty(existingImageNames[i]))
                             {
-                                case 0:
-                                    craftsmanToUpdate.CraftsMenImageName1 = fileResult.Item2;
-                                    break;
-                                case 1:
-                                    craftsmanToUpdate.CraftsMenImageName2 = fileResult.Item2;
-                                    break;
-                                case 2:
-                                    craftsmanToUpdate.CraftsMenImageName3 = fileResult.Item2;
-                                    break;
-                                case 3:
-                                    craftsmanToUpdate.CraftsMenImageName4 = fileResult.Item2;
-                                    break;
+                                await _fileService.DeleteImage(existingImageNames[i]);
                             }
+                            newImageNames[i] = fileResult.Item2;
                         }
                         else
                         {
@@ -242,9 +238,19 @@ namespace Account.Apis.Controllers
                             });
                         }
                     }
+                    else
+                    {
+                        newImageNames[i] = existingImageNames[i];
+                    }
                 }
 
+                craftsmanToUpdate.CraftsMenImageName1 = newImageNames[0];
+                craftsmanToUpdate.CraftsMenImageName2 = newImageNames[1];
+                craftsmanToUpdate.CraftsMenImageName3 = newImageNames[2];
+                craftsmanToUpdate.CraftsMenImageName4 = newImageNames[3];
+
                 _mapper.Map(craftsmanToUpdate, existingCraftsman);
+
                 await _craftsmanService.UpdateCraftsMenAsync(id, craftsmanToUpdate);
 
                 return Ok(new Status
@@ -292,6 +298,24 @@ namespace Account.Apis.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("craftsmanByCrafts/{CraftsId}")]
+        public async Task<IActionResult> GetcraftsmanByCraftsAsync(int CraftsId)
+        {
+            try
+            {
+                var craftsMen = await _craftsmanService.GetcraftsmanByCraftsAsync(CraftsId);
+                if (craftsMen == null)
+                {
+                    return NotFound(new ApiResponse(404, "Crafts not found."));
+                }
+                return Ok(craftsMen);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse(500, $"An error occurred: {ex.Message}"));
             }
         }
     }

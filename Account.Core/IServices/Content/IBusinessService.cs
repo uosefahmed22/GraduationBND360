@@ -19,5 +19,6 @@ namespace Account.Core.IServices.Content
         Task<BusinessModelDto> GetBusinessForBusinessOwnerAsync(string userId);
         Task<List<BusinessResponseInCategory>> GetAllBusinessesWithDetailsAsync();
         Task<BusinessModel> FindByIdAsync(int id);
+        Task<List<BusinessModelDto>> GetBusinessByCategoryAsync(int CategoeryId);
     }
 }

@@ -182,18 +182,24 @@ namespace Account.Apis.Controllers
             {
                 var existingBusiness = await _businessService.FindByIdAsync(id);
                 if (existingBusiness == null)
+                {
                     return StatusCode(StatusCodes.Status404NotFound,
                         new Status
                         {
                             StatusCode = 404,
                             Message = $"Business with id: {id} does not exist."
                         });
+                }
 
                 if (businessToUpdate.ProfileImage != null)
                 {
                     var profileImageResult = _fileService.SaveImage(businessToUpdate.ProfileImage);
                     if (profileImageResult.Item1 == 1)
                     {
+                        if (!string.IsNullOrEmpty(existingBusiness.ProfileImageName))
+                        {
+                            await _fileService.DeleteImage(existingBusiness.ProfileImageName);
+                        }
                         businessToUpdate.ProfileImageName = profileImageResult.Item2;
                     }
                     else
@@ -205,37 +211,27 @@ namespace Account.Apis.Controllers
                         });
                     }
                 }
-
-                List<IFormFile> businessImages = new List<IFormFile>
-            {
-            businessToUpdate.BusinessImage1,
-            businessToUpdate.BusinessImage2,
-            businessToUpdate.BusinessImage3,
-            businessToUpdate.BusinessImage4
-            };
-
-                for (int i = 0; i < businessImages.Count; i++)
+                else
                 {
-                    if (businessImages[i] != null)
+                    businessToUpdate.ProfileImageName = existingBusiness.ProfileImageName;
+                }
+
+                string[] existingImageNames = { existingBusiness.BusinessImageName1, existingBusiness.BusinessImageName2, existingBusiness.BusinessImageName3, existingBusiness.BusinessImageName4 };
+                IFormFile[] newImages = { businessToUpdate.BusinessImage1, businessToUpdate.BusinessImage2, businessToUpdate.BusinessImage3, businessToUpdate.BusinessImage4 };
+                string[] newImageNames = { businessToUpdate.BusinessImageName1, businessToUpdate.BusinessImageName2, businessToUpdate.BusinessImageName3, businessToUpdate.BusinessImageName4 };
+
+                for (int i = 0; i < newImages.Length; i++)
+                {
+                    if (newImages[i] != null)
                     {
-                        var fileResult = _fileService.SaveImage(businessImages[i]);
+                        var fileResult = _fileService.SaveImage(newImages[i]);
                         if (fileResult.Item1 == 1)
                         {
-                            switch (i)
+                            if (!string.IsNullOrEmpty(existingImageNames[i]))
                             {
-                                case 0:
-                                    businessToUpdate.BusinessImageName1 = fileResult.Item2;
-                                    break;
-                                case 1:
-                                    businessToUpdate.BusinessImageName2 = fileResult.Item2;
-                                    break;
-                                case 2:
-                                    businessToUpdate.BusinessImageName3 = fileResult.Item2;
-                                    break;
-                                case 3:
-                                    businessToUpdate.BusinessImageName4 = fileResult.Item2;
-                                    break;
+                                await _fileService.DeleteImage(existingImageNames[i]);
                             }
+                            newImageNames[i] = fileResult.Item2;
                         }
                         else
                         {
@@ -246,9 +242,19 @@ namespace Account.Apis.Controllers
                             });
                         }
                     }
+                    else
+                    {
+                        newImageNames[i] = existingImageNames[i];
+                    }
                 }
 
+                businessToUpdate.BusinessImageName1 = newImageNames[0];
+                businessToUpdate.BusinessImageName2 = newImageNames[1];
+                businessToUpdate.BusinessImageName3 = newImageNames[2];
+                businessToUpdate.BusinessImageName4 = newImageNames[3];
+
                 _mapper.Map(businessToUpdate, existingBusiness);
+
                 await _businessService.UpdateAsync(id, businessToUpdate);
 
                 return Ok(new Status
@@ -296,6 +302,24 @@ namespace Account.Apis.Controllers
                     return NotFound(new ApiResponse(404, "No businesses found."));
                 }
                 return Ok(businessResponses);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse(500, $"An error occurred: {ex.Message}"));
+            }
+        }
+
+        [HttpGet("BusinessByCategory/{CategoeryId}")]
+        public async Task<IActionResult> GetBusinessByCategoryAsync(int CategoeryId)
+        {
+            try
+            {
+                var business = await _businessService.GetBusinessByCategoryAsync(CategoeryId);
+                if (business == null)
+                {
+                    return NotFound(new ApiResponse(404, "Category not found."));
+                }
+                return Ok(business);
             }
             catch (Exception ex)
             {

@@ -260,5 +260,26 @@ namespace Account.Reposatory.Services.Content
                 throw new Exception("Failed to retrieve reviews and ratings.", ex);
             }
         }
+        public async Task<List<BusinessModelDto>> GetBusinessByCategoryAsync(int CategoeryId)
+        {
+            try
+            {
+                var businessEntities = await _context.Businesses
+                    .Where(b => b.CategoriesModelId == CategoeryId)
+                    .ToListAsync();
+
+                if (businessEntities == null || !businessEntities.Any())
+                {
+                    return null;
+                }
+
+                return businessEntities.Select(business => _mapper.Map<BusinessModelDto>(business)).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve business for the business owner.", ex);
+            }
+        }
+
     }
 }

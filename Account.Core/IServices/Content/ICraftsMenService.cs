@@ -22,5 +22,6 @@ namespace Account.Core.IServices.Content
         Task<CraftsMenModelDto> GetcraftsForCraftsmanAsync(string userId);
         Task<CraftsMenModel> FindByIdAsync(int id);
         Task<List<CraftsmanResponseDto>> GetAllCraftsmenWithDetailsAsync();
+        Task<List<CraftsMenModelDto>> GetcraftsmanByCraftsAsync(int CraftsId);
     }
 }
