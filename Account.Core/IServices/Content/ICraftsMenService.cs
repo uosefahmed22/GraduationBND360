@@ -16,12 +16,10 @@ namespace Account.Core.IServices.Content
     {
         Task<ApiResponse> CreateCraftsMenAsync(CraftsMenModelDto model);
         Task<CraftsMenModelDto> GetCraftsMenByIdAsync(int id);
-        Task<IEnumerable<CraftsMenModelDto>> GetAllCraftsMenAsync();
         Task<ApiResponse> UpdateCraftsMenAsync(int id, CraftsMenModelDto model);
         Task<ApiResponse> DeleteCraftsMenAsync(int id);
         Task<CraftsMenModelDto> GetcraftsForCraftsmanAsync(string userId);
         Task<CraftsMenModel> FindByIdAsync(int id);
-        Task<List<CraftsmanResponseDto>> GetAllCraftsmenWithDetailsAsync();
-        Task<List<CraftsMenModelDto>> GetcraftsmanByCraftsAsync(int CraftsId);
+        Task<List<CraftsmanResponseDto>> GetAllCraftsmenWithDetailsAsync(int craftsId);
     }
 }

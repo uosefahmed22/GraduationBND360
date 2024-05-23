@@ -143,20 +143,6 @@ namespace Account.Apis.Controllers
             return Ok(status);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllBusinesses()
-        {
-            try
-            {
-                var businesses = await _businessService.GetAllAsync();
-                return Ok(businesses);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBusiness(int id)
         {
@@ -291,35 +277,17 @@ namespace Account.Apis.Controllers
             }
         }
 
-        [HttpGet("all-businessesWithReviewsAndCategories")]
-        public async Task<IActionResult> GetAllBusinessesWithDetails()
+        [HttpGet("all-businessesWithReviewsAndCategories/{categoryId}")]
+        public async Task<IActionResult> GetAllBusinessesWithDetails(int categoryId)
         {
             try
             {
-                var businessResponses = await _businessService.GetAllBusinessesWithDetailsAsync();
+                var businessResponses = await _businessService.GetAllBusinessesWithDetailsAsync(categoryId);
                 if (businessResponses == null || businessResponses.Count == 0)
                 {
-                    return NotFound(new ApiResponse(404, "No businesses found."));
+                    return NotFound(new ApiResponse(404, "No businesses found for the specified category."));
                 }
                 return Ok(businessResponses);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse(500, $"An error occurred: {ex.Message}"));
-            }
-        }
-
-        [HttpGet("BusinessByCategory/{CategoeryId}")]
-        public async Task<IActionResult> GetBusinessByCategoryAsync(int CategoeryId)
-        {
-            try
-            {
-                var business = await _businessService.GetBusinessByCategoryAsync(CategoeryId);
-                if (business == null)
-                {
-                    return NotFound(new ApiResponse(404, "Category not found."));
-                }
-                return Ok(business);
             }
             catch (Exception ex)
             {

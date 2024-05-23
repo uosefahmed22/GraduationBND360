@@ -13,7 +13,7 @@ namespace Account.Core.IServices.Content
 {
     public interface IFavoriteForBusinessService
     {
-        Task<IEnumerable<BusinessModelDto>> GetBusinesses(string userId);
+        Task<IEnumerable<BusinessWithRatingsDto>> GetBusinesses(string userId);
         Task<ApiResponse> AddAsync(FavoriteModelForBusinessDto savedModel);
         Task<ApiResponse> RemoveAsync(int id);
     }

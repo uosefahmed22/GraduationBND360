@@ -78,12 +78,27 @@ namespace Account.Apis
             }
             app.UseHttpsRedirection();
 
-            app.UseStaticFiles(new StaticFileOptions
+            app.UseStaticFiles();
+
+            try
             {
-                FileProvider = new PhysicalFileProvider(
-                        Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
-                RequestPath = "/resources"
-            });
+                var uploadsPath = Path.Combine(builder.Environment.ContentRootPath, "Uploads");
+                if (!Directory.Exists(uploadsPath))
+                {
+                    Directory.CreateDirectory(uploadsPath);
+                }
+
+                app.UseStaticFiles(new StaticFileOptions
+                {
+                    FileProvider = new PhysicalFileProvider(uploadsPath),
+                    RequestPath = "/resources"
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error setting up static files: {ex.Message}");
+                throw;
+            }
 
 
             app.UseSwaggerMiddlewares();

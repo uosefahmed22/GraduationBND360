@@ -12,7 +12,7 @@ namespace Account.Core.IServices.Content
 {
     public interface IFavoriteForCraftsmenService
     {
-        Task<IEnumerable<CraftsMenModelDto>> GetCraftsmanFavorites(string userId);
+        Task<IEnumerable<CraftsManWithRatingsDto>> GetCraftsmanFavorites(string userId);
         Task<ApiResponse> AddAsync(FavoriteModelForCraftsmenDto savedModel);
         Task<ApiResponse> RemoveAsync(int CraftsmanId);
     }

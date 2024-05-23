@@ -46,10 +46,15 @@ public class MappingProfile : Profile
         CreateMap<RatingAndReviewModelForCraftsmen, RatingAndReviewModelForCraftsmenDto>().ReverseMap();
         CreateMap<RatingAndReviewModelForCraftsmen, ReviewAndRatingResponse>().ReverseMap();
         CreateMap<RatingAndReviewModelForCraftsmen, ReviewAndRatingSummaryResponse>().ReverseMap();
+        CreateMap<RatingAndReviewModelForBusiness, ReviewAndRatingResponse>().ReverseMap();
         CreateMap<AppUser, AppUserDto>().ReverseMap();
         CreateMap<AppUser, UpdateUserImageModel>().ReverseMap();
         CreateMap<BusinessModel, BusinessResponseInCategory>().ReverseMap();
+        CreateMap<BusinessModel, BusinessReviewSummaryDtoForFaviorates>().ReverseMap();
+        CreateMap<BusinessModel, BusinessWithRatingsDto>().ReverseMap();
         CreateMap<CraftsMenModel, CraftsmanResponseDto>().ReverseMap();
+        CreateMap<CraftsMenModel, CraftsmanReviewSummaryDto>().ReverseMap();
+        CreateMap<CraftsMenModel, CraftsManWithRatingsDto>().ReverseMap();
     }
 }
 

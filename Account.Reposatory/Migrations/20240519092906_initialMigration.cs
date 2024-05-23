@@ -34,7 +34,7 @@ namespace Account.Reposatory.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserRole = table.Column<int>(type: "int", nullable: false),
-                    ProfileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    profileImageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -485,9 +485,9 @@ namespace Account.Reposatory.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "5e67a631-8b7e-46dd-85b3-af676eddf85d", "1", "BussinesOwner", "BussinesOwner" },
-                    { "83eaaf2c-7917-4ba7-9c1a-4bb93713bec0", "0", "User", "User" },
-                    { "be1c1507-23e7-4304-a987-8e3d8624e600", "2", "ServiceProvider", "ServiceProvider" }
+                    { "21efffac-715c-4ffc-9587-2ce0cadafa5e", "0", "User", "User" },
+                    { "7e4a1402-0b4a-4d9a-904a-2f3d6089193d", "1", "BussinesOwner", "BussinesOwner" },
+                    { "cae871c5-f0b0-4926-b7b2-96c1f40c7bb2", "2", "ServiceProvider", "ServiceProvider" }
                 });
 
             migrationBuilder.CreateIndex(

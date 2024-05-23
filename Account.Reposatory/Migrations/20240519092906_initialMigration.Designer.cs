@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240517161705_initialMigration")]
+    [Migration("20240519092906_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -71,9 +71,6 @@ namespace Account.Reposatory.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ProfileName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -86,6 +83,9 @@ namespace Account.Reposatory.Migrations
 
                     b.Property<int>("UserRole")
                         .HasColumnType("int");
+
+                    b.Property<string>("profileImageName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -683,21 +683,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "83eaaf2c-7917-4ba7-9c1a-4bb93713bec0",
+                            Id = "21efffac-715c-4ffc-9587-2ce0cadafa5e",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "5e67a631-8b7e-46dd-85b3-af676eddf85d",
+                            Id = "7e4a1402-0b4a-4d9a-904a-2f3d6089193d",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "be1c1507-23e7-4304-a987-8e3d8624e600",
+                            Id = "cae871c5-f0b0-4926-b7b2-96c1f40c7bb2",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"

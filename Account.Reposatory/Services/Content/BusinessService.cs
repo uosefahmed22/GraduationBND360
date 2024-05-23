@@ -83,28 +83,6 @@ namespace Account.Reposatory.Services.Content
                 return new ApiResponse(500, $"Failed to delete business: {ex.Message}");
             }
         }
-        public async Task<List<BusinessModelDto>> GetAllAsync()
-        {
-            try
-            {
-                var businessEntities = await _context.Businesses
-                    .Include(b => b.CategoriesModel) 
-                    .ToListAsync();
-
-                var businessDtoList = _mapper.Map<List<BusinessModelDto>>(businessEntities);
-
-                foreach (var businessDto in businessDtoList)
-                {
-                    businessDto.CategoriesModel = _mapper.Map<CategoriesModelDTO>(businessDto.CategoriesModel);
-                }
-
-                return businessDtoList;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
         public async Task<ApiResponse> UpdateAsync(int id, BusinessModelDto model)
         {
             try
@@ -193,12 +171,13 @@ namespace Account.Reposatory.Services.Content
                 throw new Exception("Failed to retrieve business for the business owner.", ex);
             }
         }
-        public async Task<List<BusinessResponseInCategory>> GetAllBusinessesWithDetailsAsync()
+        public async Task<List<BusinessResponseInCategory>> GetAllBusinessesWithDetailsAsync(int categoryId)
         {
             try
             {
                 var businessEntities = await _context.Businesses
                     .Include(b => b.CategoriesModel)
+                    .Where(b => b.CategoriesModelId == categoryId)
                     .ToListAsync();
 
                 var businessDtos = new List<BusinessResponseInCategory>();
@@ -260,26 +239,5 @@ namespace Account.Reposatory.Services.Content
                 throw new Exception("Failed to retrieve reviews and ratings.", ex);
             }
         }
-        public async Task<List<BusinessModelDto>> GetBusinessByCategoryAsync(int CategoeryId)
-        {
-            try
-            {
-                var businessEntities = await _context.Businesses
-                    .Where(b => b.CategoriesModelId == CategoeryId)
-                    .ToListAsync();
-
-                if (businessEntities == null || !businessEntities.Any())
-                {
-                    return null;
-                }
-
-                return businessEntities.Select(business => _mapper.Map<BusinessModelDto>(business)).ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Failed to retrieve business for the business owner.", ex);
-            }
-        }
-
     }
 }

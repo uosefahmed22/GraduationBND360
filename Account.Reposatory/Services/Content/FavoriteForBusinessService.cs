@@ -1,6 +1,7 @@
 ﻿using Account.Apis.Errors;
 using Account.Core.Dtos.BusinessDto;
 using Account.Core.Dtos.FavoirteDto;
+using Account.Core.Dtos.RatingAndReviewDto.Account.Core.Dtos.RatingAndReviewDto;
 using Account.Core.IServices.Content;
 using Account.Core.Models.Content.Favorite;
 using Account.Reposatory.Data.Context;
@@ -40,8 +41,7 @@ namespace Account.Reposatory.Services.Content
                 return new ApiResponse(400, $"Failed to add record: {ex.Message}");
             }
         }
-
-        public async Task<IEnumerable<BusinessModelDto>> GetBusinesses(string userId)
+        public async Task<IEnumerable<BusinessWithRatingsDto>> GetBusinesses(string userId)
         {
             try
             {
@@ -55,14 +55,61 @@ namespace Account.Reposatory.Services.Content
                     .Where(b => favoriteBusinessIds.Contains(b.Id))
                     .ToListAsync();
 
-                return _mapper.Map<IEnumerable<BusinessModelDto>>(businesses);
+                var businessDtos = new List<BusinessWithRatingsDto>();
+
+                foreach (var business in businesses)
+                {
+                    var businessDto = _mapper.Map<BusinessWithRatingsDto>(business);
+
+                    var reviewAndRatingSummary = await GetBusinessReviewSummary(business.Id);
+
+                    businessDto.TotalReviews = reviewAndRatingSummary.TotalReviews;
+                    businessDto.AverageRating = reviewAndRatingSummary.AverageRating;
+
+                    businessDtos.Add(businessDto);
+                }
+
+                return businessDtos;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+        public async Task<BusinessReviewSummaryDtoForFaviorates> GetBusinessReviewSummary(int businessId)
+        {
+            try
+            {
+                var reviews = await _context.ratingAndReviewModelForBusinesses
+                                            .Where(r => r.businessId == businessId)
+                                            .ToListAsync();
 
+                if (reviews == null || reviews.Count == 0)
+                {
+                    return new BusinessReviewSummaryDtoForFaviorates
+                    {
+                        BusinessId = businessId,
+                        TotalReviews = 0,
+                        AverageRating = 0
+                    };
+                }
+
+                double totalRating = reviews.Sum(r => r.Rating ?? 0);
+                double averageRating = totalRating / reviews.Count;
+                averageRating = Math.Min(averageRating, 5);
+
+                return new BusinessReviewSummaryDtoForFaviorates
+                {
+                    BusinessId = businessId,
+                    TotalReviews = reviews.Count,
+                    AverageRating = averageRating
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve reviews and ratings.", ex);
+            }
+        }
         public async Task<ApiResponse> RemoveAsync(int businessId)
         {
             try

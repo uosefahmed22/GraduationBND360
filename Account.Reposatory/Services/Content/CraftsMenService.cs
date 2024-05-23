@@ -44,28 +44,6 @@ namespace Account.Reposatory.Services.Content
                 return new ApiResponse(500, $"Failed to add craftsman: {ex.Message}");
             }
         }
-        public async Task<IEnumerable<CraftsMenModelDto>> GetAllCraftsMenAsync()
-        {
-            try
-            {
-                var craftsMenEntities = await _context.CraftsMen
-                    .Include(c => c.CraftsModel) 
-                    .ToListAsync();
-
-                var craftsMenDtoList = _mapper.Map<List<CraftsMenModelDto>>(craftsMenEntities);
-
-                foreach (var craftsMenDto in craftsMenDtoList)
-                {
-                    craftsMenDto.CraftsModel = _mapper.Map<CraftsModelDto>(craftsMenDto.CraftsModel);
-                }
-
-                return craftsMenDtoList;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
         public async Task<ApiResponse> DeleteCraftsMenAsync(int id)
         {
             try
@@ -192,12 +170,13 @@ namespace Account.Reposatory.Services.Content
                 throw new Exception("Failed to retrieve crafts for the craftsman.", ex);
             }
         }
-        public async Task<List<CraftsmanResponseDto>> GetAllCraftsmenWithDetailsAsync()
+        public async Task<List<CraftsmanResponseDto>> GetAllCraftsmenWithDetailsAsync(int craftsId)
         {
             try
             {
                 var craftsmenEntities = await _context.CraftsMen
                     .Include(c => c.CraftsModel)
+                    .Where(c => c.CraftsModelId == craftsId)
                     .ToListAsync();
 
                 var craftsmenDtos = new List<CraftsmanResponseDto>();
@@ -251,26 +230,6 @@ namespace Account.Reposatory.Services.Content
             catch (Exception ex)
             {
                 throw new Exception("Failed to retrieve reviews and ratings.", ex);
-            }
-        }
-        public async Task<List<CraftsMenModelDto>> GetcraftsmanByCraftsAsync(int CraftsId)
-        {
-            try
-            {
-                var craftsMenEntities = await _context.CraftsMen
-                    .Where(x => x.CraftsModelId == CraftsId)
-                    .ToListAsync();
-
-                if (craftsMenEntities == null || !craftsMenEntities.Any())
-                {
-                    return null;
-                }
-
-                return craftsMenEntities.Select(craftsMen => _mapper.Map<CraftsMenModelDto>(craftsMen)).ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Failed to retrieve crafts for the craftsman.", ex);
             }
         }
     }

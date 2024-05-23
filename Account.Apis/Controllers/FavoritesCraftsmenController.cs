@@ -1,4 +1,5 @@
-﻿using Account.Core.Dtos.FavoirteDto;
+﻿using Account.Apis.Errors;
+using Account.Core.Dtos.FavoirteDto;
 using Account.Core.IServices.Content;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +24,22 @@ namespace Account.Apis.Controllers
             return StatusCode(result.StatusCode, result.Message);
         }
 
-        [HttpGet]
+        [HttpGet("GetCraftsmanFavorites/{userId}")]
         public async Task<IActionResult> GetCraftsmanFavorites(string userId)
         {
-            var favorites = await _favoriteForCraftsmenService.GetCraftsmanFavorites(userId);
-            return Ok(favorites);
+            try
+            {
+                var favorites = await _favoriteForCraftsmenService.GetCraftsmanFavorites(userId);
+                if (favorites == null || !favorites.Any())
+                {
+                    return NotFound(new ApiResponse(404, "No favorite craftsmen found."));
+                }
+                return Ok(favorites);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete]

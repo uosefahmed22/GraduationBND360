@@ -680,21 +680,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3a995b84-fc73-41d5-8d9a-c9f7814360f2",
+                            Id = "21efffac-715c-4ffc-9587-2ce0cadafa5e",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "6ec018af-f656-48e8-8e4a-a1eba8fa8454",
+                            Id = "7e4a1402-0b4a-4d9a-904a-2f3d6089193d",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "b2a19cda-0907-441b-b59d-ed83cea73aea",
+                            Id = "cae871c5-f0b0-4926-b7b2-96c1f40c7bb2",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"

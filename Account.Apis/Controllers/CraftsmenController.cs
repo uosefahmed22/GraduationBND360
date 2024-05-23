@@ -139,20 +139,6 @@ namespace Account.Apis.Controllers
             return Ok(status);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllCraftsmen()
-        {
-            try
-            {
-                var craftsmen = await _craftsmanService.GetAllCraftsMenAsync();
-                return Ok(craftsmen);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCraftsman(int id)
         {
@@ -287,12 +273,16 @@ namespace Account.Apis.Controllers
             }
         }
 
-        [HttpGet("GetAllCraftsmenWithDetails")]
-        public async Task<IActionResult> GetAllCraftsmenWithDetails()
+        [HttpGet("GetAllCraftsmenWithDetails/{craftsId}")]
+        public async Task<IActionResult> GetAllCraftsmenWithDetails(int craftsId)
         {
             try
             {
-                var craftsmen = await _craftsmanService.GetAllCraftsmenWithDetailsAsync();
+                var craftsmen = await _craftsmanService.GetAllCraftsmenWithDetailsAsync(craftsId);
+                if (craftsmen == null || craftsmen.Count == 0)
+                {
+                    return NotFound(new ApiResponse(404, "No craftsmen found for the specified craft."));
+                }
                 return Ok(craftsmen);
             }
             catch (Exception ex)
@@ -301,22 +291,5 @@ namespace Account.Apis.Controllers
             }
         }
 
-        [HttpGet("craftsmanByCrafts/{CraftsId}")]
-        public async Task<IActionResult> GetcraftsmanByCraftsAsync(int CraftsId)
-        {
-            try
-            {
-                var craftsMen = await _craftsmanService.GetcraftsmanByCraftsAsync(CraftsId);
-                if (craftsMen == null)
-                {
-                    return NotFound(new ApiResponse(404, "Crafts not found."));
-                }
-                return Ok(craftsMen);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse(500, $"An error occurred: {ex.Message}"));
-            }
-        }
     }
 }
