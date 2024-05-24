@@ -18,18 +18,40 @@ namespace Account.Reposatory.Services.Content
     {
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
-        private readonly IFileService _fileService;
+        private readonly IImageService _imageService;
 
-        public PropertyService(AppDBContext context, IMapper mapper,IFileService fileService)
+        public PropertyService(AppDBContext context, IMapper mapper,IImageService fileService)
         {
             _context = context;
             _mapper = mapper;
-            _fileService = fileService;
+            _imageService = fileService;
         }
         public async Task<ApiResponse> CreatePropertyAsync(PropertyModelDTO propertyDto)
         {
             try
             {
+                var imageTasks = new List<Task<Tuple<int, string>>>();
+
+                if (propertyDto.image1 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(propertyDto.image1));
+                if (propertyDto.image2 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(propertyDto.image2));
+                if (propertyDto.image3 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(propertyDto.image3));
+                if (propertyDto.image4 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(propertyDto.image4));
+
+                var imageResults = await Task.WhenAll(imageTasks);
+
+                if (propertyDto.image1 != null)
+                    propertyDto.ImageName1 = imageResults[0].Item2;
+                if (propertyDto.image2 != null)
+                    propertyDto.ImageName2 = imageResults[1].Item2;
+                if (propertyDto.image3 != null)
+                    propertyDto.ImageName3 = imageResults[2].Item2;
+                if (propertyDto.image4 != null)
+                    propertyDto.ImageName4 = imageResults[3].Item2;
+
                 var propertyEntity = _mapper.Map<PropertyModel>(propertyDto);
                 _context.Properties.Add(propertyEntity);
                 await _context.SaveChangesAsync();
@@ -51,21 +73,20 @@ namespace Account.Reposatory.Services.Content
                     return new ApiResponse(404, "Property not found.");
                 }
 
-                if (!string.IsNullOrEmpty(existingProperty.ImageName1))
+                var imageUrls = new List<string>
+        {
+            existingProperty.ImageName1,
+            existingProperty.ImageName2,
+            existingProperty.ImageName3,
+            existingProperty.ImageName4
+        };
+
+                foreach (var imageUrl in imageUrls)
                 {
-                    await _fileService.DeleteImage(existingProperty.ImageName1);
-                }
-                if (!string.IsNullOrEmpty(existingProperty.ImageName2))
-                {
-                    await _fileService.DeleteImage(existingProperty.ImageName2);
-                }
-                if (!string.IsNullOrEmpty(existingProperty.ImageName3))
-                {
-                    await _fileService.DeleteImage(existingProperty.ImageName3);
-                }
-                if (!string.IsNullOrEmpty(existingProperty.ImageName4))
-                {
-                    await _fileService.DeleteImage(existingProperty.ImageName4);
+                    if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        await _imageService.DeleteImageAsync(imageUrl);
+                    }
                 }
 
                 _context.Properties.Remove(existingProperty);
@@ -83,14 +104,14 @@ namespace Account.Reposatory.Services.Content
             try
             {
                 var propertyEntities = await _context.Properties
-                    .Include(p=>p.PublisherDetails)
+                    .Include(p => p.PublisherDetails)
                     .ToListAsync();
 
                 return _mapper.Map<List<PropertyModelDTO>>(propertyEntities);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("Failed to get all properties", ex);
             }
         }
         public async Task<PropertyModelDTO> GetPropertyByIdAsync(int id)
@@ -108,9 +129,9 @@ namespace Account.Reposatory.Services.Content
 
                 return _mapper.Map<PropertyModelDTO>(propertyEntity);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("Failed to get property by ID", ex);
             }
         }
         public async Task<ApiResponse> UpdatePropertyAsync(int id, PropertyModelDTO propertyDto)
@@ -118,8 +139,9 @@ namespace Account.Reposatory.Services.Content
             try
             {
                 var existingProperty = await _context.Properties
-                                                    .Include(p => p.PublisherDetails)
-                                                    .FirstOrDefaultAsync(p => p.Id == id);
+                    .Include(p => p.PublisherDetails)
+                    .FirstOrDefaultAsync(p => p.Id == id);
+
                 if (existingProperty == null)
                 {
                     return new ApiResponse(404, "Property not found.");
@@ -131,6 +153,25 @@ namespace Account.Reposatory.Services.Content
                 {
                     _mapper.Map(propertyDto.PublisherDetails, existingProperty.PublisherDetails);
                 }
+
+                if (propertyDto.image1 != null)
+                {
+                    if (!string.IsNullOrEmpty(existingProperty.ImageName1))
+                    {
+                        await _imageService.DeleteImageAsync(existingProperty.ImageName1);
+                    }
+                    var imageResult = await _imageService.UploadImageAsync(propertyDto.image1);
+                    if (imageResult.Item1 == 1)
+                    {
+                        existingProperty.ImageName1 = imageResult.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(500, imageResult.Item2);
+                    }
+                }
+
+                // Repeat similar blocks for image2, image3, image4
 
                 await _context.SaveChangesAsync();
 

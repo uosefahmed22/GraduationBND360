@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240519092906_initialMigration")]
+    [Migration("20240524091859_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -683,21 +683,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "21efffac-715c-4ffc-9587-2ce0cadafa5e",
+                            Id = "209c5533-6f0f-4944-b9a8-22ebee9a0526",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "7e4a1402-0b4a-4d9a-904a-2f3d6089193d",
+                            Id = "24fb6af1-6192-406b-b291-ee077c0182c3",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "cae871c5-f0b0-4926-b7b2-96c1f40c7bb2",
+                            Id = "0d8ed817-ccc8-4422-8060-a34a7b5558bc",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"

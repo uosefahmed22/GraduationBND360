@@ -39,7 +39,7 @@ namespace Account.Apis.Extentions
             //service.AddScoped<IFileService, FileService>();
             service.AddScoped<IJobService, JobService>();
             service.AddScoped<IPropertyService, PropertyService>();
-            service.AddScoped<IFileService, FileService>();
+            service.AddScoped<IImageService, ImageService>();
             service.AddScoped<ICategoriesService, CategoriesService>();
             service.AddScoped<IBusinessService, BusinessService>();
             service.AddScoped<ICraftsService, CraftsService>();

@@ -6,6 +6,7 @@ using Account.Core.IServices.Content;
 using AutoMapper;
 using Account.Core.Services.Content;
 using Account.Apis.Errors;
+using Account.Reposatory.Services.Content;
 
 namespace Account.Apis.Controllers
 {
@@ -15,13 +16,13 @@ namespace Account.Apis.Controllers
     {
         private readonly ICraftsMenService _craftsmanService;
         private readonly IMapper _mapper;
-        private readonly IFileService _fileService;
+        private readonly IImageService _imageService;
 
-        public CraftsmenController(ICraftsMenService craftsMenService , IMapper mapper,IFileService fileService)
+        public CraftsmenController(ICraftsMenService craftsMenService , IMapper mapper,IImageService fileService)
         {
             _craftsmanService = craftsMenService;
             _mapper = mapper;
-            _fileService = fileService;
+            _imageService = fileService;
         }
         [HttpPost]
         public async Task<IActionResult> AddCraftsman([FromForm] CraftsMenModelDto model)
@@ -44,7 +45,7 @@ namespace Account.Apis.Controllers
                 }
                 else
                 {
-                    var fileResult = _fileService.SaveImage(model.ProfileImage);
+                    var fileResult = await _imageService.SaveImageAsync(model.ProfileImage);
 
                     if (fileResult.Item1 == 1)
                     {
@@ -60,7 +61,7 @@ namespace Account.Apis.Controllers
 
                 if (model.CraftsMenImage1 != null)
                 {
-                    var fileResult1 = _fileService.SaveImage(model.CraftsMenImage1);
+                    var fileResult1 = await _imageService.SaveImageAsync(model.CraftsMenImage1);
                     if (fileResult1.Item1 == 1)
                     {
                         model.CraftsMenImageName1 = fileResult1.Item2;
@@ -75,7 +76,7 @@ namespace Account.Apis.Controllers
 
                 if (model.CraftsMenImage2 != null)
                 {
-                    var fileResult2 = _fileService.SaveImage(model.CraftsMenImage2);
+                    var fileResult2 = await _imageService.SaveImageAsync(model.CraftsMenImage2);
                     if (fileResult2.Item1 == 1)
                     {
                         model.CraftsMenImageName2 = fileResult2.Item2;
@@ -90,7 +91,7 @@ namespace Account.Apis.Controllers
 
                 if (model.CraftsMenImage3 != null)
                 {
-                    var fileResult3 = _fileService.SaveImage(model.CraftsMenImage3);
+                    var fileResult3 = await _imageService.SaveImageAsync(model.CraftsMenImage3);
                     if (fileResult3.Item1 == 1)
                     {
                         model.CraftsMenImageName3 = fileResult3.Item2;
@@ -105,7 +106,7 @@ namespace Account.Apis.Controllers
 
                 if (model.CraftsMenImage4 != null)
                 {
-                    var fileResult4 = _fileService.SaveImage(model.CraftsMenImage4);
+                    var fileResult4 = await _imageService.SaveImageAsync(model.CraftsMenImage4);
                     if (fileResult4.Item1 == 1)
                     {
                         model.CraftsMenImageName4 = fileResult4.Item2;
@@ -145,18 +146,6 @@ namespace Account.Apis.Controllers
             var result = await _craftsmanService.DeleteCraftsMenAsync(id);
             return StatusCode(result.StatusCode, result);
         }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCraftsman(int id)
-        {
-            var craftsman = await _craftsmanService.GetCraftsMenByIdAsync(id);
-            if (craftsman == null)
-            {
-                return NotFound();
-            }
-            return Ok(craftsman);
-        }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCraftsman(int id, [FromForm] CraftsMenModelDto craftsmanToUpdate)
         {
@@ -175,12 +164,12 @@ namespace Account.Apis.Controllers
 
                 if (craftsmanToUpdate.ProfileImage != null)
                 {
-                    var profileImageResult = _fileService.SaveImage(craftsmanToUpdate.ProfileImage);
+                    var profileImageResult = await _imageService.SaveImageAsync(craftsmanToUpdate.ProfileImage);
                     if (profileImageResult.Item1 == 1)
                     {
                         if (!string.IsNullOrEmpty(existingCraftsman.ProfileImageName))
                         {
-                            await _fileService.DeleteImage(existingCraftsman.ProfileImageName);
+                            await _imageService.DeleteImageAsync(existingCraftsman.ProfileImageName);
                         }
                         craftsmanToUpdate.ProfileImageName = profileImageResult.Item2;
                     }
@@ -206,12 +195,12 @@ namespace Account.Apis.Controllers
                 {
                     if (newImages[i] != null)
                     {
-                        var fileResult = _fileService.SaveImage(newImages[i]);
+                        var fileResult = await _imageService.SaveImageAsync(newImages[i]);
                         if (fileResult.Item1 == 1)
                         {
                             if (!string.IsNullOrEmpty(existingImageNames[i]))
                             {
-                                await _fileService.DeleteImage(existingImageNames[i]);
+                                await _imageService.DeleteImageAsync(existingImageNames[i]);
                             }
                             newImageNames[i] = fileResult.Item2;
                         }
@@ -253,6 +242,17 @@ namespace Account.Apis.Controllers
                     Message = ex.Message
                 });
             }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCraftsman(int id)
+        {
+            var craftsman = await _craftsmanService.GetCraftsMenByIdAsync(id);
+            if (craftsman == null)
+            {
+                return NotFound();
+            }
+            return Ok(craftsman);
         }
 
         [HttpGet("craftsman/{userId}")]

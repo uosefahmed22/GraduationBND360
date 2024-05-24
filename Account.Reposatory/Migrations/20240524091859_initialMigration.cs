@@ -485,9 +485,9 @@ namespace Account.Reposatory.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "21efffac-715c-4ffc-9587-2ce0cadafa5e", "0", "User", "User" },
-                    { "7e4a1402-0b4a-4d9a-904a-2f3d6089193d", "1", "BussinesOwner", "BussinesOwner" },
-                    { "cae871c5-f0b0-4926-b7b2-96c1f40c7bb2", "2", "ServiceProvider", "ServiceProvider" }
+                    { "0d8ed817-ccc8-4422-8060-a34a7b5558bc", "2", "ServiceProvider", "ServiceProvider" },
+                    { "209c5533-6f0f-4944-b9a8-22ebee9a0526", "0", "User", "User" },
+                    { "24fb6af1-6192-406b-b291-ee077c0182c3", "1", "BussinesOwner", "BussinesOwner" }
                 });
 
             migrationBuilder.CreateIndex(

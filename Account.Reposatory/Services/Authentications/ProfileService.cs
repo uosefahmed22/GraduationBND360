@@ -20,14 +20,14 @@ namespace Account.Reposatory.Services.Authentications
     public class ProfileService : IProfileService
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IFileService _fileService;
+        private readonly IImageService _imageService;
         private readonly IMapper _mapper;
         private readonly AppDBContext _context;
 
-        public ProfileService(UserManager<AppUser> userManager , IFileService fileService,IMapper mapper,AppDBContext context)
+        public ProfileService(UserManager<AppUser> userManager , IImageService fileService,IMapper mapper,AppDBContext context)
         {
             _userManager = userManager;
-            _fileService = fileService;
+            _imageService = fileService;
             _mapper = mapper;
             _context = context;
         }
@@ -106,7 +106,7 @@ namespace Account.Reposatory.Services.Authentications
                     return new ApiResponse(404, "User not found.");
                 }
 
-                var saveResult = _fileService.SaveImage(model.image);
+                var saveResult = await _imageService.SaveImageAsync(model.image);
                 if (saveResult.Item1 == 0)
                 {
                     return new ApiResponse(400, saveResult.Item2);
@@ -114,7 +114,7 @@ namespace Account.Reposatory.Services.Authentications
 
                 if (!string.IsNullOrEmpty(user.profileImageName))
                 {
-                    await _fileService.DeleteImage(user.profileImageName);
+                    await _imageService.DeleteImageAsync(user.profileImageName);
                 }
 
                 user.profileImageName = saveResult.Item2;

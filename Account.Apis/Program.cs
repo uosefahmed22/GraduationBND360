@@ -1,7 +1,9 @@
 using Account.Apis.Errors;
 using Account.Apis.Extentions;
+using Account.Apis.Helpers;
 using Account.Core.Models.Account;
 using Account.Reposatory.Data.Context;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -18,6 +20,16 @@ namespace Account.Apis
 
             builder.Services.AddControllers();
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
+
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySetting"));
+
+            builder.Services.AddSingleton(cloudinary =>
+            {
+                var config = builder.Configuration.GetSection("CloudinarySetting").Get<CloudinarySettings>();
+                var account = new CloudinaryDotNet.Account(config.CloudName, config.ApiKey, config.ApiSecret);
+                return new CloudinaryDotNet.Cloudinary(account);
+            });
+
 
             builder.Services.AddIdentityServices(builder.Configuration);
 

@@ -5,6 +5,7 @@ using Account.Core.Dtos.JobFolderDTO;
 using Account.Core.IServices.Content;
 using Account.Core.Models.Content;
 using Account.Core.Services.Content;
+using Account.Reposatory.Services.Content;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,19 +18,20 @@ namespace Account.Apis.Controllers
     public class BusinessController : ControllerBase
     {
         private readonly IBusinessService _businessService;
-        private readonly IFileService _fileService;
+        private readonly IImageService _imageService;
         private readonly IMapper _mapper;
 
-        public BusinessController(IBusinessService businessService, IFileService fileService, IMapper mapper)
+        public BusinessController(IBusinessService businessService, IImageService fileService, IMapper mapper)
         {
             _businessService = businessService;
-            _fileService = fileService;
+            _imageService = fileService;
             _mapper = mapper;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddBusiness([FromForm] BusinessModelDto model)
         {
+            
             var status = new Status();
             if (!ModelState.IsValid)
             {
@@ -37,6 +39,7 @@ namespace Account.Apis.Controllers
                 status.Message = "Please pass valid data.";
                 return Ok(status);
             }
+
 
             try
             {
@@ -48,7 +51,7 @@ namespace Account.Apis.Controllers
                 }
                 else
                 {
-                    var fileResult = _fileService.SaveImage(model.ProfileImage);
+                    var fileResult = await _imageService.SaveImageAsync(model.ProfileImage);
 
                     if (fileResult.Item1 == 1)
                     {
@@ -64,7 +67,7 @@ namespace Account.Apis.Controllers
 
                 if (model.BusinessImage1 != null)
                 {
-                    var fileResult1 = _fileService.SaveImage(model.BusinessImage1);
+                    var fileResult1 = await _imageService.SaveImageAsync(model.BusinessImage1);
                     if (fileResult1.Item1 == 1)
                     {
                         model.BusinessImageName1 = fileResult1.Item2;
@@ -79,7 +82,7 @@ namespace Account.Apis.Controllers
 
                 if (model.BusinessImage2 != null)
                 {
-                    var fileResult2 = _fileService.SaveImage(model.BusinessImage2);
+                    var fileResult2 = await _imageService.SaveImageAsync(model.BusinessImage2);
                     if (fileResult2.Item1 == 1)
                     {
                         model.BusinessImageName2 = fileResult2.Item2;
@@ -94,7 +97,7 @@ namespace Account.Apis.Controllers
 
                 if (model.BusinessImage3 != null)
                 {
-                    var fileResult3 = _fileService.SaveImage(model.BusinessImage3);
+                    var fileResult3 = await _imageService.SaveImageAsync(model.BusinessImage3);
                     if (fileResult3.Item1 == 1)
                     {
                         model.BusinessImageName3 = fileResult3.Item2;
@@ -109,7 +112,7 @@ namespace Account.Apis.Controllers
 
                 if (model.BusinessImage4 != null)
                 {
-                    var fileResult4 = _fileService.SaveImage(model.BusinessImage4);
+                    var fileResult4 = await _imageService.SaveImageAsync(model.BusinessImage4);
                     if (fileResult4.Item1 == 1)
                     {
                         model.BusinessImageName4 = fileResult4.Item2;
@@ -150,17 +153,6 @@ namespace Account.Apis.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBusiness(int id)
-        {
-            var business = await _businessService.GetByIdAsync(id);
-            if (business == null)
-            {
-                return NotFound();
-            }
-            return Ok(business);
-        }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBusiness(int id, [FromForm] BusinessModelDto businessToUpdate)
         {
@@ -179,12 +171,12 @@ namespace Account.Apis.Controllers
 
                 if (businessToUpdate.ProfileImage != null)
                 {
-                    var profileImageResult = _fileService.SaveImage(businessToUpdate.ProfileImage);
+                    var profileImageResult = await _imageService.SaveImageAsync(businessToUpdate.ProfileImage);
                     if (profileImageResult.Item1 == 1)
                     {
                         if (!string.IsNullOrEmpty(existingBusiness.ProfileImageName))
                         {
-                            await _fileService.DeleteImage(existingBusiness.ProfileImageName);
+                            await _imageService.DeleteImageAsync(existingBusiness.ProfileImageName);
                         }
                         businessToUpdate.ProfileImageName = profileImageResult.Item2;
                     }
@@ -210,12 +202,12 @@ namespace Account.Apis.Controllers
                 {
                     if (newImages[i] != null)
                     {
-                        var fileResult = _fileService.SaveImage(newImages[i]);
+                        var fileResult = await _imageService.SaveImageAsync(newImages[i]);
                         if (fileResult.Item1 == 1)
                         {
                             if (!string.IsNullOrEmpty(existingImageNames[i]))
                             {
-                                await _fileService.DeleteImage(existingImageNames[i]);
+                                await _imageService.DeleteImageAsync(existingImageNames[i]);
                             }
                             newImageNames[i] = fileResult.Item2;
                         }
@@ -257,6 +249,17 @@ namespace Account.Apis.Controllers
                     Message = ex.Message
                 });
             }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBusiness(int id)
+        {
+            var business = await _businessService.GetByIdAsync(id);
+            if (business == null)
+            {
+                return NotFound();
+            }
+            return Ok(business);
         }
 
         [HttpGet("business-owner/{userId}")]

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Account.Core.IServices.Content;
 using AutoMapper;
+using Account.Reposatory.Services.Content;
 
 namespace Account.Apis.Controllers
 {
@@ -13,18 +14,17 @@ namespace Account.Apis.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoriesService _categoryRepository;
-        private readonly IFileService _fileService;
+        private readonly IImageService _imageService;
         private readonly IMapper _mapper;
 
-        public CategoriesController(ICategoriesService categoryRepository, IFileService fileService, IMapper mapper)
+        public CategoriesController(ICategoriesService categoryRepository, IImageService fileService, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
-            _fileService = fileService;
+            _imageService = fileService;
             _mapper = mapper;
         }
-
         [HttpPost]
-        public IActionResult Add([FromForm] CategoriesModelDTO model)
+        public async Task<IActionResult> Add([FromForm] CategoriesModelDTO model)
         {
             var status = new Status();
             if (!ModelState.IsValid)
@@ -36,15 +36,20 @@ namespace Account.Apis.Controllers
 
             if (model.Image != null)
             {
-                var fileResult = _fileService.SaveImage(model.Image);
-
+                var fileResult = await _imageService.SaveImageAsync(model.Image);
                 if (fileResult.Item1 == 1)
                 {
                     model.ImageFileName = fileResult.Item2;
                 }
+                else
+                {
+                    status.StatusCode = 0;
+                    status.Message = fileResult.Item2;
+                    return Ok(status);
+                }
             }
 
-            var categoryResult = _categoryRepository.CreateCategoryAsync(model).Result;
+            var categoryResult = await _categoryRepository.CreateCategoryAsync(model);
             if (categoryResult.StatusCode == 200)
             {
                 status.StatusCode = 1;
@@ -58,7 +63,6 @@ namespace Account.Apis.Controllers
 
             return Ok(status);
         }
-
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
@@ -73,12 +77,18 @@ namespace Account.Apis.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = await _categoryRepository.DeleteCategoryAsync(id);
-            return StatusCode(result.StatusCode, result);
-        }
+            var category = await _categoryRepository.GetCategoryByIdAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
 
+            await _categoryRepository.DeleteCategoryAsync(id);
+
+            return NoContent();
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory(int id)
         {
@@ -92,63 +102,48 @@ namespace Account.Apis.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromForm] CategoriesModelDTO categoryToUpdate)
         {
-            try
+            var status = new Status();
+            if (id != categoryToUpdate.Id)
             {
-                if (id != categoryToUpdate.Id)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest,
-                        new Status
-                        {
-                            StatusCode = 400,
-                            Message = "Id in URL and form body does not match."
-                        });
-                }
-
-                var existingCategory = await _categoryRepository.FindByIdAsync(id);
-                if (existingCategory == null)
-                {
-                    return StatusCode(StatusCodes.Status404NotFound,
-                        new Status
-                        {
-                            StatusCode = 404,
-                            Message = $"Category with ID: {id} does not exist."
-                        });
-                }
-
-                if (categoryToUpdate.Image != null)
-                {
-                    var fileResult = _fileService.SaveImage(categoryToUpdate.Image);
-                    if (fileResult.Item1 == 1)
-                    {
-                        categoryToUpdate.ImageFileName = fileResult.Item2;
-                    }
-                }
-
-                _mapper.Map(categoryToUpdate, existingCategory);
-
-                var result = await _categoryRepository.UpdateCategoryAsync(id, categoryToUpdate);
-
-                if (categoryToUpdate.Image != null)
-                {
-                    await _fileService.DeleteImage(existingCategory.ImageFileName);
-                }
-
-                return StatusCode(result.StatusCode,
-                    new Status
-                    {
-                        StatusCode = result.StatusCode,
-                        Message = result.Message
-                    });
+                status.StatusCode = 400;
+                status.Message = "Id in URL and form body does not match.";
+                return BadRequest(status);
             }
-            catch (Exception ex)
+
+            var existingCategory = await _categoryRepository.FindByIdAsync(id);
+            if (existingCategory == null)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Status
-                    {
-                        StatusCode = 500,
-                        Message = ex.Message
-                    });
+                status.StatusCode = 404;
+                status.Message = $"Category with ID: {id} does not exist.";
+                return NotFound(status);
             }
+
+            if (categoryToUpdate.Image != null)
+            {
+                if (!string.IsNullOrEmpty(existingCategory.ImageFileName))
+                {
+                    await _imageService.DeleteImageAsync(existingCategory.ImageFileName);
+                }
+
+                var fileResult = await _imageService.SaveImageAsync(categoryToUpdate.Image);
+                if (fileResult.Item1 == 1)
+                {
+                    categoryToUpdate.ImageFileName = fileResult.Item2;
+                }
+                else
+                {
+                    status.StatusCode = 0;
+                    status.Message = fileResult.Item2;
+                    return BadRequest(status);
+                }
+            }
+
+            var result = await _categoryRepository.UpdateCategoryAsync(id, categoryToUpdate);
+            return StatusCode(result.StatusCode, new Status
+            {
+                StatusCode = result.StatusCode,
+                Message = result.Message
+            });
         }
 
     }

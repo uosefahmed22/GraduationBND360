@@ -125,6 +125,10 @@ namespace Account.Reposatory.Services.Authentications
 
             return new UserDto
             {
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                Role = (UserRoleEnum)user.UserRole,
+                id = user.Id,
                 Token = await _TokenService.CreateTokenAsync(user)
             };
         }

@@ -22,18 +22,83 @@ namespace Account.Reposatory.Services.Content
     {
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
-        private readonly IFileService _fileService;
+        private readonly IImageService _imageService;
 
-        public CraftsMenService(AppDBContext context,IMapper mapper,IFileService fileService)
+        public CraftsMenService(AppDBContext context,IMapper mapper,IImageService fileService)
         {
             _context = context;
             _mapper = mapper;
-            _fileService = fileService;
+            _imageService = fileService;
         }
         public async Task<ApiResponse> CreateCraftsMenAsync(CraftsMenModelDto model)
         {
             try
             {
+                if (model.ProfileImage != null)
+                {
+                    var fileResult = await _imageService.SaveImageAsync(model.ProfileImage);
+                    if (fileResult.Item1 == 1)
+                    {
+                        model.ProfileImageName = fileResult.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult.Item2);
+                    }
+                }
+
+                if (model.CraftsMenImage1 != null)
+                {
+                    var fileResult1 = await _imageService.SaveImageAsync(model.CraftsMenImage1);
+                    if (fileResult1.Item1 == 1)
+                    {
+                        model.CraftsMenImageName1 = fileResult1.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult1.Item2);
+                    }
+                }
+
+                if (model.CraftsMenImage2 != null)
+                {
+                    var fileResult2 = await _imageService.SaveImageAsync(model.CraftsMenImage2);
+                    if (fileResult2.Item1 == 1)
+                    {
+                        model.CraftsMenImageName2 = fileResult2.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult2.Item2);
+                    }
+                }
+
+                if (model.CraftsMenImage3 != null)
+                {
+                    var fileResult3 = await _imageService.SaveImageAsync(model.CraftsMenImage3);
+                    if (fileResult3.Item1 == 1)
+                    {
+                        model.CraftsMenImageName3 = fileResult3.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult3.Item2);
+                    }
+                }
+
+                if (model.CraftsMenImage4 != null)
+                {
+                    var fileResult4 = await _imageService.SaveImageAsync(model.CraftsMenImage4);
+                    if (fileResult4.Item1 == 1)
+                    {
+                        model.CraftsMenImageName4 = fileResult4.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult4.Item2);
+                    }
+                }
+
                 var craftsMenEntity = _mapper.Map<CraftsMenModel>(model);
                 _context.CraftsMen.Add(craftsMenEntity);
                 await _context.SaveChangesAsync();
@@ -57,23 +122,23 @@ namespace Account.Reposatory.Services.Content
 
                 if (!string.IsNullOrEmpty(existingCraftsman.ProfileImageName))
                 {
-                    await _fileService.DeleteImage(existingCraftsman.ProfileImageName);
+                    await _imageService.DeleteImageAsync(existingCraftsman.ProfileImageName);
                 }
                 if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName1))
                 {
-                    await _fileService.DeleteImage(existingCraftsman.CraftsMenImageName1);
+                    await _imageService.DeleteImageAsync(existingCraftsman.CraftsMenImageName1);
                 }
                 if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName2))
                 {
-                    await _fileService.DeleteImage(existingCraftsman.CraftsMenImageName2);
+                    await _imageService.DeleteImageAsync(existingCraftsman.CraftsMenImageName2);
                 }
                 if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName3))
                 {
-                    await _fileService.DeleteImage(existingCraftsman.CraftsMenImageName3);
+                    await _imageService.DeleteImageAsync(existingCraftsman.CraftsMenImageName3);
                 }
                 if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName4))
                 {
-                    await _fileService.DeleteImage(existingCraftsman.CraftsMenImageName4);
+                    await _imageService.DeleteImageAsync(existingCraftsman.CraftsMenImageName4);
                 }
 
                 _context.CraftsMen.Remove(existingCraftsman);
@@ -84,6 +149,112 @@ namespace Account.Reposatory.Services.Content
             catch (Exception ex)
             {
                 return new ApiResponse(500, $"Failed to delete craftsman: {ex.Message}");
+            }
+        }
+        public async Task<ApiResponse> UpdateCraftsMenAsync(int id, CraftsMenModelDto model)
+        {
+            try
+            {
+                var existingCraftsman = await _context.CraftsMen.FirstOrDefaultAsync(b => b.Id == id);
+
+                if (existingCraftsman == null)
+                {
+                    return new ApiResponse(404, "Craftsman not found.");
+                }
+
+                if (model.ProfileImage != null)
+                {
+                    var fileResult = await _imageService.SaveImageAsync(model.ProfileImage);
+                    if (fileResult.Item1 == 1)
+                    {
+                        if (!string.IsNullOrEmpty(existingCraftsman.ProfileImageName))
+                        {
+                            await _imageService.DeleteImageAsync(existingCraftsman.ProfileImageName);
+                        }
+                        model.ProfileImageName = fileResult.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult.Item2);
+                    }
+                }
+
+                if (model.CraftsMenImage1 != null)
+                {
+                    var fileResult1 = await _imageService.SaveImageAsync(model.CraftsMenImage1);
+                    if (fileResult1.Item1 == 1)
+                    {
+                        if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName1))
+                        {
+                            await _imageService.DeleteImageAsync(existingCraftsman.CraftsMenImageName1);
+                        }
+                        model.CraftsMenImageName1 = fileResult1.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult1.Item2);
+                    }
+                }
+
+                if (model.CraftsMenImage2 != null)
+                {
+                    var fileResult2 = await _imageService.SaveImageAsync(model.CraftsMenImage2);
+                    if (fileResult2.Item1 == 1)
+                    {
+                        if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName2))
+                        {
+                            await _imageService.DeleteImageAsync(existingCraftsman.CraftsMenImageName2);
+                        }
+                        model.CraftsMenImageName2 = fileResult2.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult2.Item2);
+                    }
+                }
+
+                if (model.CraftsMenImage3 != null)
+                {
+                    var fileResult3 = await _imageService.SaveImageAsync(model.CraftsMenImage3);
+                    if (fileResult3.Item1 == 1)
+                    {
+                        if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName3))
+                        {
+                            await _imageService.DeleteImageAsync(existingCraftsman.CraftsMenImageName3);
+                        }
+                        model.CraftsMenImageName3 = fileResult3.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult3.Item2);
+                    }
+                }
+
+                if (model.CraftsMenImage4 != null)
+                {
+                    var fileResult4 = await _imageService.SaveImageAsync(model.CraftsMenImage4);
+                    if (fileResult4.Item1 == 1)
+                    {
+                        if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName4))
+                        {
+                            await _imageService.DeleteImageAsync(existingCraftsman.CraftsMenImageName4);
+                        }
+                        model.CraftsMenImageName4 = fileResult4.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult4.Item2);
+                    }
+                }
+
+                _mapper.Map(model, existingCraftsman);
+                await _context.SaveChangesAsync();
+
+                return new ApiResponse(200, "Craftsman updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse(500, $"Failed to update craftsman: {ex.Message}");
             }
         }
         public async Task<CraftsMenModel> FindByIdAsync(int id)
@@ -108,46 +279,6 @@ namespace Account.Reposatory.Services.Content
             catch (Exception)
             {
                 throw;
-            }
-        }
-        public async Task<ApiResponse> UpdateCraftsMenAsync(int id, CraftsMenModelDto model)
-        {
-            try
-            {
-                var existingCraftsman = await _context.CraftsMen.FirstOrDefaultAsync(b => b.Id == id);
-
-                if (existingCraftsman == null)
-                {
-                    return new ApiResponse(404, "Craftsman not found.");
-                }
-                if (!string.IsNullOrEmpty(existingCraftsman.ProfileImageName))
-                {
-                    await _fileService.DeleteImage(existingCraftsman.ProfileImageName);
-                }
-                if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName1))
-                {
-                    await _fileService.DeleteImage(existingCraftsman.CraftsMenImageName1);
-                }
-                if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName2))
-                {
-                    await _fileService.DeleteImage(existingCraftsman.CraftsMenImageName2);
-                }
-                if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName3))
-                {
-                    await _fileService.DeleteImage(existingCraftsman.CraftsMenImageName3);
-                }
-                if (!string.IsNullOrEmpty(existingCraftsman.CraftsMenImageName4))
-                {
-                    await _fileService.DeleteImage(existingCraftsman.CraftsMenImageName4);
-                }
-                _mapper.Map(model, existingCraftsman);
-                await _context.SaveChangesAsync();
-
-                return new ApiResponse(200, "Craftsman updated successfully.");
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse(500, $"Failed to update craftsman: {ex.Message}");
             }
         }
         public async Task<CraftsMenModelDto> GetcraftsForCraftsmanAsync(string userId)

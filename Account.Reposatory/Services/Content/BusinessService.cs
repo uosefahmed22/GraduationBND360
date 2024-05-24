@@ -20,17 +20,44 @@ namespace Account.Reposatory.Services.Content
     {
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
-        private readonly IFileService _fileService;
-        public BusinessService(AppDBContext context, IMapper mapper,IFileService fileService)
+        private readonly IImageService _imageService;
+        public BusinessService(AppDBContext context, IMapper mapper,IImageService fileService)
         {
             _context = context;
             _mapper = mapper;
-            _fileService = fileService;
+            _imageService = fileService;
         }
         public async Task<ApiResponse> CreateAsync(BusinessModelDto model)
         {
             try
             {
+
+                var imageTasks = new List<Task<Tuple<int, string>>>();
+
+                if (model.ProfileImage != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(model.ProfileImage));
+                if (model.BusinessImage1 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage1));
+                if (model.BusinessImage2 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage2));
+                if (model.BusinessImage3 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage3));
+                if (model.BusinessImage4 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage4));
+
+                var imageResults = await Task.WhenAll(imageTasks);
+
+                if (model.ProfileImage != null)
+                    model.ProfileImageName = imageResults[0].Item2;
+                if (model.BusinessImage1 != null)
+                    model.BusinessImageName1 = imageResults[1].Item2;
+                if (model.BusinessImage2 != null)
+                    model.BusinessImageName2 = imageResults[2].Item2;
+                if (model.BusinessImage3 != null)
+                    model.BusinessImageName3 = imageResults[3].Item2;
+                if (model.BusinessImage4 != null)
+                    model.BusinessImageName4 = imageResults[4].Item2;
+
                 var businessEntity = _mapper.Map<BusinessModel>(model);
                 _context.Businesses.Add(businessEntity);
                 await _context.SaveChangesAsync();
@@ -54,25 +81,24 @@ namespace Account.Reposatory.Services.Content
 
                 if (!string.IsNullOrEmpty(existingBusiness.ProfileImageName))
                 {
-                    await _fileService.DeleteImage(existingBusiness.ProfileImageName);
+                    await _imageService.DeleteImageAsync(existingBusiness.ProfileImageName);
                 }
                 if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName1))
                 {
-                    await _fileService.DeleteImage(existingBusiness.BusinessImageName1);
+                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName1);
                 }
                 if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName2))
                 {
-                    await _fileService.DeleteImage(existingBusiness.BusinessImageName2);
+                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName2);
                 }
                 if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName3))
                 {
-                    await _fileService.DeleteImage(existingBusiness.BusinessImageName3);
+                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName3);
                 }
                 if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName4))
                 {
-                    await _fileService.DeleteImage(existingBusiness.BusinessImageName4);
+                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName4);
                 }
-
                 _context.Businesses.Remove(existingBusiness);
                 await _context.SaveChangesAsync();
 
@@ -87,8 +113,7 @@ namespace Account.Reposatory.Services.Content
         {
             try
             {
-                var existingBusiness = await _context.Businesses
-                    .FirstOrDefaultAsync(b => b.Id == id);
+                var existingBusiness = await _context.Businesses.FirstOrDefaultAsync(b => b.Id == id);
 
                 if (existingBusiness == null)
                 {
@@ -97,24 +122,50 @@ namespace Account.Reposatory.Services.Content
 
                 if (!string.IsNullOrEmpty(existingBusiness.ProfileImageName))
                 {
-                    await _fileService.DeleteImage(existingBusiness.ProfileImageName);
+                    await _imageService.DeleteImageAsync(existingBusiness.ProfileImageName);
                 }
                 if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName1))
                 {
-                    await _fileService.DeleteImage(existingBusiness.BusinessImageName1);
+                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName1);
                 }
                 if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName2))
                 {
-                    await _fileService.DeleteImage(existingBusiness.BusinessImageName2);
+                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName2);
                 }
                 if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName3))
                 {
-                    await _fileService.DeleteImage(existingBusiness.BusinessImageName3);
+                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName3);
                 }
                 if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName4))
                 {
-                    await _fileService.DeleteImage(existingBusiness.BusinessImageName4);
+                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName4);
                 }
+
+                var imageTasks = new List<Task<Tuple<int, string>>>();
+
+                if (model.ProfileImage != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(model.ProfileImage));
+                if (model.BusinessImage1 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage1));
+                if (model.BusinessImage2 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage2));
+                if (model.BusinessImage3 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage3));
+                if (model.BusinessImage4 != null)
+                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage4));
+
+                var imageResults = await Task.WhenAll(imageTasks);
+
+                if (model.ProfileImage != null)
+                    model.ProfileImageName = imageResults[0].Item2;
+                if (model.BusinessImage1 != null)
+                    model.BusinessImageName1 = imageResults[1].Item2;
+                if (model.BusinessImage2 != null)
+                    model.BusinessImageName2 = imageResults[2].Item2;
+                if (model.BusinessImage3 != null)
+                    model.BusinessImageName3 = imageResults[3].Item2;
+                if (model.BusinessImage4 != null)
+                    model.BusinessImageName4 = imageResults[4].Item2;
 
                 _mapper.Map(model, existingBusiness);
                 await _context.SaveChangesAsync();

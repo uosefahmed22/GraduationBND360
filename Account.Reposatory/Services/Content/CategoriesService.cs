@@ -1,4 +1,5 @@
 ﻿using Account.Apis.Errors;
+using Account.Core.Dtos;
 using Account.Core.Dtos.CategoriesDto;
 using Account.Core.IServices.Content;
 using Account.Core.Models.Content.Categories;
@@ -18,18 +19,32 @@ namespace Account.Reposatory.Services.Content
     {
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
-        private readonly IFileService _fileService;
+        private readonly IImageService _imageService;
 
-        public CategoriesService(AppDBContext context , IMapper mapper,IFileService fileService)
+        public CategoriesService(AppDBContext context , IMapper mapper,IImageService fileService)
         {
             _context = context;
             _mapper = mapper;
-            _fileService = fileService;
+            _imageService = fileService;
         }
         public async Task<ApiResponse> CreateCategoryAsync(CategoriesModelDTO category)
         {
             try
             {
+
+                if (category.Image != null)
+                {
+                    var imageUrl = await _imageService.UploadImageAsync(category.Image);
+                    if (imageUrl.Item1 == 1)
+                    {
+                        category.ImageFileName = imageUrl.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(500, imageUrl.Item2);
+                    }
+                }
+
                 var categoryEntity = _mapper.Map<CategoriesModel>(category);
                 _context.Categories.Add(categoryEntity);
                 await _context.SaveChangesAsync();
@@ -40,6 +55,7 @@ namespace Account.Reposatory.Services.Content
                 return new ApiResponse(500, $"Failed to add category: {ex.Message}");
             }
         }
+
         public async Task<IEnumerable<CategoriesModelDTO>> GetAllCategoriesAsync()
         {
             try
@@ -68,7 +84,10 @@ namespace Account.Reposatory.Services.Content
                 _context.Categories.Remove(existingCategory);
                 await _context.SaveChangesAsync();
 
-                await _fileService.DeleteImage(imageFileName);
+                if (!string.IsNullOrEmpty(imageFileName))
+                {
+                    await _imageService.DeleteImageAsync(imageFileName);
+                }
 
                 return new ApiResponse(200, "Category deleted successfully.");
             }
@@ -106,6 +125,24 @@ namespace Account.Reposatory.Services.Content
                     return new ApiResponse(404, "Category not found.");
                 }
 
+                if (category.Image != null)
+                {
+                    if (!string.IsNullOrEmpty(existingCategory.ImageFileName))
+                    {
+                        await _imageService.DeleteImageAsync(existingCategory.ImageFileName);
+                    }
+
+                    var imageUrl = await _imageService.UploadImageAsync(category.Image);
+                    if (imageUrl.Item1 == 1)
+                    {
+                        existingCategory.ImageFileName = imageUrl.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(500, imageUrl.Item2);
+                    }
+                }
+
                 _mapper.Map(category, existingCategory);
 
                 await _context.SaveChangesAsync();
@@ -119,8 +156,8 @@ namespace Account.Reposatory.Services.Content
         }
         public async Task<CategoriesModel?> FindByIdAsync(int id)
         {
-            var product = await _context.Categories.FindAsync(id);
-            return product;
+            var category = await _context.Categories.FindAsync(id);
+            return category;
         }
     }
 }
