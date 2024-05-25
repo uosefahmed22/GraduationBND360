@@ -2,9 +2,11 @@
 using Account.Core.Dtos.RatingAndReviewDto;
 using Account.Core.Dtos.RatingAndReviewDto.Account.Core.Dtos.RatingAndReviewDto;
 using Account.Core.IServices.Content;
+using Account.Core.Models.Account;
 using Account.Core.Models.Content.RatingReview;
 using Account.Reposatory.Data.Context;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,14 +20,17 @@ namespace Account.Reposatory.Services.Content
     {
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<AppUser> _userManager;
+
         public ServiceForRatingAndReviewsForBusiness()
         {
 
         }
-        public ServiceForRatingAndReviewsForBusiness(AppDBContext context, IMapper mapper)
+        public ServiceForRatingAndReviewsForBusiness(AppDBContext context, IMapper mapper,UserManager<AppUser> userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
         public async Task<ApiResponse> AddAsync(RatingAndReviewModelForBusinessDto savedModel)
         {
@@ -47,16 +52,43 @@ namespace Account.Reposatory.Services.Content
             try
             {
                 var reviews = await _context.ratingAndReviewModelForBusinesses
-                                             .Where(r => r.businessId == businessId)
-                                             .ToListAsync();
+                                            .Where(r => r.businessId == businessId)
+                                            .ToListAsync();
 
-                return _mapper.Map<IEnumerable<ReviewAndRatingResponse>>(reviews);
+                var responseList = new List<ReviewAndRatingResponse>();
+
+                foreach (var review in reviews)
+                {
+                    var user = await _userManager.FindByIdAsync(review.userId);
+                    if (user == null)
+                    {
+                        continue;
+                    }
+
+                    var response = new ReviewAndRatingResponse
+                    {
+                        Id = review.Id,
+                        Review = review.Review,
+                        Rating = review.Rating,
+                        dateTime = review.CreatedAt,
+                        PhotoUrl = user.profileImageName,
+                        UserName = user.DisplayName,
+                        UserId = user.Id
+                        
+                    };
+
+                    responseList.Add(response);
+                }
+
+                return responseList;
             }
             catch (Exception ex)
             {
                 throw;
             }
         }
+
+
         public async Task<ApiResponse> RemoveAsync(int reviewAndRatingId)
         {
             try

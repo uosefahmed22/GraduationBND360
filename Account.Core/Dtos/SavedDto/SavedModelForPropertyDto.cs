@@ -14,6 +14,6 @@ namespace Account.Core.Dtos.Saved
     {
         public int Id { get; set; }
         public string UserId { get; set; }
-        public int? PropertyId { get; set; }
+        public int PropertyId { get; set; }
     }
 }

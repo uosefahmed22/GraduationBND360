@@ -10,6 +10,6 @@ namespace Account.Core.Models.Content.Favorite
     {
         public int Id { get; set; }
         public string UserId { get; set; }
-        public int BusinessId { get; set; }
+        public int CraftsmanId { get; set; }
     }
 }

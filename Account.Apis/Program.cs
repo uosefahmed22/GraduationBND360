@@ -7,6 +7,7 @@ using CloudinaryDotNet;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using System.Text.Json.Serialization;
 
 namespace Account.Apis
 {
@@ -18,7 +19,11 @@ namespace Account.Apis
 
             #region configure service
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            });
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySetting"));
@@ -50,32 +55,32 @@ namespace Account.Apis
             var app = builder.Build();
 
             #region Update automatically
-            // Create a service scope to resolve services
-            using var scope = app.Services.CreateScope();
-            var Services = scope.ServiceProvider;
+            //// Create a service scope to resolve services
+            //using var scope = app.Services.CreateScope();
+            //var Services = scope.ServiceProvider;
 
-            // Obtain logger factory to create loggers
-            var loggerfactory = Services.GetRequiredService<ILoggerFactory>();
-            try
-            {
-                // Get the database context for Identity
-                var identityDbContext = Services.GetRequiredService<AppDBContext>();
+            //// Obtain logger factory to create loggers
+            //var loggerfactory = Services.GetRequiredService<ILoggerFactory>();
+            //try
+            //{
+            //    // Get the database context for Identity
+            //    var identityDbContext = Services.GetRequiredService<AppDBContext>();
 
-                // Apply database migration asynchronously
-                await identityDbContext.Database.MigrateAsync();
+            //    // Apply database migration asynchronously
+            //    await identityDbContext.Database.MigrateAsync();
 
-                // Get the UserManager service to manage users
-                var usermanager = Services.GetRequiredService<UserManager<AppUser>>();
+            //    // Get the UserManager service to manage users
+            //    var usermanager = Services.GetRequiredService<UserManager<AppUser>>();
 
-                // Seed initial user data for the Identity context
-                //await AppIdentityDbContextSeed.SeedUserAsync(usermanager);
-            }
-            catch (Exception ex)
-            {
-                // If an exception occurs during migration or seeding, log the error
-                var logger = loggerfactory.CreateLogger<Program>();
-                logger.LogError(ex, "An Error Occurred During Applying The Migrations");
-            }
+            //    // Seed initial user data for the Identity context
+            //    //await AppIdentityDbContextSeed.SeedUserAsync(usermanager);
+            //}
+            //catch (Exception ex)
+            //{
+            //    // If an exception occurs during migration or seeding, log the error
+            //    var logger = loggerfactory.CreateLogger<Program>();
+            //    logger.LogError(ex, "An Error Occurred During Applying The Migrations");
+            //}
             #endregion
 
 

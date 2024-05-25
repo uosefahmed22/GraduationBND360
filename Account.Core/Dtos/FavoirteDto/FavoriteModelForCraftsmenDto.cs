@@ -9,6 +9,6 @@ namespace Account.Core.Dtos.FavoirteDto
     public class FavoriteModelForCraftsmenDto
     {
         public string UserId { get; set; }
-        public int BusinessId { get; set; }
+        public int CraftsmanId { get; set; }
     }
 }

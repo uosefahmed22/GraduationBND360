@@ -106,18 +106,30 @@ namespace Account.Reposatory.Services.Authentications
                     return new ApiResponse(404, "User not found.");
                 }
 
-                var saveResult = await _imageService.SaveImageAsync(model.image);
-                if (saveResult.Item1 == 0)
+                if (model.image == null)
                 {
-                    return new ApiResponse(400, saveResult.Item2);
+                    if (!string.IsNullOrEmpty(user.profileImageName))
+                    {
+                        await _imageService.DeleteImageAsync(user.profileImageName);
+                        user.profileImageName = null;
+                    }
+                }
+                else
+                {
+                    var saveResult = await _imageService.SaveImageAsync(model.image);
+                    if (saveResult.Item1 == 0)
+                    {
+                        return new ApiResponse(400, saveResult.Item2);
+                    }
+
+                    if (!string.IsNullOrEmpty(user.profileImageName))
+                    {
+                        await _imageService.DeleteImageAsync(user.profileImageName);
+                    }
+
+                    user.profileImageName = saveResult.Item2;
                 }
 
-                if (!string.IsNullOrEmpty(user.profileImageName))
-                {
-                    await _imageService.DeleteImageAsync(user.profileImageName);
-                }
-
-                user.profileImageName = saveResult.Item2;
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {

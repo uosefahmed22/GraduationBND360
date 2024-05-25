@@ -11,6 +11,6 @@ namespace Account.Core.Dtos.Account
     {
         public string Id { get; set; }
         public string? ProfileImagename { get; set; }
-        public IFormFile image { get; set; }
+        public IFormFile? image { get; set; }
     }
 }

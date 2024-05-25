@@ -85,11 +85,12 @@ namespace Account.Reposatory.Services.Content
             }
 
         }
-        public async Task<ApiResponse> RemoveAsync(int id)
+        public async Task<ApiResponse> RemoveAsync(int Jobid, string userId)
         {
             try
             {
-                var savedJob = await _context.JobsSaved.FindAsync(id);
+                var savedJob = await _context.JobsSaved
+                    .FirstOrDefaultAsync(s => s.JobId == Jobid && s.UserId == userId);
 
                 if (savedJob == null)
                     return new ApiResponse(404, "Record not found.");
@@ -104,5 +105,6 @@ namespace Account.Reposatory.Services.Content
                 return new ApiResponse(400, $"Failed to remove record: {ex.Message}");
             }
         }
+
     }
 }

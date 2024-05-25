@@ -14,6 +14,6 @@ namespace Account.Core.IServices.Content
     {
         Task<IEnumerable<PropertyModelDTO>> GetProperty(string userId);
         Task<ApiResponse> AddAsync(SavedModelForPropertyDto savedModel);
-        Task<ApiResponse> RemoveAsync(int id);
+        Task<ApiResponse> RemoveAsync(int Propertyid, string userId);
     }
 }

@@ -4,6 +4,7 @@ using Account.Reposatory.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240525132427_initialMigration12")]
+    partial class initialMigration12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -328,7 +331,7 @@ namespace Account.Reposatory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CraftsmanId")
+                    b.Property<int>("BusinessId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -680,21 +683,21 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b253c10c-164e-4505-8ba5-62ea2025c48b",
+                            Id = "4515036a-9654-48f8-b224-25382e3b3c3d",
                             ConcurrencyStamp = "0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "8969b853-9c63-4af7-a454-f8d8b0ea4d0a",
+                            Id = "2364dc2d-39d7-4e89-8d67-734aa9243028",
                             ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
                             NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "92d86669-38c3-41c8-924b-643d6c735c2a",
+                            Id = "cf85c74a-22bc-4c1f-b0ed-77116bc3726b",
                             ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
                             NormalizedName = "ServiceProvider"

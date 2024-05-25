@@ -14,6 +14,6 @@ namespace Account.Core.IServices.Content
     {
         Task<IEnumerable<JobModelDto>> GetJobs(string userId);
         Task<ApiResponse> AddAsync(SavedModelForJobsDto savedModel);
-        Task<ApiResponse> RemoveAsync(int id);
+        Task<ApiResponse> RemoveAsync(int Jobid, string userId);
     }
 }

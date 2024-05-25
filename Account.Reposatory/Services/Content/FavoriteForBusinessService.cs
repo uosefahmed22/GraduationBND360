@@ -110,12 +110,12 @@ namespace Account.Reposatory.Services.Content
                 throw new Exception("Failed to retrieve reviews and ratings.", ex);
             }
         }
-        public async Task<ApiResponse> RemoveAsync(int businessId)
+        public async Task<ApiResponse> RemoveAsync(int businessId, string userId)
         {
             try
             {
                 var favorite = await _context.BusinessFavorites
-                    .FirstOrDefaultAsync(f => f.Id == businessId);
+                    .FirstOrDefaultAsync(f => f.BusinessId == businessId && f.UserId == userId);
 
                 if (favorite == null)
                     return new ApiResponse(404, "Record not found.");

@@ -14,6 +14,6 @@ namespace Account.Core.IServices.Content
     {
         Task<IEnumerable<CraftsManWithRatingsDto>> GetCraftsmanFavorites(string userId);
         Task<ApiResponse> AddAsync(FavoriteModelForCraftsmenDto savedModel);
-        Task<ApiResponse> RemoveAsync(int CraftsmanId);
+        Task<ApiResponse> RemoveAsync(int CraftsmanId, string userId);
     }
 }

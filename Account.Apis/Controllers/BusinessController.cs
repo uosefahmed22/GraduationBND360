@@ -7,6 +7,7 @@ using Account.Core.Models.Content;
 using Account.Core.Services.Content;
 using Account.Reposatory.Services.Content;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,6 @@ namespace Account.Apis.Controllers
             _imageService = fileService;
             _mapper = mapper;
         }
-
         [HttpPost]
         public async Task<IActionResult> AddBusiness([FromForm] BusinessModelDto model)
         {

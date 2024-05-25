@@ -15,6 +15,6 @@ namespace Account.Core.Models.Account
         public int UserRole { get; set; }
         public string? profileImageName { get; set; }
         [NotMapped]
-        public IFormFile image { get; set; }
+        public IFormFile? image { get; set; }
     }
 }

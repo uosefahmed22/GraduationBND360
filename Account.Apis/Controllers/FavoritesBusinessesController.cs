@@ -45,9 +45,9 @@ namespace Account.Apis.Controllers
 
 
         [HttpDelete]
-        public async Task<IActionResult> RemoveFavoriteBusiness(int businessId)
+        public async Task<IActionResult> RemoveFavoriteBusiness(int businessId, string userId)
         {
-            var result = await _favoriteForBusinessService.RemoveAsync(businessId);
+            var result = await _favoriteForBusinessService.RemoveAsync(businessId,userId);
             return StatusCode(result.StatusCode, result.Message);
         }
     }

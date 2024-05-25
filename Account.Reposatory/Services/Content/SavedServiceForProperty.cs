@@ -61,11 +61,12 @@ namespace Account.Reposatory.Services.Content
                 throw;
             }
         }
-        public async Task<ApiResponse> RemoveAsync(int id)
+        public async Task<ApiResponse> RemoveAsync(int Propertyid, string userId)
         {
             try
             {
-                var savedProperty = await _context.PropertiesSaved.FindAsync(id);
+                var savedProperty = await _context.PropertiesSaved
+                    .FirstOrDefaultAsync(s => s.PropertyId == Propertyid && s.UserId == userId);
 
                 if (savedProperty == null)
                     return new ApiResponse(404, "Record not found.");

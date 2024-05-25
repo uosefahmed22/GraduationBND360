@@ -43,9 +43,9 @@ namespace Account.Apis.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> RemoveFavoriteCraftsman(int CraftsmanId)
+        public async Task<IActionResult> RemoveFavoriteCraftsman(int CraftsmanId, string userId)
         {
-            var result = await _favoriteForCraftsmenService.RemoveAsync(CraftsmanId);
+            var result = await _favoriteForCraftsmenService.RemoveAsync(CraftsmanId, userId);
             return StatusCode(result.StatusCode, result.Message);
         }
     }

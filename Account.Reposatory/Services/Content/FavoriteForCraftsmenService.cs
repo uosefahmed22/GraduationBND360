@@ -46,7 +46,7 @@ namespace Account.Reposatory.Services.Content
             {
                 var favoriteCraftsmanIds = await _context.ServiceProvidersFavorites
                     .Where(f => f.UserId == userId)
-                    .Select(f => f.BusinessId)
+                    .Select(f => f.CraftsmanId)
                     .ToListAsync();
 
                 var craftsmen = await _context.CraftsMen
@@ -109,12 +109,12 @@ namespace Account.Reposatory.Services.Content
                 throw new Exception("Failed to retrieve reviews and ratings.", ex);
             }
         }
-        public async Task<ApiResponse> RemoveAsync(int CraftsmanId)
+        public async Task<ApiResponse> RemoveAsync(int CraftsmanId, string userId)
         {
             try
             {
                 var favorite = await _context.ServiceProvidersFavorites
-                    .FirstOrDefaultAsync(f => f.Id == CraftsmanId);
+                    .FirstOrDefaultAsync(f => f.CraftsmanId == CraftsmanId && f.UserId == userId);
 
                 if (favorite == null)
                     return new ApiResponse(404, "Record not found.");

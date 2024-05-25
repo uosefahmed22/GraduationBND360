@@ -15,6 +15,6 @@ namespace Account.Core.IServices.Content
     {
         Task<IEnumerable<BusinessWithRatingsDto>> GetBusinesses(string userId);
         Task<ApiResponse> AddAsync(FavoriteModelForBusinessDto savedModel);
-        Task<ApiResponse> RemoveAsync(int id);
+        Task<ApiResponse> RemoveAsync(int businessId, string userId);
     }
 }

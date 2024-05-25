@@ -22,7 +22,7 @@ namespace Account.Apis.Controllers
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpGet("{businessId}")]
+        [HttpGet("{businessId}")]   
         public async Task<IActionResult> GetReviewsAndRatings(int businessId)
         {
             var reviews = await _serviceForRatingAndReviewsForBusiness.GetReviewsAndRatings(businessId);

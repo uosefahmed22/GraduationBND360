@@ -36,10 +36,10 @@ namespace Account.Apis.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveJob(int id)
+        [HttpDelete]
+        public async Task<IActionResult> RemoveJob(int Jobid, string userId)
         {
-            var result = await _savedServiceForJobs.RemoveAsync(id);
+            var result = await _savedServiceForJobs.RemoveAsync(Jobid, userId);
             return StatusCode(result.StatusCode, result.Message);
         }
 
