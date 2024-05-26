@@ -13,7 +13,7 @@ namespace Account.Core.IServices.Content
     {
         Task<IEnumerable<ReviewAndRatingResponse>> GetReviewsAndRatings(int businessId);
         Task<ApiResponse> AddAsync(RatingAndReviewModelForBusinessDto savedModel);
-        Task<ApiResponse> RemoveAsync(int ReviewAndRatingId);
+        Task<ApiResponse> RemoveAsync(string userId, int businessId, int reviewAndRatingId);
         Task<ReviewAndRatingSummaryResponse> GetReviewsAndRatingsForBusinessWithDetailsAsync(int businessId);
     }
 }

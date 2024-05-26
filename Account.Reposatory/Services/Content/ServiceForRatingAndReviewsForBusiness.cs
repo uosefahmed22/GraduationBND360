@@ -87,14 +87,12 @@ namespace Account.Reposatory.Services.Content
                 throw;
             }
         }
-
-
-        public async Task<ApiResponse> RemoveAsync(int reviewAndRatingId)
+        public async Task<ApiResponse> RemoveAsync(string userId, int businessId, int reviewAndRatingId)
         {
             try
             {
                 var reviewAndRating = await _context.ratingAndReviewModelForBusinesses
-                    .FirstOrDefaultAsync(r => r.Id == reviewAndRatingId);
+                    .FirstOrDefaultAsync(r => r.Id == reviewAndRatingId && r.userId == userId && r.businessId == businessId);
 
                 if (reviewAndRating == null)
                     return new ApiResponse(404, "Record not found.");

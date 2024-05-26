@@ -29,10 +29,10 @@ namespace Account.Apis.Controllers
             return Ok(reviews);
         }
 
-        [HttpDelete("{reviewAndRatingId}")]
-        public async Task<IActionResult> RemoveRatingAndReview(int reviewAndRatingId)
+        [HttpDelete("{userId}/{businessId}/{reviewAndRatingId}")]
+        public async Task<IActionResult> RemoveRatingAndReview(string userId, int businessId, int reviewAndRatingId)
         {
-            var response = await _serviceForRatingAndReviewsForBusiness.RemoveAsync(reviewAndRatingId);
+            var response = await _serviceForRatingAndReviewsForBusiness.RemoveAsync(userId, businessId, reviewAndRatingId);
             return StatusCode(response.StatusCode, response);
         }
 
