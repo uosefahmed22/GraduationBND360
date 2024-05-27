@@ -316,6 +316,12 @@ namespace Account.Reposatory.Services.Content
                 {
                     var craftsmanDto = _mapper.Map<CraftsmanResponseDto>(craftsman);
 
+                    if (craftsman.CraftsModel != null)
+                    {
+                        var craftsModelDto = _mapper.Map<CraftsModelDto>(craftsman.CraftsModel);
+                        craftsmanDto.CraftsModel = craftsModelDto;
+                    }
+
                     var reviewAndRatingSummary = await GetReviewsAndRatingsForCraftsmanAsync(craftsman.Id);
 
                     craftsmanDto.TotalReviews = reviewAndRatingSummary.TotalReviews;
