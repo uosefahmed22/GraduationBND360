@@ -4,6 +4,7 @@ using Account.Reposatory.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240606185956_initialMigrationAddAdmins")]
+    partial class initialMigrationAddAdmins
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -680,27 +683,31 @@ namespace Account.Reposatory.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "2",
+                            Id = "eae16506-b9e4-4098-9b34-a7580456e617",
+                            ConcurrencyStamp = "0",
                             Name = "User",
-                            NormalizedName = "USER"
+                            NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "3",
+                            Id = "e1edf9e1-c960-4a36-9206-4fdc5a935511",
+                            ConcurrencyStamp = "1",
                             Name = "BussinesOwner",
-                            NormalizedName = "BUSSINESOWNER"
+                            NormalizedName = "BussinesOwner"
                         },
                         new
                         {
-                            Id = "4",
+                            Id = "8f901d6a-c03d-416c-a2a9-81794e36fdea",
+                            ConcurrencyStamp = "2",
                             Name = "ServiceProvider",
-                            NormalizedName = "SERVICEPROVIDER"
+                            NormalizedName = "ServiceProvider"
+                        },
+                        new
+                        {
+                            Id = "77091b77-a65c-4678-820e-02420f80f685",
+                            ConcurrencyStamp = "3",
+                            Name = "Admin",
+                            NormalizedName = "Admin"
                         });
                 });
 

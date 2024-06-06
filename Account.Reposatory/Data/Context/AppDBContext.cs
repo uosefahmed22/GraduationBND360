@@ -39,11 +39,33 @@ namespace Account.Reposatory.Data.Context
         {
             modelBuilder.Entity<IdentityRole>().HasData
             (
-                new IdentityRole { Name = "User", ConcurrencyStamp = "0", NormalizedName = "User" },
-                new IdentityRole { Name = "BussinesOwner", ConcurrencyStamp = "1", NormalizedName = "BussinesOwner" },
-                new IdentityRole { Name = "ServiceProvider", ConcurrencyStamp = "2", NormalizedName = "ServiceProvider" }
+                new IdentityRole
+                {
+                    Id = "1",
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                },
+                new IdentityRole
+                {
+                    Id = "2",
+                    Name = "User",
+                    NormalizedName = "USER"
+                },
+                new IdentityRole
+                {
+                    Id = "3",
+                    Name = "BussinesOwner",
+                    NormalizedName = "BUSSINESOWNER"
+                },
+                new IdentityRole
+                {
+                    Id = "4",
+                    Name = "ServiceProvider",
+                    NormalizedName = "SERVICEPROVIDER"
+                }
             );
         }
+
         public DbSet<PropertyModel> Properties { get; set; }
         public DbSet<JobModel> Jobs { get; set; }
         public DbSet<RequirementArb> RequirementsArabic { get; set; }

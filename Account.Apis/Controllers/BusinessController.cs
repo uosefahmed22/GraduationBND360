@@ -267,7 +267,7 @@ namespace Account.Apis.Controllers
         {
             try
             {
-                var business = await _businessService.GetBusinessForBusinessOwnerAsync(userId);
+                var business = await _businessService.GetBusinessesForBusinessOwnerAsync(userId);
                 if (business == null)
                 {
                     return NotFound(new ApiResponse(404, "Business not found."));

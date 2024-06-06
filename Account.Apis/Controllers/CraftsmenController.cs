@@ -256,11 +256,11 @@ namespace Account.Apis.Controllers
         }
 
         [HttpGet("craftsman/{userId}")]
-        public async Task<IActionResult> GetcraftsForCraftsmanAsync(string userId)
+        public async Task<IActionResult> GetCraftsmenForUserAsync(string userId)
         {
             try
             {
-                var craftsMen = await _craftsmanService.GetcraftsForCraftsmanAsync(userId);
+                var craftsMen = await _craftsmanService.GetCraftsmenForUserAsync(userId);
                 if (craftsMen == null)
                 {
                     return NotFound(new ApiResponse(404, "Craftsman not found."));

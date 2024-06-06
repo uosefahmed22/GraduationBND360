@@ -55,6 +55,7 @@ public class MappingProfile : Profile
         CreateMap<CraftsMenModel, CraftsmanResponseDto>().ReverseMap();
         CreateMap<CraftsMenModel, CraftsmanReviewSummaryDto>().ReverseMap();
         CreateMap<CraftsMenModel, CraftsManWithRatingsDto>().ReverseMap();
+        CreateMap<RegisterForAdmin, RegisterForAdminDto>().ReverseMap();
     }
 }
 

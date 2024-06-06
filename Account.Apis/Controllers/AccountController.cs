@@ -48,6 +48,36 @@ namespace Account.Apis.Controllers
             return Ok(result);
         }
 
+        [HttpPost("registerForAdmin")]
+        public async Task<IActionResult> RegisterForAdmin(RegisterForAdmin dto)
+        {
+            var result = await _accountService.RegisterForAdminAsync(dto);
+
+            if (result.StatusCode == 200)
+            {
+                return Ok(result.Message);
+            }
+            else
+            {
+                return StatusCode(result.StatusCode, result.Message);
+            }
+        }
+
+        [HttpPost("loginForAdmin")]
+        public async Task<IActionResult> LoginForAdmin(LoginForAdmin dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _accountService.LoginForAdminAsync(dto);
+            if (result.StatusCode == 400)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
+
         [HttpPost("forgetPassword")]
         public async Task<IActionResult> ForgetPassword([FromHeader][EmailAddress] string email)
         {
@@ -88,6 +118,7 @@ namespace Account.Apis.Controllers
                 return BadRequest(result.Message); // Return the error message directly
             }
         }
+
         [HttpPut("resetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPassword dto)
         {
@@ -106,6 +137,7 @@ namespace Account.Apis.Controllers
                     return StatusCode(500, "An unexpected error occurred.");
             }
         }
+
         [HttpPost("ChangePassword")]
         public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
         {
@@ -113,6 +145,7 @@ namespace Account.Apis.Controllers
 
             return StatusCode(result.StatusCode, result);
         }
+
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmUserEmail(string userId, string confirmationToken)
         {
@@ -127,7 +160,6 @@ namespace Account.Apis.Controllers
                 return BadRequest("Failed to confirm user email.");
             }
         }
-
         private string GenerateCallBackUrl(string token, string userId)
         {
             var encodedToken = Uri.EscapeDataString(token);

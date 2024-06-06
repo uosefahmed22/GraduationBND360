@@ -55,13 +55,11 @@ namespace Account.Reposatory.Services.Content
                 return new ApiResponse(500, $"Failed to add category: {ex.Message}");
             }
         }
-
         public async Task<IEnumerable<CategoriesModelDTO>> GetAllCategoriesAsync()
         {
             try
             {
-                var categoryEntities = await _context.Categories.ToListAsync();
-                return _mapper.Map<IEnumerable<CategoriesModelDTO>>(categoryEntities);
+                var categoryEntities = await _context.Categories.ToListAsync();                return _mapper.Map<IEnumerable<CategoriesModelDTO>>(categoryEntities);
             }
             catch (Exception ex)
             {

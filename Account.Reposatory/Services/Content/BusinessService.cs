@@ -202,24 +202,25 @@ namespace Account.Reposatory.Services.Content
                 throw;
             }
         }
-        public async Task<BusinessModelDto> GetBusinessForBusinessOwnerAsync(string userId)
+        public async Task<List<BusinessModelDto>> GetBusinessesForBusinessOwnerAsync(string userId)
         {
             try
             {
-                var businessEntity = await _context.Businesses
+                var businessEntities = await _context.Businesses
                     .Include(b => b.CategoriesModel)
-                    .FirstOrDefaultAsync(b => b.UserId == userId);
+                    .Where(b => b.UserId == userId)
+                    .ToListAsync();
 
-                if (businessEntity == null)
+                if (businessEntities == null || !businessEntities.Any())
                 {
-                    return null;
+                    return new List<BusinessModelDto>();
                 }
 
-                return _mapper.Map<BusinessModelDto>(businessEntity);
+                return _mapper.Map<List<BusinessModelDto>>(businessEntities);
             }
             catch (Exception ex)
             {
-                throw new Exception("Failed to retrieve business for the business owner.", ex);
+                throw new Exception("Failed to retrieve businesses for the business owner.", ex);
             }
         }
         public async Task<List<BusinessResponseInCategory>> GetAllBusinessesWithDetailsAsync(int categoryId)

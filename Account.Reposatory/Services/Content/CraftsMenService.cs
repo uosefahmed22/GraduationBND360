@@ -281,26 +281,28 @@ namespace Account.Reposatory.Services.Content
                 throw;
             }
         }
-        public async Task<CraftsMenModelDto> GetcraftsForCraftsmanAsync(string userId)
+        public async Task<List<CraftsMenModelDto>> GetCraftsmenForUserAsync(string userId)
         {
             try
             {
-                var craftsMenEntity = await _context.CraftsMen
+                var craftsMenEntities = await _context.CraftsMen
                     .Include(c => c.CraftsModel)
-                    .FirstOrDefaultAsync(c => c.UserId == userId);
+                    .Where(c => c.UserId == userId)
+                    .ToListAsync();
 
-                if (craftsMenEntity == null)
+                if (craftsMenEntities == null || !craftsMenEntities.Any())
                 {
-                    return null;
+                    return new List<CraftsMenModelDto>();
                 }
 
-                return _mapper.Map<CraftsMenModelDto>(craftsMenEntity);
+                return _mapper.Map<List<CraftsMenModelDto>>(craftsMenEntities);
             }
             catch (Exception ex)
             {
-                throw new Exception("Failed to retrieve crafts for the craftsman.", ex);
+                throw new Exception("Failed to retrieve craftsmen for the user.", ex);
             }
         }
+
         public async Task<List<CraftsmanResponseDto>> GetAllCraftsmenWithDetailsAsync(int craftsId)
         {
             try

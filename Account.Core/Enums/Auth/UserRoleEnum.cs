@@ -10,6 +10,7 @@ namespace Account.Core.Enums.Auth
     {
         User,
         BussinesOwner,
-        ServiceProvider
+        ServiceProvider,
+        Admin
     }
 }

@@ -20,5 +20,7 @@ namespace Account.Core.Services.Auth
         Task<bool> ConfirmUserEmailAsync(string userId, string token);
         Task<ApiResponse> ResetPasswordAsync(ResetPassword dto);
         Task<ApiResponse> ChangePasswordAsync(Guid userId, string oldPassword, string newPassword);
+        Task<ApiResponse> RegisterForAdminAsync(RegisterForAdmin dto);
+        Task<ApiResponse> LoginForAdminAsync(LoginForAdmin dto);
     }
 }

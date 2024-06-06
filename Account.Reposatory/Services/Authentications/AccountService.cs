@@ -49,7 +49,6 @@ namespace Account.Reposatory.Services.Authentications
         }
         #endregion
 
-
         public async Task<ApiResponse> RegisterAsync(Register dto, Func<string, string, string> generateCallBackUrl)
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
@@ -90,17 +89,14 @@ namespace Account.Reposatory.Services.Authentications
         }
         public static string GetUserRoleName(UserRoleEnum role)
         {
-            switch (role)
+            return role switch
             {
-                case UserRoleEnum.User:
-                    return "User";
-                case UserRoleEnum.BussinesOwner:
-                    return "BussinesOwner";
-                case UserRoleEnum.ServiceProvider:
-                    return "ServiceProvider";
-                default:
-                    return "Unknown";
-            }
+                UserRoleEnum.User => "User",
+                UserRoleEnum.BussinesOwner => "BussinesOwner",
+                UserRoleEnum.ServiceProvider => "ServiceProvider",
+                UserRoleEnum.Admin => "Admin",
+                _ => "Unknown",
+            };
         }
         public async Task<ApiResponse> LoginAsync(Login dto)
         {
@@ -138,7 +134,8 @@ namespace Account.Reposatory.Services.Authentications
             {
                 "User" => UserRoleEnum.User,
                 "BussinesOwner" => UserRoleEnum.BussinesOwner,
-                "ServiceProvider" => UserRoleEnum.ServiceProvider
+                "ServiceProvider" => UserRoleEnum.ServiceProvider,
+                "Admin" => UserRoleEnum.Admin,
             };
         }
         public async Task<ApiResponse> ForgetPassword(string email)
@@ -259,6 +256,61 @@ namespace Account.Reposatory.Services.Authentications
                 await client.SendAsync(message, Cancellation);
                 await client.DisconnectAsync(true, Cancellation);
             }
+        }
+        public async Task<ApiResponse> RegisterForAdminAsync(RegisterForAdmin dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+
+            if (user is not null)
+            {
+                return new ApiResponse(400, "User with this email already exists.");
+            }
+
+            user = new AppUser
+            {
+                DisplayName = dto.DisplayName,
+                Email = dto.Email,
+                UserName = dto.Email.Split('@')[0],
+                UserRole = (int)dto.UserRole,
+                EmailConfirmed = true
+            };
+
+            var createResult = await _userManager.CreateAsync(user, dto.Password);
+            if (!createResult.Succeeded)
+            {
+                return new ApiResponse(400, "Failed to create user.");
+            }
+
+            var roleName = GetUserRoleName(dto.UserRole);
+            var roleResult = await _userManager.AddToRoleAsync(user, roleName);
+            if (!roleResult.Succeeded)
+            {
+                return new ApiResponse(400, "Failed to add user to role.");
+            }
+
+            return new ApiResponse(200, "Admin created successfully.");
+        }
+
+        public async Task<ApiResponse> LoginForAdminAsync(LoginForAdmin dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user == null)
+            {
+                return new ApiResponse(400, "User not found.");
+            }
+
+            if (!await _userManager.CheckPasswordAsync(user, dto.Password))
+            {
+                return new ApiResponse(400, "Incorrect email or password.");
+            }
+
+            var token = await _TokenService.CreateTokenAsync(user);
+
+            return new ApiResponse(200, "Login successful.", new AdminDto
+            {
+                id = user.Id,
+                Token = token
+            });
         }
     }
 }
