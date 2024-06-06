@@ -8,6 +8,7 @@ namespace Account.Apis.Errors
         public int StatusCode { get; set; }
         [JsonIgnore]
         public string Message { get; set; }
+        public object Data { get; set; }
         public ApiResponse()
         {
         }
@@ -16,7 +17,13 @@ namespace Account.Apis.Errors
             StatusCode = statusCode;
             Message = message ?? GetDefaultMessageForStatusCode(StatusCode);
         }
-
+        //create ctor takes three parameters
+        public ApiResponse(int statusCode, string message, object data)
+        {
+            StatusCode = statusCode;
+            Message = message ?? GetDefaultMessageForStatusCode(StatusCode);
+            Data = data;
+        }
         // Provides default messages for common HTTP status codes
         private string? GetDefaultMessageForStatusCode(int statusCode)
         {

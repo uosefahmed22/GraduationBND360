@@ -56,6 +56,8 @@ namespace Account.Apis
 
             #region Update automatically
             //// Create a service scope to resolve services
+             
+            
             //using var scope = app.Services.CreateScope();
             //var Services = scope.ServiceProvider;
 
