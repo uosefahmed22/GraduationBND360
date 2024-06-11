@@ -60,9 +60,10 @@ namespace Account.Reposatory.Services.Content
                 foreach (var review in reviews)
                 {
                     var user = await _userManager.FindByIdAsync(review.userId);
+
                     if (user == null)
                     {
-                        continue;
+                        throw new Exception("User not found.");
                     }
 
                     var response = new ReviewAndRatingResponse

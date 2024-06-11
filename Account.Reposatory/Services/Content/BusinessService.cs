@@ -291,5 +291,36 @@ namespace Account.Reposatory.Services.Content
                 throw new Exception("Failed to retrieve reviews and ratings.", ex);
             }
         }
+        public async Task<List<BusinessResponseInCategory>> GetTopFiveRatedBusinessesAsync()
+        {
+            try
+            {
+                var businessEntities = await _context.Businesses
+                    .Include(b => b.CategoriesModel)
+                    .ToListAsync();
+
+                if (businessEntities == null || !businessEntities.Any())
+                {
+                    throw new Exception("No businesses found.");
+                }
+
+                var businessDtos = _mapper.Map<List<BusinessResponseInCategory>>(businessEntities);
+
+                foreach (var business in businessDtos)
+                {
+                    var reviewAndRatingSummary = await GetReviewsAndRatingsForBusinessAsync(business.id);
+
+                    business.TotalReviews = reviewAndRatingSummary.TotalReviews;
+                    business.AverageRating = reviewAndRatingSummary.AverageRating;
+                }
+
+                return businessDtos.OrderByDescending(b => b.AverageRating).Take(5).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve top five rated businesses.", ex);
+            }
+        }
+
     }
 }

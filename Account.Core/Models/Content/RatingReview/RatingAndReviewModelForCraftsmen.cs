@@ -11,8 +11,15 @@ namespace Account.Core.Models.Content.RatingReview
         public int Id { get; set; }
         public string Review { get; set; }
         public float? Rating { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        private readonly TimeZoneInfo timeZone;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public int CraftsmanId { get; set; }
         public string userId { get; set; }
+        public RatingAndReviewModelForCraftsmen()
+        {
+            timeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            CreatedAt = TimeZoneInfo.ConvertTime(DateTime.Now, timeZone);
+        }
     }
 }

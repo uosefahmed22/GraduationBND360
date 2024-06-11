@@ -297,5 +297,23 @@ namespace Account.Apis.Controllers
                 return StatusCode(500, new ApiResponse(500, $"An error occurred: {ex.Message}"));
             }
         }
+
+        [HttpGet("GetTopFiveRatedBusinesses")]
+        public async Task<IActionResult> GetTopFiveRatedBusinesses()
+        {
+            try
+            {
+                var topFiveRatedBusinesses = await _businessService.GetTopFiveRatedBusinessesAsync();
+                if (topFiveRatedBusinesses == null || topFiveRatedBusinesses.Count == 0)
+                {
+                    return NotFound(new ApiResponse(404, "No businesses found."));
+                }
+                return Ok(topFiveRatedBusinesses);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse(500, $"An error occurred: {ex.Message}"));
+            }
+        }
     }
 }
