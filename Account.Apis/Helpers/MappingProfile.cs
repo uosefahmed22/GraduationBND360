@@ -51,9 +51,11 @@ public class MappingProfile : Profile
         CreateMap<AppUser, UpdateUserImageModel>().ReverseMap();
         CreateMap<BusinessModel, BusinessResponseInCategory>().ReverseMap();
         CreateMap<BusinessModel, BusinessReviewSummaryDtoForFaviorates>().ReverseMap();
+        CreateMap<BusinessModel, BusinessModeWithUserNamelDto>().ReverseMap();
         CreateMap<BusinessModel, BusinessWithRatingsDto>().ReverseMap();
         CreateMap<CraftsMenModel, CraftsmanResponseDto>().ReverseMap();
         CreateMap<CraftsMenModel, CraftsmanReviewSummaryDto>().ReverseMap();
+        CreateMap<CraftsMenModel, CraftsMenModelWitheUserandIdDto>().ReverseMap();
         CreateMap<CraftsMenModel, CraftsManWithRatingsDto>().ReverseMap();
         CreateMap<RegisterForAdmin, RegisterForAdminDto>().ReverseMap();
     }

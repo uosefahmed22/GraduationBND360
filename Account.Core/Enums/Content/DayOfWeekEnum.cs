@@ -14,6 +14,7 @@ namespace Account.Core.Enums.Content
         Wednesday,
         Thursday,
         Friday,
-        Saturday
+        Saturday,
+        alwaysWork
     }
 }

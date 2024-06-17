@@ -15,7 +15,7 @@ namespace Account.Core.IServices.Content
     public interface ICraftsMenService
     {
         Task<ApiResponse> CreateCraftsMenAsync(CraftsMenModelDto model);
-        Task<CraftsMenModelDto> GetCraftsMenByIdAsync(int id);
+        Task<CraftsMenModelWitheUserandIdDto> GetCraftsMenByIdAsync(int id);
         Task<ApiResponse> UpdateCraftsMenAsync(int id, CraftsMenModelDto model);
         Task<ApiResponse> DeleteCraftsMenAsync(int id);
         Task<List<CraftsMenModelDto>> GetCraftsmenForUserAsync(string userId);

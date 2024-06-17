@@ -1,12 +1,15 @@
 ﻿using Account.Apis.Errors;
+using Account.Core.Dtos.Account;
 using Account.Core.Dtos.BusinessDto;
 using Account.Core.Dtos.CategoriesDto;
 using Account.Core.Dtos.RatingAndReviewDto.Account.Core.Dtos.RatingAndReviewDto;
 using Account.Core.IServices.Content;
+using Account.Core.Models.Account;
 using Account.Core.Models.Content.Business;
 using Account.Core.Services.Content;
 using Account.Reposatory.Data.Context;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,11 +24,14 @@ namespace Account.Reposatory.Services.Content
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
         private readonly IImageService _imageService;
-        public BusinessService(AppDBContext context, IMapper mapper,IImageService fileService)
+        private readonly UserManager<AppUser> _userManager;
+
+        public BusinessService(AppDBContext context, IMapper mapper,IImageService fileService,UserManager<AppUser>userManager)
         {
             _context = context;
             _mapper = mapper;
             _imageService = fileService;
+            _userManager = userManager;
         }
         public async Task<ApiResponse> CreateAsync(BusinessModelDto model)
         {
@@ -181,7 +187,7 @@ namespace Account.Reposatory.Services.Content
         {
             return await _context.Businesses.FirstOrDefaultAsync(p => p.Id == id);
         }
-        public async Task<BusinessModelDto> GetByIdAsync(int id)
+        public async Task<BusinessModeWithUserNamelDto> GetByIdAsync(int id)
         {
             try
             {
@@ -189,19 +195,21 @@ namespace Account.Reposatory.Services.Content
                     .Include(b => b.CategoriesModel)
                     .FirstOrDefaultAsync(b => b.Id == id);
 
+                var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == businessEntity.UserId);
 
-                if (businessEntity == null)
-                {
-                    return null;
-                }
+                var businessDto = _mapper.Map<BusinessModeWithUserNamelDto>(businessEntity);
 
-                return _mapper.Map<BusinessModelDto>(businessEntity);
+                businessDto.UserName = user.DisplayName;
+                businessDto.UserProfileImageName = user.profileImageName;
+
+                return businessDto;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
         public async Task<List<BusinessModelDto>> GetBusinessesForBusinessOwnerAsync(string userId)
         {
             try
@@ -298,11 +306,6 @@ namespace Account.Reposatory.Services.Content
                 var businessEntities = await _context.Businesses
                     .Include(b => b.CategoriesModel)
                     .ToListAsync();
-
-                if (businessEntities == null || !businessEntities.Any())
-                {
-                    throw new Exception("No businesses found.");
-                }
 
                 var businessDtos = _mapper.Map<List<BusinessResponseInCategory>>(businessEntities);
 

@@ -4,11 +4,13 @@ using Account.Core.Dtos.CraftsFolder;
 using Account.Core.Dtos.CraftsMenDtoFolder;
 using Account.Core.Dtos.RatingAndReviewDto.Account.Core.Dtos.RatingAndReviewDto;
 using Account.Core.IServices.Content;
+using Account.Core.Models.Account;
 using Account.Core.Models.Content.Crafts;
 using Account.Core.Models.Content.CraftsMen;
 using Account.Core.Services.Content;
 using Account.Reposatory.Data.Context;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,12 +25,14 @@ namespace Account.Reposatory.Services.Content
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
         private readonly IImageService _imageService;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CraftsMenService(AppDBContext context,IMapper mapper,IImageService fileService)
+        public CraftsMenService(AppDBContext context,IMapper mapper,IImageService fileService,UserManager<AppUser> userManager)
         {
             _context = context;
             _mapper = mapper;
             _imageService = fileService;
+            _userManager = userManager;
         }
         public async Task<ApiResponse> CreateCraftsMenAsync(CraftsMenModelDto model)
         {
@@ -261,7 +265,7 @@ namespace Account.Reposatory.Services.Content
         {
             return await _context.CraftsMen.FirstOrDefaultAsync(p => p.Id == id);
         }
-        public async Task<CraftsMenModelDto> GetCraftsMenByIdAsync(int id)
+        public async Task<CraftsMenModelWitheUserandIdDto> GetCraftsMenByIdAsync(int id)
         {
             try
             {
@@ -269,18 +273,21 @@ namespace Account.Reposatory.Services.Content
                     .Include(c => c.CraftsModel)
                     .FirstOrDefaultAsync(b => b.Id == id);
 
-                if (craftsMenEntity == null)
-                {
-                    return null;
-                }
+                var user = await _userManager.FindByIdAsync(craftsMenEntity.UserId);
 
-                return _mapper.Map<CraftsMenModelDto>(craftsMenEntity);
+                var craftsMenDto = _mapper.Map<CraftsMenModelWitheUserandIdDto>(craftsMenEntity);
+
+                craftsMenDto.UserName = user.DisplayName;
+                craftsMenDto.UserProfileImageName = user.profileImageName;
+
+                return craftsMenDto;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
         public async Task<List<CraftsMenModelDto>> GetCraftsmenForUserAsync(string userId)
         {
             try
@@ -289,12 +296,6 @@ namespace Account.Reposatory.Services.Content
                     .Include(c => c.CraftsModel)
                     .Where(c => c.UserId == userId)
                     .ToListAsync();
-
-                if (craftsMenEntities == null || !craftsMenEntities.Any())
-                {
-                    return new List<CraftsMenModelDto>();
-                }
-
                 return _mapper.Map<List<CraftsMenModelDto>>(craftsMenEntities);
             }
             catch (Exception ex)
@@ -302,11 +303,8 @@ namespace Account.Reposatory.Services.Content
                 throw new Exception("Failed to retrieve craftsmen for the user.", ex);
             }
         }
-
         public async Task<List<CraftsmanResponseDto>> GetAllCraftsmenWithDetailsAsync(int craftsId)
         {
-            try
-            {
                 var craftsmenEntities = await _context.CraftsMen
                     .Include(c => c.CraftsModel)
                     .Where(c => c.CraftsModelId == craftsId)
@@ -333,18 +331,13 @@ namespace Account.Reposatory.Services.Content
                 }
 
                 return craftsmenDtos;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Failed to retrieve craftsmen with details.", ex);
-            }
         }
         public async Task<ReviewAndRatingSummaryResponse> GetReviewsAndRatingsForCraftsmanAsync(int businessId)
         {
             try
             {
-                var reviews = await _context.ratingAndReviewModelForBusinesses
-                                             .Where(r => r.businessId == businessId)
+                var reviews = await _context.ratingAndReviewModelForCraftsmens
+                                             .Where(r => r.CraftsmanId == businessId)
                                              .ToListAsync();
 
                 if (reviews == null || reviews.Count == 0)

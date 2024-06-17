@@ -11,7 +11,7 @@ namespace Account.Core.IServices.Content
 {
     public interface IBusinessService
     {
-        Task<BusinessModelDto> GetByIdAsync(int id);
+        Task<BusinessModeWithUserNamelDto> GetByIdAsync(int id);
         Task<ApiResponse> CreateAsync(BusinessModelDto model);
         Task<ApiResponse> UpdateAsync(int id, BusinessModelDto model);
         Task<ApiResponse> DeleteAsync(int id);

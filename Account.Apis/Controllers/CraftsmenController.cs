@@ -276,19 +276,9 @@ namespace Account.Apis.Controllers
         [HttpGet("GetAllCraftsmenWithDetails/{craftsId}")]
         public async Task<IActionResult> GetAllCraftsmenWithDetails(int craftsId)
         {
-            try
-            {
                 var craftsmen = await _craftsmanService.GetAllCraftsmenWithDetailsAsync(craftsId);
-                if (craftsmen == null || craftsmen.Count == 0)
-                {
-                    return NotFound(new ApiResponse(404, "No craftsmen found for the specified craft."));
-                }
+                
                 return Ok(craftsmen);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
         }
 
     }

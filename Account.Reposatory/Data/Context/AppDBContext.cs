@@ -80,7 +80,5 @@ namespace Account.Reposatory.Data.Context
         public DbSet<FavoriteModelForCraftsmen> ServiceProvidersFavorites { get; set; }
         public DbSet<RatingAndReviewModelForBusiness> ratingAndReviewModelForBusinesses { get; set; }
         public DbSet<RatingAndReviewModelForCraftsmen> ratingAndReviewModelForCraftsmens { get; set; }
-
-
     }
 }

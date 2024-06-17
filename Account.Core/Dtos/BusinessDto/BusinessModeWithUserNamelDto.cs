@@ -1,21 +1,16 @@
-﻿using Account.Core.Enums.Content;
+﻿using Account.Core.Dtos.CategoriesDto;
+using Account.Core.Enums.Content;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Account.Core.Models.Content;
-using Account.Core.Models.Content.Business;
-using Account.Core.Dtos.JobFolderDTO;
-using Account.Core.Models.Content.Categories;
-using Account.Core.Dtos.CategoriesDto;
 
 namespace Account.Core.Dtos.BusinessDto
 {
-    public class BusinessModelDto
+    public class BusinessModeWithUserNamelDto
     {
         public int Id { get; set; }
         public string BusinessNameArabic { get; set; }
@@ -34,7 +29,6 @@ namespace Account.Core.Dtos.BusinessDto
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
         public string UserId { get; set; }
-
         public CategoriesModelDTO? CategoriesModel { get; set; }
         public string? ProfileImageName { get; set; }
         [NotMapped]
@@ -51,5 +45,7 @@ namespace Account.Core.Dtos.BusinessDto
         public string? BusinessImageName4 { get; set; }
         [NotMapped]
         public IFormFile? BusinessImage4 { get; set; }
+        public string UserName { get; set; }
+        public string UserProfileImageName { get; set; }
     }
 }

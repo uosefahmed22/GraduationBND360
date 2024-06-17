@@ -304,10 +304,7 @@ namespace Account.Apis.Controllers
             try
             {
                 var topFiveRatedBusinesses = await _businessService.GetTopFiveRatedBusinessesAsync();
-                if (topFiveRatedBusinesses == null || topFiveRatedBusinesses.Count == 0)
-                {
-                    return NotFound(new ApiResponse(404, "No businesses found."));
-                }
+                
                 return Ok(topFiveRatedBusinesses);
             }
             catch (Exception ex)
