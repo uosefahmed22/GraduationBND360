@@ -64,7 +64,7 @@ namespace Account.Reposatory.Services.Authentications
                 Email = dto.Email,
                 UserName = dto.Email.Split('@')[0],
                 UserRole = (int)dto.UserRole,
-                EmailConfirmed = true
+                EmailConfirmed = false
             };
 
             var Result = await _userManager.CreateAsync(user, dto.Password);

@@ -175,7 +175,6 @@ namespace Account.Apis.Controllers
                 return StatusCode(result.StatusCode, result.Message);
             }
         }
-
         private string GenerateCallBackUrl(string token, string userId)
         {
             var encodedToken = Uri.EscapeDataString(token);
