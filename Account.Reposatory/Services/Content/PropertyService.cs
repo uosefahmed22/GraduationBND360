@@ -26,6 +26,7 @@ namespace Account.Reposatory.Services.Content
             _mapper = mapper;
             _imageService = fileService;
         }
+
         public async Task<ApiResponse> CreatePropertyAsync(PropertyModelDTO propertyDto)
         {
             try
@@ -147,12 +148,13 @@ namespace Account.Reposatory.Services.Content
                     return new ApiResponse(404, "Property not found.");
                 }
 
-                _mapper.Map(propertyDto, existingProperty);
+                propertyDto.ImageName1 = propertyDto.image1 != null ? propertyDto.ImageName1 : existingProperty.ImageName1;
+                propertyDto.ImageName2 = propertyDto.image2 != null ? propertyDto.ImageName2 : existingProperty.ImageName2;
+                propertyDto.ImageName3 = propertyDto.image3 != null ? propertyDto.ImageName3 : existingProperty.ImageName3;
+                propertyDto.ImageName4 = propertyDto.image4 != null ? propertyDto.ImageName4 : existingProperty.ImageName4;
 
-                if (propertyDto.PublisherDetails != null)
-                {
-                    _mapper.Map(propertyDto.PublisherDetails, existingProperty.PublisherDetails);
-                }
+                _mapper.Map(propertyDto, existingProperty);
+                _mapper.Map(propertyDto.PublisherDetails, existingProperty.PublisherDetails);
 
                 if (propertyDto.image1 != null)
                 {
@@ -171,7 +173,56 @@ namespace Account.Reposatory.Services.Content
                     }
                 }
 
-                // Repeat similar blocks for image2, image3, image4
+                if (propertyDto.image2 != null)
+                {
+                    if (!string.IsNullOrEmpty(existingProperty.ImageName2))
+                    {
+                        await _imageService.DeleteImageAsync(existingProperty.ImageName2);
+                    }
+                    var imageResult = await _imageService.UploadImageAsync(propertyDto.image2);
+                    if (imageResult.Item1 == 1)
+                    {
+                        existingProperty.ImageName2 = imageResult.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(500, imageResult.Item2);
+                    }
+                }
+
+                if (propertyDto.image3 != null)
+                {
+                    if (!string.IsNullOrEmpty(existingProperty.ImageName3))
+                    {
+                        await _imageService.DeleteImageAsync(existingProperty.ImageName3);
+                    }
+                    var imageResult = await _imageService.UploadImageAsync(propertyDto.image3);
+                    if (imageResult.Item1 == 1)
+                    {
+                        existingProperty.ImageName3 = imageResult.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(500, imageResult.Item2);
+                    }
+                }
+
+                if (propertyDto.image4 != null)
+                {
+                    if (!string.IsNullOrEmpty(existingProperty.ImageName4))
+                    {
+                        await _imageService.DeleteImageAsync(existingProperty.ImageName4);
+                    }
+                    var imageResult = await _imageService.UploadImageAsync(propertyDto.image4);
+                    if (imageResult.Item1 == 1)
+                    {
+                        existingProperty.ImageName4 = imageResult.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(500, imageResult.Item2);
+                    }
+                }
 
                 await _context.SaveChangesAsync();
 

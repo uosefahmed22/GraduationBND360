@@ -136,75 +136,87 @@ namespace Account.Apis.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProperty(int id, [FromForm] PropertyModelDTO propertyToUpdate)
         {
-            var status = new Status();
-            if (id != propertyToUpdate.Id)
+            try
             {
-                status.StatusCode = 400;
-                status.Message = "Id in URL and form body does not match.";
-                return BadRequest(status);
+                if (id != propertyToUpdate.Id)
+                {
+                    return BadRequest(new Status
+                    {
+                        StatusCode = 400,
+                        Message = "Id in URL and form body does not match."
+                    });
+                }
+
+                var existingProperty = await _propertyService.FindByIdAsync(id);
+                if (existingProperty == null)
+                {
+                    return NotFound(new Status
+                    {
+                        StatusCode = 404,
+                        Message = $"Property with ID: {id} does not exist."
+                    });
+                }
+
+                string[] existingImageNames = { existingProperty.ImageName1, existingProperty.ImageName2, existingProperty.ImageName3, existingProperty.ImageName4 };
+                IFormFile[] newImages = { propertyToUpdate.image1, propertyToUpdate.image2, propertyToUpdate.image3, propertyToUpdate.image4 };
+                string[] newImageNames = { propertyToUpdate.ImageName1, propertyToUpdate.ImageName2, propertyToUpdate.ImageName3, propertyToUpdate.ImageName4 };
+
+                for (int i = 0; i < newImages.Length; i++)
+                {
+                    if (newImages[i] != null)
+                    {
+                        var fileResult = await _imageService.UploadImageAsync(newImages[i]);
+                        if (fileResult.Item1 == 1)
+                        {
+                            if (!string.IsNullOrEmpty(existingImageNames[i]))
+                            {
+                                await _imageService.DeleteImageAsync(existingImageNames[i]);
+                            }
+                            newImageNames[i] = fileResult.Item2;
+                        }
+                        else
+                        {
+                            return StatusCode(StatusCodes.Status500InternalServerError, new Status
+                            {
+                                StatusCode = 500,
+                                Message = $"Error saving property image {i + 1}."
+                            });
+                        }
+                    }
+                    else
+                    {
+                        newImageNames[i] = existingImageNames[i];
+                    }
+                }
+
+                propertyToUpdate.ImageName1 = newImageNames[0];
+                propertyToUpdate.ImageName2 = newImageNames[1];
+                propertyToUpdate.ImageName3 = newImageNames[2];
+                propertyToUpdate.ImageName4 = newImageNames[3];
+
+                _mapper.Map(propertyToUpdate, existingProperty);
+
+                if (propertyToUpdate.PublisherDetails != null)
+                {
+                    _mapper.Map(propertyToUpdate.PublisherDetails, existingProperty.PublisherDetails);
+                }
+
+                var result = await _propertyService.UpdatePropertyAsync(id, propertyToUpdate);
+                return StatusCode(result.StatusCode, new Status
+                {
+                    StatusCode = result.StatusCode,
+                    Message = result.Message
+                });
             }
-
-            var existingProperty = await _propertyService.FindByIdAsync(id);
-            if (existingProperty == null)
+            catch (Exception ex)
             {
-                status.StatusCode = 404;
-                status.Message = $"Property with ID: {id} does not exist.";
-                return NotFound(status);
+                return StatusCode(StatusCodes.Status500InternalServerError, new Status
+                {
+                    StatusCode = 500,
+                    Message = ex.Message
+                });
             }
-
-            var imageTasks = new List<Task<Tuple<int, string>>>();
-            if (propertyToUpdate.image1 != null)
-                imageTasks.Add(_imageService.UploadImageAsync(propertyToUpdate.image1));
-            if (propertyToUpdate.image2 != null)
-                imageTasks.Add(_imageService.UploadImageAsync(propertyToUpdate.image2));
-            if (propertyToUpdate.image3 != null)
-                imageTasks.Add(_imageService.UploadImageAsync(propertyToUpdate.image3));
-            if (propertyToUpdate.image4 != null)
-                imageTasks.Add(_imageService.UploadImageAsync(propertyToUpdate.image4));
-
-            var imageResults = await Task.WhenAll(imageTasks);
-
-            if (propertyToUpdate.image1 != null && imageResults[0].Item1 == 1)
-            {
-                if (!string.IsNullOrEmpty(existingProperty.ImageName1))
-                    await _imageService.DeleteImageAsync(existingProperty.ImageName1);
-                propertyToUpdate.ImageName1 = imageResults[0].Item2;
-            }
-
-            if (propertyToUpdate.image2 != null && imageResults[1].Item1 == 1)
-            {
-                if (!string.IsNullOrEmpty(existingProperty.ImageName2))
-                    await _imageService.DeleteImageAsync(existingProperty.ImageName2);
-                propertyToUpdate.ImageName2 = imageResults[1].Item2;
-            }
-
-            if (propertyToUpdate.image3 != null && imageResults[2].Item1 == 1)
-            {
-                if (!string.IsNullOrEmpty(existingProperty.ImageName3))
-                    await _imageService.DeleteImageAsync(existingProperty.ImageName3);
-                propertyToUpdate.ImageName3 = imageResults[2].Item2;
-            }
-
-            if (propertyToUpdate.image4 != null && imageResults[3].Item1 == 1)
-            {
-                if (!string.IsNullOrEmpty(existingProperty.ImageName4))
-                    await _imageService.DeleteImageAsync(existingProperty.ImageName4);
-                propertyToUpdate.ImageName4 = imageResults[3].Item2;
-            }
-
-            _mapper.Map(propertyToUpdate, existingProperty);
-
-            if (propertyToUpdate.PublisherDetails != null)
-            {
-                _mapper.Map(propertyToUpdate.PublisherDetails, existingProperty.PublisherDetails);
-            }
-
-            var result = await _propertyService.UpdatePropertyAsync(id, propertyToUpdate);
-            return StatusCode(result.StatusCode, new Status
-            {
-                StatusCode = result.StatusCode,
-                Message = result.Message
-            });
         }
+
     }
 }

@@ -37,32 +37,70 @@ namespace Account.Reposatory.Services.Content
         {
             try
             {
-
-                var imageTasks = new List<Task<Tuple<int, string>>>();
-
                 if (model.ProfileImage != null)
-                    imageTasks.Add(_imageService.UploadImageAsync(model.ProfileImage));
-                if (model.BusinessImage1 != null)
-                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage1));
-                if (model.BusinessImage2 != null)
-                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage2));
-                if (model.BusinessImage3 != null)
-                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage3));
-                if (model.BusinessImage4 != null)
-                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage4));
+                {
+                    var fileResult = await _imageService.SaveImageAsync(model.ProfileImage);
+                    if (fileResult.Item1 == 1)
+                    {
+                        model.ProfileImageName = fileResult.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult.Item2);
+                    }
+                }
 
-                var imageResults = await Task.WhenAll(imageTasks);
-
-                if (model.ProfileImage != null)
-                    model.ProfileImageName = imageResults[0].Item2;
                 if (model.BusinessImage1 != null)
-                    model.BusinessImageName1 = imageResults[1].Item2;
+                {
+                    var fileResult1 = await _imageService.SaveImageAsync(model.BusinessImage1);
+                    if (fileResult1.Item1 == 1)
+                    {
+                        model.BusinessImageName1 = fileResult1.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult1.Item2);
+                    }
+                }
+
                 if (model.BusinessImage2 != null)
-                    model.BusinessImageName2 = imageResults[2].Item2;
+                {
+                    var fileResult2 = await _imageService.SaveImageAsync(model.BusinessImage2);
+                    if (fileResult2.Item1 == 1)
+                    {
+                        model.BusinessImageName2 = fileResult2.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult2.Item2);
+                    }
+                }
+
                 if (model.BusinessImage3 != null)
-                    model.BusinessImageName3 = imageResults[3].Item2;
+                {
+                    var fileResult3 = await _imageService.SaveImageAsync(model.BusinessImage3);
+                    if (fileResult3.Item1 == 1)
+                    {
+                        model.BusinessImageName3 = fileResult3.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult3.Item2);
+                    }
+                }
+
                 if (model.BusinessImage4 != null)
-                    model.BusinessImageName4 = imageResults[4].Item2;
+                {
+                    var fileResult4 = await _imageService.SaveImageAsync(model.BusinessImage4);
+                    if (fileResult4.Item1 == 1)
+                    {
+                        model.BusinessImageName4 = fileResult4.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult4.Item2);
+                    }
+                }
 
                 var businessEntity = _mapper.Map<BusinessModel>(model);
                 _context.Businesses.Add(businessEntity);
@@ -126,52 +164,90 @@ namespace Account.Reposatory.Services.Content
                     return new ApiResponse(404, "Business not found.");
                 }
 
-                if (!string.IsNullOrEmpty(existingBusiness.ProfileImageName))
-                {
-                    await _imageService.DeleteImageAsync(existingBusiness.ProfileImageName);
-                }
-                if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName1))
-                {
-                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName1);
-                }
-                if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName2))
-                {
-                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName2);
-                }
-                if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName3))
-                {
-                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName3);
-                }
-                if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName4))
-                {
-                    await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName4);
-                }
-
-                var imageTasks = new List<Task<Tuple<int, string>>>();
-
                 if (model.ProfileImage != null)
-                    imageTasks.Add(_imageService.UploadImageAsync(model.ProfileImage));
-                if (model.BusinessImage1 != null)
-                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage1));
-                if (model.BusinessImage2 != null)
-                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage2));
-                if (model.BusinessImage3 != null)
-                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage3));
-                if (model.BusinessImage4 != null)
-                    imageTasks.Add(_imageService.UploadImageAsync(model.BusinessImage4));
+                {
+                    var fileResult = await _imageService.SaveImageAsync(model.ProfileImage);
+                    if (fileResult.Item1 == 1)
+                    {
+                        if (!string.IsNullOrEmpty(existingBusiness.ProfileImageName))
+                        {
+                            await _imageService.DeleteImageAsync(existingBusiness.ProfileImageName);
+                        }
+                        model.ProfileImageName = fileResult.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult.Item2);
+                    }
+                }
 
-                var imageResults = await Task.WhenAll(imageTasks);
-
-                if (model.ProfileImage != null)
-                    model.ProfileImageName = imageResults[0].Item2;
                 if (model.BusinessImage1 != null)
-                    model.BusinessImageName1 = imageResults[1].Item2;
+                {
+                    var fileResult1 = await _imageService.SaveImageAsync(model.BusinessImage1);
+                    if (fileResult1.Item1 == 1)
+                    {
+                        if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName1))
+                        {
+                            await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName1);
+                        }
+                        model.BusinessImageName1 = fileResult1.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult1.Item2);
+                    }
+                }
+
                 if (model.BusinessImage2 != null)
-                    model.BusinessImageName2 = imageResults[2].Item2;
+                {
+                    var fileResult2 = await _imageService.SaveImageAsync(model.BusinessImage2);
+                    if (fileResult2.Item1 == 1)
+                    {
+                        if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName2))
+                        {
+                            await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName2);
+                        }
+                        model.BusinessImageName2 = fileResult2.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult2.Item2);
+                    }
+                }
+
                 if (model.BusinessImage3 != null)
-                    model.BusinessImageName3 = imageResults[3].Item2;
+                {
+                    var fileResult3 = await _imageService.SaveImageAsync(model.BusinessImage3);
+                    if (fileResult3.Item1 == 1)
+                    {
+                        if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName3))
+                        {
+                            await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName3);
+                        }
+                        model.BusinessImageName3 = fileResult3.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult3.Item2);
+                    }
+                }
+
                 if (model.BusinessImage4 != null)
-                    model.BusinessImageName4 = imageResults[4].Item2;
+                {
+                    var fileResult4 = await _imageService.SaveImageAsync(model.BusinessImage4);
+                    if (fileResult4.Item1 == 1)
+                    {
+                        if (!string.IsNullOrEmpty(existingBusiness.BusinessImageName4))
+                        {
+                            await _imageService.DeleteImageAsync(existingBusiness.BusinessImageName4);
+                        }
+                        model.BusinessImageName4 = fileResult4.Item2;
+                    }
+                    else
+                    {
+                        return new ApiResponse(400, fileResult4.Item2);
+                    }
+                }
 
                 _mapper.Map(model, existingBusiness);
                 await _context.SaveChangesAsync();
@@ -209,7 +285,6 @@ namespace Account.Reposatory.Services.Content
                 throw;
             }
         }
-
         public async Task<List<BusinessModelDto>> GetBusinessesForBusinessOwnerAsync(string userId)
         {
             try
@@ -324,6 +399,5 @@ namespace Account.Reposatory.Services.Content
                 throw new Exception("Failed to retrieve top five rated businesses.", ex);
             }
         }
-
     }
 }

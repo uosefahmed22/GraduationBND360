@@ -160,6 +160,22 @@ namespace Account.Apis.Controllers
                 return BadRequest("Failed to confirm user email.");
             }
         }
+
+        [HttpPost("ResendConfirmationEmail")]
+        public async Task<IActionResult> ResendConfirmationEmail(string email)
+        {
+            var result = await _accountService.ResendConfirmationEmailAsync(email, GenerateCallBackUrl);
+
+            if (result.StatusCode == 200)
+            {
+                return Ok(result.Message);
+            }
+            else
+            {
+                return StatusCode(result.StatusCode, result.Message);
+            }
+        }
+
         private string GenerateCallBackUrl(string token, string userId)
         {
             var encodedToken = Uri.EscapeDataString(token);

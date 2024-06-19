@@ -35,10 +35,10 @@ namespace Account.Core.Models.Content.Business
         public string UserId { get; set; }
         public string? ProfileImageName { get; set; }
         [NotMapped]
-        public IFormFile ProfileImage { get; set; }
+        public IFormFile? ProfileImage { get; set; }
         public string? BusinessImageName1 { get; set; }
         [NotMapped]
-        public IFormFile BusinessImage1 { get; set; }
+        public IFormFile? BusinessImage1 { get; set; }
         public string? BusinessImageName2 { get; set; }
         [NotMapped]
         public IFormFile? BusinessImage2 { get; set; }

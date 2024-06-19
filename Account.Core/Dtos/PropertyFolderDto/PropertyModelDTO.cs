@@ -29,7 +29,6 @@ namespace Account.Core.Dtos.PropertyFolderDto
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
         public string UserId { get; set; }
-
         public DateTime? TimeAddedProperty { get; set; } = DateTime.Now;
         public string? ImageName1 { get; set; }
         public IFormFile? image1 { get; set; }

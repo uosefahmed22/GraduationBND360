@@ -2,9 +2,11 @@
 using Account.Core.Dtos.CraftsMenDtoFolder;
 using Account.Core.Dtos.FavoirteDto;
 using Account.Core.IServices.Content;
+using Account.Core.Models.Account;
 using Account.Core.Models.Content.Favorite;
 using Account.Reposatory.Data.Context;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,11 +20,13 @@ namespace Account.Reposatory.Services.Content
     {
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<AppUser> _userManager;
 
-        public FavoriteForCraftsmenService(AppDBContext context,IMapper mapper)
+        public FavoriteForCraftsmenService(AppDBContext context,IMapper mapper,UserManager<AppUser>userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
         public async Task<ApiResponse> AddAsync(FavoriteModelForCraftsmenDto savedModel)
         {
@@ -49,6 +53,19 @@ namespace Account.Reposatory.Services.Content
                     .Select(f => f.CraftsmanId)
                     .ToListAsync();
 
+                if (!favoriteCraftsmanIds.Any())
+                {
+                    return new List<CraftsManWithRatingsDto>();
+                }
+
+                var user = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.Id == userId);
+
+                if (user == null)
+                {
+                    return new List<CraftsManWithRatingsDto>();
+                }
+
                 var craftsmen = await _context.CraftsMen
                     .Include(c => c.CraftsModel)
                     .Where(c => favoriteCraftsmanIds.Contains(c.Id))
@@ -65,14 +82,17 @@ namespace Account.Reposatory.Services.Content
                     craftsmanDto.TotalReviews = reviewAndRatingSummary.TotalReviews;
                     craftsmanDto.AverageRating = reviewAndRatingSummary.AverageRating;
 
+                    craftsmanDto.UserName = user.DisplayName;
+                    craftsmanDto.UserProfileImageName = user.profileImageName;
+
                     craftsmanDtos.Add(craftsmanDto);
                 }
 
                 return craftsmanDtos;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("An error occurred while retrieving favorite craftsmen", ex);
             }
         }
         public async Task<CraftsmanReviewSummaryDto> GetCraftsmanReviewSummary(int craftsmanId)

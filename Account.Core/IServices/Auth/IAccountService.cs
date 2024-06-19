@@ -22,5 +22,6 @@ namespace Account.Core.Services.Auth
         Task<ApiResponse> ChangePasswordAsync(Guid userId, string oldPassword, string newPassword);
         Task<ApiResponse> RegisterForAdminAsync(RegisterForAdmin dto);
         Task<ApiResponse> LoginForAdminAsync(LoginForAdmin dto);
+        Task<ApiResponse> ResendConfirmationEmailAsync(string email, Func<string, string, string> generateCallBackUrl);
     }
 }

@@ -34,14 +34,13 @@ namespace Account.Core.Dtos.BusinessDto
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
         public string UserId { get; set; }
-
         public CategoriesModelDTO? CategoriesModel { get; set; }
         public string? ProfileImageName { get; set; }
         [NotMapped]
-        public IFormFile ProfileImage { get; set; }
+        public IFormFile? ProfileImage { get; set; }
         public string? BusinessImageName1 { get; set; }
         [NotMapped]
-        public IFormFile BusinessImage1 { get; set; }
+        public IFormFile? BusinessImage1 { get; set; }
         public string? BusinessImageName2 { get; set; }
         [NotMapped]
         public IFormFile? BusinessImage2 { get; set; }

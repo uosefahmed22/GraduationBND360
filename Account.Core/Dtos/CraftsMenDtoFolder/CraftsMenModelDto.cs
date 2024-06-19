@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,14 +29,13 @@ namespace Account.Core.Dtos.CraftsMenDtoFolder
         public int Opening { get; set; }
         public int Closing { get; set; }
         public string UserId { get; set; }
-
         public CraftsModelDto? CraftsModel { get; set; }
         public string? ProfileImageName { get; set; }
         [NotMapped]
-        public IFormFile ProfileImage { get; set; }
+        public IFormFile? ProfileImage { get; set; }
         public string? CraftsMenImageName1 { get; set; }
         [NotMapped]
-        public IFormFile CraftsMenImage1 { get; set; }
+        public IFormFile? CraftsMenImage1 { get; set; }
         public string? CraftsMenImageName2 { get; set; }
         [NotMapped]
         public IFormFile? CraftsMenImage2 { get; set; }

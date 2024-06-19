@@ -287,7 +287,6 @@ namespace Account.Reposatory.Services.Content
                 throw;
             }
         }
-
         public async Task<List<CraftsMenModelDto>> GetCraftsmenForUserAsync(string userId)
         {
             try

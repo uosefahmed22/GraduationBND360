@@ -3,9 +3,11 @@ using Account.Core.Dtos.BusinessDto;
 using Account.Core.Dtos.FavoirteDto;
 using Account.Core.Dtos.RatingAndReviewDto.Account.Core.Dtos.RatingAndReviewDto;
 using Account.Core.IServices.Content;
+using Account.Core.Models.Account;
 using Account.Core.Models.Content.Favorite;
 using Account.Reposatory.Data.Context;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,11 +21,13 @@ namespace Account.Reposatory.Services.Content
     {
         private readonly AppDBContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<AppUser> _userManager;
 
-        public FavoriteForBusinessService(AppDBContext context, IMapper mapper)
+        public FavoriteForBusinessService(AppDBContext context, IMapper mapper,UserManager<AppUser>userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
         public async Task<ApiResponse> AddAsync(FavoriteModelForBusinessDto savedModel)
         {
@@ -50,6 +54,22 @@ namespace Account.Reposatory.Services.Content
                     .Select(f => f.BusinessId)
                     .ToListAsync();
 
+                var businessEntity = await _context.BusinessFavorites
+                    .FirstOrDefaultAsync(b => b.UserId == userId);
+
+                if (businessEntity == null)
+                {
+                    return new List<BusinessWithRatingsDto>();
+                }
+
+                var user = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.Id == businessEntity.UserId);
+
+                if (user == null)
+                {
+                    return new List<BusinessWithRatingsDto>();
+                }
+
                 var businesses = await _context.Businesses
                     .Include(b => b.CategoriesModel)
                     .Where(b => favoriteBusinessIds.Contains(b.Id))
@@ -66,16 +86,21 @@ namespace Account.Reposatory.Services.Content
                     businessDto.TotalReviews = reviewAndRatingSummary.TotalReviews;
                     businessDto.AverageRating = reviewAndRatingSummary.AverageRating;
 
+                    businessDto.UserName = user.DisplayName;
+                    businessDto.UserProfileImageName = user.profileImageName;
+
                     businessDtos.Add(businessDto);
                 }
 
                 return businessDtos;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Log the exception details here for better debugging
+                throw new Exception("An error occurred while retrieving businesses", ex);
             }
         }
+
         public async Task<BusinessReviewSummaryDtoForFaviorates> GetBusinessReviewSummary(int businessId)
         {
             try

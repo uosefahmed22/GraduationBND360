@@ -45,5 +45,7 @@ namespace Account.Core.Dtos.CraftsMenDtoFolder
         public IFormFile? CraftsMenImage4 { get; set; }
         public int TotalReviews { get; set; }
         public double AverageRating { get; set; }
+        public string UserName { get; set; }
+        public string UserProfileImageName { get; set; }
     }
 }

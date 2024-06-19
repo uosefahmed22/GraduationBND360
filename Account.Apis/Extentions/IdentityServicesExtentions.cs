@@ -6,6 +6,7 @@ using Account.services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -47,7 +48,7 @@ namespace Account.Apis.Extentions
 
             services.AddDbContext<AppDBContext>(Options =>
             {
-                Options.UseSqlServer(configuration.GetConnectionString("DefaultConnections"));
+                Options.UseSqlServer(configuration.GetConnectionString("DefaultConnections")).EnableSensitiveDataLogging();
             });
 
             // Register custom token service

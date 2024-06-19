@@ -64,7 +64,7 @@ namespace Account.Reposatory.Services.Authentications
                 Email = dto.Email,
                 UserName = dto.Email.Split('@')[0],
                 UserRole = (int)dto.UserRole,
-                EmailConfirmed = false
+                EmailConfirmed = true
             };
 
             var Result = await _userManager.CreateAsync(user, dto.Password);
@@ -290,7 +290,6 @@ namespace Account.Reposatory.Services.Authentications
 
             return new ApiResponse(200, "Admin created successfully.");
         }
-
         public async Task<ApiResponse> LoginForAdminAsync(LoginForAdmin dto)
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
@@ -311,6 +310,28 @@ namespace Account.Reposatory.Services.Authentications
                 id = user.Id,
                 Token = token
             });
+        }
+        public async Task<ApiResponse> ResendConfirmationEmailAsync(string email, Func<string, string, string> generateCallBackUrl)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return new ApiResponse(400, "User with this email does not exist.");
+            }
+
+            if (user.EmailConfirmed)
+            {
+                return new ApiResponse(400, "Email is already confirmed.");
+            }
+
+            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var callBackUrl = generateCallBackUrl(emailConfirmationToken, user.Id);
+            var emailBody = $"<h1>Dear {user.UserName}! Welcome To BNS360.</h1><p>Please <a href='{callBackUrl}'>Click Here</a> To Confirm Your Email.</p>";
+
+            await SendEmailAsync(user.Email, "Email Confirmation", emailBody);
+
+            return new ApiResponse(200, "Email verification has been resent to your email successfully. Please verify it!");
         }
     }
 }
