@@ -61,22 +61,22 @@ namespace Account.Reposatory.Services.Content
                 {
                     var user = await _userManager.FindByIdAsync(review.userId);
 
-                    if (user == null)
-                    {
-                        throw new Exception("User not found.");
-                    }
-
                     var response = new ReviewAndRatingResponse
                     {
                         Id = review.Id,
                         Review = review.Review,
                         Rating = review.Rating,
                         dateTime = review.CreatedAt,
-                        PhotoUrl = user.profileImageName,
-                        UserName = user.DisplayName,
-                        UserId = user.Id
-                        
+                        PhotoUrl = user?.profileImageName,
+                        UserName = user?.DisplayName,
+                        UserId = user?.Id ?? "-1"
                     };
+
+                    if (user == null)
+                    {
+                        response.UserName = "Deleted account";
+                        response.PhotoUrl = null;
+                    }
 
                     responseList.Add(response);
                 }
@@ -85,6 +85,7 @@ namespace Account.Reposatory.Services.Content
             }
             catch (Exception ex)
             {
+                // Handle the exception as needed
                 throw;
             }
         }

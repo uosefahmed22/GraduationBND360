@@ -379,6 +379,7 @@ namespace Account.Reposatory.Services.Content
             try
             {
                 var businessEntities = await _context.Businesses
+                    .Where(b=>b.CategoriesModelId==3)
                     .Include(b => b.CategoriesModel)
                     .ToListAsync();
 

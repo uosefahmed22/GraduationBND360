@@ -56,10 +56,6 @@ namespace Account.Reposatory.Services.Content
                 foreach (var review in reviews)
                 {
                     var user = await _userManager.FindByIdAsync(review.userId);
-                    if (user == null)
-                    {
-                        continue;
-                    }
 
                     var response = new ReviewAndRatingResponse
                     {
@@ -67,10 +63,16 @@ namespace Account.Reposatory.Services.Content
                         Review = review.Review,
                         Rating = review.Rating,
                         dateTime = review.CreatedAt,
-                        PhotoUrl = user.profileImageName,
-                        UserName = user.DisplayName,
-                        UserId = user.Id
+                        PhotoUrl = user?.profileImageName,
+                        UserName = user?.DisplayName,
+                        UserId = user?.Id ?? "-1"
                     };
+
+                    if (user == null)
+                    {
+                        response.UserName = "Deleted account";
+                        response.PhotoUrl = null;
+                    }
 
                     responseList.Add(response);
                 }
