@@ -4,6 +4,7 @@ using Account.Reposatory.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.Reposatory.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240628233828_initialMigrationUpdateLongAndLat")]
+    partial class initialMigrationUpdateLongAndLat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,10 +154,10 @@ namespace Account.Reposatory.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(18, 14)");
+                        .HasColumnType("decimal(18, 9)");
 
                     b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(18, 14)");
+                        .HasColumnType("decimal(18, 9)");
 
                     b.Property<int>("Opening")
                         .HasColumnType("int");
@@ -487,10 +490,10 @@ namespace Account.Reposatory.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(18, 14)");
+                        .HasColumnType("decimal(18, 9)");
 
                     b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(18, 14)");
+                        .HasColumnType("decimal(18, 9)");
 
                     b.Property<string>("Phonenumbers")
                         .IsRequired()

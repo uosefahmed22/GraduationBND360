@@ -15,10 +15,10 @@ namespace Account.Reposatory.Data.Config
         public void Configure(EntityTypeBuilder<BusinessModel> builder)
         {
             builder.Property(b => b.Longitude)
-            .HasColumnType("decimal(18, 2)");
+                .HasColumnType("decimal(18, 14)");
 
             builder.Property(b => b.Latitude)
-           .HasColumnType("decimal(18, 2)");
+                .HasColumnType("decimal(18, 14)");
         }
     }
 }
